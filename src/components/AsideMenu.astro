@@ -1,0 +1,29 @@
+---
+import SideMenuItem from './SideMenuItem.astro'
+import Home from '../icons/Home.astro'
+import Temas from '../icons/Temas.astro'
+import Ejercicios from '../icons/Ejercicios.astro'
+import Perfil from '../icons/Perfil.astro'
+---
+
+<nav class="flex flex-col ml-5">
+    <div class="bg-slate-900 rounded-lg p-2 m-2">
+        <ul>
+            <SideMenuItem href="./" text="Inicio">   <!-- TODO: cambiar href -->
+                <Home/>
+            </SideMenuItem>
+
+            <SideMenuItem href="./" text="Temas">   <!-- TODO: cambiar href -->
+                <Temas/>
+            </SideMenuItem>
+
+            <SideMenuItem href="./" text="Ejercicios">   <!-- TODO: cambiar href -->
+                <Ejercicios/>
+            </SideMenuItem>
+
+            <SideMenuItem href="./" text="Perfil">   <!-- TODO: cambiar href -->
+                <Perfil/>
+            </SideMenuItem>
+        </ul>
+    </div>
+</nav>
