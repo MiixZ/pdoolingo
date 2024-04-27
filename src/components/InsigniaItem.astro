@@ -1,0 +1,19 @@
+---
+interface Props {
+  text?: string;
+  experience?: number;
+  experienceMax?: number;
+}
+
+const { text, experience, experienceMax } = Astro.props;
+---
+
+<tr class="flex flex-col items-center p-2 border-b-4 border-gray-600">
+    <td>
+    <p class="text-gray-200"> { text } </p>
+    <div class="flex flex-row items-center ml-auto">
+        <p class="text-gray-200"> { experience } </p>
+        <p class="text-gray-200"> / { experienceMax } </p>
+    </div>
+    </td>
+</tr>
