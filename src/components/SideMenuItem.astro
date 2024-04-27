@@ -3,18 +3,24 @@ interface Props {
   href?: string;
   text?: string;
   selected?: string;
+  notSelectable?: string;
 }
 
 const { href } = Astro.props;
 const { text } = Astro.props;
 const { selected } = Astro.props;
+const { notSelectable } = Astro.props;
 
 let className: string;
 
 if (selected == "false") {
-  className = "flex gap-4 px-4 py-2 mt-2 rounded-lg text-gray-200 hover:bg-slate-500 items-center";
+  className = "flex gap-4 px-4 py-2 mt-2 rounded-lg hover:bg-slate-500 items-center";
 } else {
-  className = "flex gap-4 px-4 py-2 mt-2 rounded-lg text-gray-200 hover:bg-slate-500 items-center bg-slate-500";
+  className = "flex gap-4 px-4 py-2 mt-2 rounded-lg hover:bg-slate-500 items-center bg-slate-500";
+}
+
+if (notSelectable != undefined) {
+  className = "flex gap-4 px-4 py-2 mt-2 rounded-lg items-center";
 }
 ---
 
