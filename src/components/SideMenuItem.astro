@@ -2,16 +2,26 @@
 interface Props {
   href?: string;
   text?: string;
+  selected?: string;
 }
 
 const { href } = Astro.props;
 const { text } = Astro.props;
+const { selected } = Astro.props;
+
+let className: string;
+
+if (selected == "false") {
+  className = "flex gap-4 px-4 py-2 mt-2 rounded-lg text-gray-200 hover:bg-slate-500 items-center";
+} else {
+  className = "flex gap-4 px-4 py-2 mt-2 rounded-lg text-gray-200 hover:bg-slate-500 items-center bg-slate-500";
+}
 ---
 
 <li>
-    <a 
-        href={href} 
-        class="flex gap-4 px-4 py-2 rounded-lg text-gray-200 hover:bg-slate-500 items-center"
+    <a
+      href={href}
+      class={className}
     >
     <slot />
     {text}
