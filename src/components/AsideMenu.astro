@@ -7,6 +7,7 @@ import Ejercicios from '../icons/Ejercicios.astro'
 import Perfil from '../icons/Perfil.astro'
 import Insignia from '../icons/Insignia.astro'
 import Vidas from '../icons/Vidas.astro'
+import Experience from '../icons/Experience.astro'
 
 let pathname : String = Astro.url.pathname;
 pathname = pathname.split("/")[1];
@@ -16,7 +17,6 @@ let perfil = pathname == "perfil" ? "true" : "false";
 let temas = pathname == "temas" ? "true" : "false";
 let ejercicios = pathname == "ejercicios" ? "true" : "false";
 let insignias = pathname == "insignias" ? "true" : "false";
-
 ---
 
 <nav class="flex flex-col flex-1 p-2 gap-2" >
@@ -52,6 +52,10 @@ let insignias = pathname == "insignias" ? "true" : "false";
 
             <SideMenuItem text="5" selected="false">
                 <Vidas/>
+            </SideMenuItem>
+
+            <SideMenuItem text="0/5000" selected="false">    <!-- TODO: Cambiar experiencia -->
+                <Experience/>
             </SideMenuItem>
         </ul>
     </div>
