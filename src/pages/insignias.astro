@@ -1,27 +1,44 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import InsigniaItem from '../components/InsigniaItem.astro';
-import Insignia from '../icons/Insignia.astro';
+import InsigniaTotal from '../icons/insignias/InsigniaTotal.astro'
+import Tema1 from '../icons/insignias/tema1.astro';
+import Tema2 from '../icons/insignias/tema2.astro';
 
 const username = "username";    // Aquí se debe de poner el nombre de usuario del usuario que está logueado
 ---
 
 <Layout title="PDOOLingo - Insignias">
-    <h1 class="m-4 text-center text text-4xl text-gray-200 font-bold"> ¡HOLA, {username}! </h1>
-    <h2 class="m-4 text-center text text-3xl text-gray-200 font-bold"> Tus insignias: </h2>
+    <h1 class="m-4 text-center text text-4xl font-bold"> ¡HOLA, {username}! </h1>
+    <h2 class="m-4 text-center text text-3xl font-bold"> Tus insignias: </h2>
     <div class="w-full flex items-center justify-center">
-        <table class="m-4 border-x-4 border-t-4 border-gray-600">
+        <table class="[width:40%] m-4">
             <InsigniaItem
-                text="Insignia de prueba" 
-                experience={100}
+                text="Insignia del tema 1" 
+                description='Completa el tema 1.'
+                experience={800}
                 experienceMax={1000}
-            />
+            >
+                <Tema1 />
+            </InsigniaItem>
+
+            <InsigniaItem
+                text="Insignia del tema 2" 
+                description='Completa el tema 2.'
+                experience={800}
+                experienceMax={1000}
+            >
+                <Tema2 />
+            </InsigniaItem>
 
             <InsigniaItem 
-                text="Insignia de prueba 2" 
-                experience={200}
+                text="¡INSIGNIA DE PROEZA!"
+                description='Consigue todas las insignias.'
+                experience={400}
                 experienceMax={2000}
-            />
+            >
+                <InsigniaTotal />
+            </InsigniaItem>
         </table>
     </div>
 </Layout>
