@@ -13,7 +13,7 @@ let pathname : String = Astro.url.pathname;
 pathname = pathname.split("/")[1];
 
 let home = pathname == "home" ? "true" : "false";
-let perfil = pathname == "perfil" ? "true" : "false";
+let perfil = pathname == "login" ? "true" : "false";                // TODO: cambiar a perfil o login segun corresponda.
 let temas = pathname == "temas" ? "true" : "false";
 let ejercicios = pathname == "ejercicios" ? "true" : "false";
 let insignias = pathname == "insignias" ? "true" : "false";
@@ -30,7 +30,7 @@ let insignias = pathname == "insignias" ? "true" : "false";
                 <Home/>
             </SideMenuItem> 
 
-            <SideMenuItem href="./" text="PERFIL" selected={perfil}>   <!-- TODO: cambiar href -->
+            <SideMenuItem href="/login/" text="PERFIL" selected={perfil}>  <!-- TODO: Cambiar href según corresponda -->
                 <Perfil/>
             </SideMenuItem>
         </ul>
