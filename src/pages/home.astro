@@ -1,6 +1,39 @@
 ---
+import EjercicioItem from '../components/EjercicioItem.astro';
 import Layout from '../layouts/Layout.astro';
+
+interface Ejercicio {
+    id: number;
+    enunciado: string;
+    tipo: string;
+    coste_pista: string;
+    tipo_coste_pista: string;
+    xp_base: number;
+}
+
+const result = await fetch('http://localhost:3000/ejercicios');
+let data = await result.json();
+let cont = 0;
+
+data.success ? console.log('Data fetched successfully') : console.error('Error fetching data');
+
+const ejercicios = data.data as Ejercicio[];
 ---
 
 <Layout title="PDOOLingo">
+    <div class="w-full flex flex-col">
+        <h2 class="[width:70%] text-center my-4 mt-20 text-3xl font-bold"> Ejercicios: </h2>
+        <div class="w-full flex items-center justify-center">
+            <table class="[width:40%] my-4 mt-0">
+                {ejercicios.map(ejercicio => (
+                    <EjercicioItem
+                        numero={++cont}
+                        enunciado={ejercicio.enunciado} 
+                        tipo={ejercicio.tipo} 
+                        xp={ejercicio.xp_base}
+                    />
+                ))}
+            </table>
+        </div>
+    </div>
 </Layout>

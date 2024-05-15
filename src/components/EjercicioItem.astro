@@ -1,0 +1,31 @@
+---
+import tipo_flecha from '../icons/ejercicios/tipo_flecha.astro';
+
+interface Props {
+    numero: number;
+    enunciado: string;
+    tipo: string;
+    xp: number;
+}
+
+const { numero, enunciado, tipo, xp } = Astro.props;
+---
+
+<tr class="flex items-center mb-2 p-2 border-4 rounded-lg border-gray-600 hover:bg-slate-900 transition-colors duration-300">
+    <td class="flex flex-row justify-between w-full">
+        <slot/>
+        <div class="p-2 flex flex-col items-end w-full">
+          <div class="flex flex-row justify-between w-full">
+            <p class="py-2 items-start font-bold"> EJERCICIO { numero } </p>
+            <div class="py-2 flex flex-row items-end">
+                <p> { xp } xp </p>
+            </div>
+          </div>
+
+          <div class="flex flex-row items-baseline w-full">
+            <p class="px-4"> { tipo } </p>
+            <p class="px-4"> { enunciado } </p>
+          </div>
+        </div>
+    </td>
+</tr>
