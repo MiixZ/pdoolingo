@@ -1,31 +1,43 @@
 ---
-import tipo_flecha from '../../icons/ejercicios/tipo_flecha.astro';
+import TipoFlecha from '../../icons/ejercicios/TipoFlecha.astro';
+import TipoUnir from '../../icons/ejercicios/TipoUnir.astro';
+import TipoTexto from '../../icons/ejercicios/TipoTexto.astro';
 
 interface Props {
-    numero: number;
-    enunciado: string;
-    tipo: string;
-    xp: number;
+  numero: number;
+  enunciado: string;
+  tipo: string;
+  xp: number;
 }
 
 const { numero, enunciado, tipo, xp } = Astro.props;
 ---
 
-<tr class="flex items-center mb-2 p-2 border-4 rounded-lg border-gray-600 hover:bg-slate-900 transition-colors duration-300">
-    <td class="flex flex-row justify-between w-full">
-        <slot/>
-        <div class="p-2 flex flex-col items-end w-full">
-          <div class="flex flex-row justify-between w-full">
-            <p class="py-2 items-start font-bold"> EJERCICIO { numero } </p>
-            <div class="py-2 flex flex-row items-end">
-                <p> { xp } xp </p>
-            </div>
-          </div>
-
-          <div class="flex flex-row items-baseline w-full">
-            <p class="px-4"> { tipo } </p>
-            <p class="px-4"> { enunciado } </p>
-          </div>
-        </div>
-    </td>
+<tr class="flex items-center mb-4 p-6 border-4 rounded-lg border-gray-600 hover:bg-slate-900 transition-colors duration-300">
+  <td class="flex flex-col justify-center w-full">
+    <slot/>
+    <div class="flex flex-row items-center w-full">
+      <p class="py-2 flex justify-center items-center font-bold w-1/4 text-center text-4xl"> { numero } </p>
+      <p class="flex w-1/4 text-center items-center justify-center"> 
+        {(() => {
+          switch(tipo) {
+            case 'flecha':
+              return <TipoFlecha />;
+            case 'unir':
+              return <TipoUnir />;
+            case 'texto':
+              return <TipoTexto />;
+            default:
+              return tipo;
+          }
+        })()}
+      </p>
+      <button 
+      class="flex justify-center items-center p-3 mr-2 text-2xl text-center border-r border-l
+           hover:bg-slate-500 rounded-xl transition-colors transition-duration-300 w-1/4">
+            START
+      </button>
+      <p class="flex justify-center items-center text-center p-3 text-2xl text-yellow-700 font-bold bg-lime-600 rounded-xl w-1/4"> { xp } XP </p>
+    </div>
+  </td>
 </tr>

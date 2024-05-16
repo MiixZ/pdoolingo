@@ -1,5 +1,5 @@
 ---
-import SideMenuItem from './SideMenuItem.astro'
+import AsideMenuItem from './AsideMenuItem.astro'
 
 import Temas from '../icons/Temas.astro'
 import Ejercicios from '../icons/Ejercicios.astro'
@@ -17,24 +17,24 @@ let insignias = pathname == "insignias" ? "true" : "false";
 
 <div class="bg-slate-900 rounded-lg p-2 flex-1" >
     <ul>
-        <SideMenuItem href="./" text="TEMAS" selected={temas}>   <!-- TODO: cambiar href -->
+        <AsideMenuItem href="./" text="TEMAS" selected={temas}>   <!-- TODO: cambiar href -->
             <Temas/>
-        </SideMenuItem>
+        </AsideMenuItem>
 
-        <SideMenuItem href="./" text="EJERCICIOS" selected={ejercicios}>   <!-- TODO: cambiar href -->
+        <AsideMenuItem href="./" text="EJERCICIOS" selected={ejercicios}>   <!-- TODO: cambiar href -->
             <Ejercicios/>
-        </SideMenuItem>
+        </AsideMenuItem>
 
-        <SideMenuItem href="/insignias/" text="INSIGNIAS" selected={insignias}>
+        <AsideMenuItem href="/insignias/" text="INSIGNIAS" selected={insignias}>
             <Insignia/>
-        </SideMenuItem>
+        </AsideMenuItem>
 
-        <SideMenuItem text="5/5" selected="false" notSelectable='true'>
+        <AsideMenuItem text="5/5" selected="false" notSelectable='true'>
             <Vidas/>
-        </SideMenuItem>
+        </AsideMenuItem>
 
-        <SideMenuItem text="0/5000" selected="false" notSelectable='true'>    <!-- TODO: Cambiar experiencia -->
+        <AsideMenuItem text="0/5000" selected="false" notSelectable='true'>    <!-- TODO: Cambiar experiencia -->
             <Experience/>
-        </SideMenuItem>
+        </AsideMenuItem>
     </ul>
 </div>
