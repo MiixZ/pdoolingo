@@ -1,0 +1,23 @@
+---
+import SideMenuItem from './SideMenuItem.astro'
+import Home from '../icons/Home.astro'
+import Perfil from '../icons/Perfil.astro'
+
+let pathname : String = Astro.url.pathname;
+pathname = pathname.split("/")[1];
+
+let perfil = pathname == "perfil" ? "true" : "false";
+let home = pathname == "home" ? "true" : "false";
+---
+ 
+<div class="bg-slate-900 rounded-lg p-2" >
+    <ul>
+        <SideMenuItem href="/home/" text="INICIO" selected={home}>
+            <Home/>
+        </SideMenuItem> 
+
+        <SideMenuItem href="/login/" text="PERFIL" selected={perfil}>  <!-- TODO: Cambiar href según corresponda -->
+            <Perfil/>
+        </SideMenuItem>
+    </ul>
+</div>

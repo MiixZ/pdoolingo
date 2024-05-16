@@ -1,0 +1,40 @@
+---
+import SideMenuItem from './SideMenuItem.astro'
+
+import Temas from '../icons/Temas.astro'
+import Ejercicios from '../icons/Ejercicios.astro'
+import Insignia from '../icons/Insignia.astro'
+import Vidas from '../icons/Vidas.astro'
+import Experience from '../icons/Experience.astro'
+
+let pathname : String = Astro.url.pathname;
+pathname = pathname.split("/")[1];
+
+let temas = pathname == "temas" ? "true" : "false";
+let ejercicios = pathname == "ejercicios" ? "true" : "false";
+let insignias = pathname == "insignias" ? "true" : "false";
+---
+
+<div class="bg-slate-900 rounded-lg p-2 flex-1" >
+    <ul>
+        <SideMenuItem href="./" text="TEMAS" selected={temas}>   <!-- TODO: cambiar href -->
+            <Temas/>
+        </SideMenuItem>
+
+        <SideMenuItem href="./" text="EJERCICIOS" selected={ejercicios}>   <!-- TODO: cambiar href -->
+            <Ejercicios/>
+        </SideMenuItem>
+
+        <SideMenuItem href="/insignias/" text="INSIGNIAS" selected={insignias}>
+            <Insignia/>
+        </SideMenuItem>
+
+        <SideMenuItem text="5/5" selected="false" notSelectable='true'>
+            <Vidas/>
+        </SideMenuItem>
+
+        <SideMenuItem text="0/5000" selected="false" notSelectable='true'>    <!-- TODO: Cambiar experiencia -->
+            <Experience/>
+        </SideMenuItem>
+    </ul>
+</div>
