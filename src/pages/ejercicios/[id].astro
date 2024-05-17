@@ -14,5 +14,22 @@ const ejercicio = await getEjercicio(id);
 
 console.log(ejercicio)
 ---
+<script>
+    let counter = 0;
+    const timerElement = document.getElementById('timer');
 
-<EjercicioLayout title="PDOOLingo - Ejercicio"/>
+    const timer = setInterval(() => {
+        if (timerElement) {
+            timerElement.textContent = (++counter).toString();
+            if (counter === 10) {
+                clearInterval(timer);
+            }
+        }
+    }, 1000);
+</script>
+
+<EjercicioLayout title="PDOOLingo - Ejercicio">
+    <div class="flex flex-auto flex-col relative h-screen bg-slate-800">
+        <div id="timer" class="text-3xl text-white w-full items-center justify-center text-center">0</div>
+    </div>
+</EjercicioLayout>
