@@ -1,38 +1,32 @@
 ---
 import EjercicioItem from '../components/mainMenu/EjercicioItem.astro';
 import Layout from '../layouts/Layout.astro';
+import type { Ejercicio } from '../interfaces/Ejercicio.ts';
+import { getEjercicios } from '../services/ejercicios.ts'
 
-interface Ejercicio {
-    id: number;
-    enunciado: string;
-    tipo: string;
-    coste_pista: string;
-    tipo_coste_pista: string;
-    xp_base: number;
-}
-
-const result = await fetch('http://localhost:3000/ejercicios');
-let data = await result.json();
+let data = await getEjercicios();
 let cont = 0;
 
-data.success ? console.log('Data fetched successfully') : console.error('Error fetching data');
+data.success ? console.log('Data fetched successfully') : console.error(data.error);
 
 const ejercicios = data.data as Ejercicio[];
 ---
 
 <Layout title="PDOOLingo">
-    <div class="w-full flex flex-col">
+    <div class="w-full flex flex-col overflow-auto">
         <h2 class="[width:70%] text-center my-4 mt-20 text-3xl font-bold"> Ejercicios: </h2>
         <div class="w-full flex items-center justify-center">
             <table class="[width:40%] mt-0">
-                {ejercicios.map(ejercicio => (
-                    <EjercicioItem
-                        numero={++cont}
-                        enunciado={ejercicio.enunciado} 
-                        tipo={ejercicio.tipo} 
-                        xp={ejercicio.xp_base}
-                    />
-                ))}
+                {ejercicios && ejercicios.length > 0 ?
+                    ejercicios.map(ejercicio => (
+                        <EjercicioItem
+                            Ejercicio={ejercicio}
+                            numero={++cont}
+                        />
+                    ))
+                    :
+                    <tr><td class="text-center text-xl">No hay ejercicios disponibles :(</td></tr>
+                }
             </table>
         </div>
     </div>
