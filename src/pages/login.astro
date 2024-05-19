@@ -1,11 +1,11 @@
 ---
-import LoginLayout from '../layouts/LoginLayout.astro';
-import { login } from '../services/loginlogin';
+import Layout from '../layouts/HomeLayout.astro';
+import { login } from '../services/login';
 import LoginComponent from '../components/mainMenu/loginComponent.astro';
 
 const l = login;
 ---
 
-<LoginLayout>
+<Layout title="PDOOLingo - Login">
 	<LoginComponent/>
-</LoginLayout>
+</Layout>
