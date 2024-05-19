@@ -1,17 +1,28 @@
 ---
+import type { Usuario } from '../../interfaces/Usuario';
+
 interface Props {
-    email: string;
-    name: string;
+    usuario: Usuario;
     image: string;
+    email: string;
 }
 
-const { email, name, image } = Astro.props;
+const { usuario, image, email } = Astro.props;
+
+const { nombre, apellidos, tipo, DNI } = usuario;
+console.log(usuario.nombre);
 ---
 
-<div class="flex relative flex-row items-center p-7 justify-center bg-slate-500 rounded-lg w-3/4">
-    <img src={image} alt={name} class="w-12 h-12 rounded-full" />
-    <div class="ml-4">
-        <h2 class="text-2xl font-semibold">¡HOLA, {name}!</h2>
-        <p class="text-sm text-gray-800">{email}</p>
+<div class="flex relative flex-col p-7 bg-slate-500 rounded-lg w-3/4">
+    <div class="flex flex-row items-center justify-between w-3/5">
+        <img src={image} alt={nombre} class="w-24 h-24 rounded-full" />
+        <div class="ml-4">
+            <h2 class="text-4xl text-wrap font-semibold">¡HOLA, {nombre}!</h2>
+            <p class="text-sm text-gray-800 text-center">{email}</p>
+        </div>
     </div>
+
+    <h1 class="text-3xl font-semibold mt-10">Tus datos:</h1>
+
+    <pre> { JSON.stringify(usuario) }</pre>
 </div>

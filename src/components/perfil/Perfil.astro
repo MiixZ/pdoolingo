@@ -1,16 +1,17 @@
 ---
 import Header from "./Header.astro";
+import type { Usuario } from '../../interfaces/Usuario';
 
 interface Props {
-    email: string;
-    name: string;
+    usuario: Usuario;
     image: string;
+    email: string;
 }
 
-const { email, name, image } = Astro.props;
+const { usuario, image, email } = Astro.props;
 ---
 
-<Header email={email} name={name} image={image} />
+<Header email={email} usuario={usuario} image={image} />
 
 <button id="logout"> Cerrar sesión </button>
 
