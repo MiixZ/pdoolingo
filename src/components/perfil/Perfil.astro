@@ -1,0 +1,25 @@
+---
+import Header from "./Header.astro";
+
+interface Props {
+    email: string;
+    name: string;
+    image: string;
+}
+
+const { email, name, image } = Astro.props;
+---
+
+<Header email={email} name={name} image={image} />
+
+<button id="logout"> Cerrar sesión </button>
+
+<script>
+    const { signOut } = await import("auth-astro/client")
+
+    const logout = document.getElementById("logout");
+
+    logout?.addEventListener("click", async () => {
+        await signOut()
+    });
+</script>

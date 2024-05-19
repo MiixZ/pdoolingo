@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/HomeLayout.astro';
+import LoginComponent from '../components/perfil/LoginComponent.astro';
+import Intro from '../components/perfil/Intro.astro';
+import Perfil from '../components/perfil/Perfil.astro';
+import { getSession } from "auth-astro/server"
+
+const session = await getSession(Astro.request);
+const usuario = session ? session.user : null;
+
+const { email, name, image } = usuario || {};
+---
+
+<Layout title="PDOOLingo - Perfil">
+	<div class="flex flex-col items-center text-white min-h-screen gap-6 pt-10">
+		{session ? <Perfil email=`${email}` name=`${name}` image=`${image}` /> : <Intro/>}
+	</div>
+</Layout>
