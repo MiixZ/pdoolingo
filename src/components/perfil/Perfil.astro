@@ -12,7 +12,7 @@ interface Props {
 const { usuario, image, email } = Astro.props;
 ---
 
-<div class="flex flex-col relative p-10 bg-slate-700 rounded-lg w-3/4"> 
+<div class="flex flex-col relative p-10 bg-slate-700 rounded-lg w-full md:w-3/4"> 
     <Header email={email} usuario={usuario} image={image} />
     <Datos usuario={usuario} />
 </div>
