@@ -1,5 +1,6 @@
 ---
 import Header from "./Header.astro";
+import Datos from "./Datos.astro";
 import type { Usuario } from '../../interfaces/Usuario';
 
 interface Props {
@@ -11,9 +12,12 @@ interface Props {
 const { usuario, image, email } = Astro.props;
 ---
 
-<Header email={email} usuario={usuario} image={image} />
+<div class="flex flex-col relative p-10 bg-slate-700 rounded-lg w-3/4"> 
+    <Header email={email} usuario={usuario} image={image} />
+    <Datos usuario={usuario} />
+</div>
 
-<button id="logout"> Cerrar sesión </button>
+<button id="logout" class="bg-red-500 p-3 rounded-xl"> Cerrar sesión </button>
 
 <script>
     const { signOut } = await import("auth-astro/client")

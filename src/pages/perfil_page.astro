@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/HomeLayout.astro';
-import LoginComponent from '../components/perfil/LoginComponent.astro';
 import Intro from '../components/perfil/Intro.astro';
 import Perfil from '../components/perfil/Perfil.astro';
+import NoUser from '../components/perfil/NoUser.astro';
 import { getSession } from "auth-astro/server"
 import { getUsuario } from '../services/usuario';
 
@@ -24,12 +24,12 @@ let usuario = {
 	tipo: "",
 }
 
-usuarios.length == 1 ? usuario = usuarios[0] : void 0;
-
+usuarios?.length == 1 ? usuario = usuarios[0] : void 0;
 ---
 
 <Layout title="PDOOLingo - Perfil">
-	<div class="flex flex-col items-center text-white min-h-screen gap-6 pt-10">
-		{session ? <Perfil email=`${email}` usuario={usuario} image=`${image}` /> : <Intro/>}
+	<div class="flex flex-col items-center text-white min-h-screen pt-10 gap-20">
+		{session && usuarios?.length > 0 ? <Perfil email=`${email}` usuario={usuario} image=`${image}` /> : <Intro/>}
+		{session && usuarios == null ? <NoUser/> : void 0}
 	</div>
 </Layout>

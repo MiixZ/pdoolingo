@@ -20,10 +20,6 @@ export const getUsuario = async (
     body: JSON.stringify(body),
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
   const data = await response.json();
   const usuario = data.data as Usuario[];
 
