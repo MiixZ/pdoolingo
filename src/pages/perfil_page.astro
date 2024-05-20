@@ -1,10 +1,11 @@
 ---
-import Layout from '../layouts/HomeLayout.astro';
-import Intro from '../components/perfil/Intro.astro';
-import Perfil from '../components/perfil/Perfil.astro';
-import NoUser from '../components/perfil/NoUser.astro';
+import Layout from '@layouts/HomeLayout.astro';
+import Intro from '@components/perfil/Intro.astro';
+import Perfil from '@components/perfil/Perfil.astro';
+import NoUser from '@components/perfil/NoUser.astro';
+import { getUsuario } from '@services/usuario';
+
 import { getSession } from "auth-astro/server"
-import { getUsuario } from '../services/usuario';
 
 const session = await getSession(Astro.request);
 const sessionUser = session ? session.user : null;

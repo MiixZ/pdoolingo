@@ -1,7 +1,7 @@
 ---
-import type { Ejercicio } from "../../interfaces/Ejercicio"
-import EjercicioLayout from "../../layouts/EjercicioLayout.astro";
-import { getEjercicios, getEjercicio } from '../../services/ejercicios.ts'
+import type { Ejercicio } from "@interfaces/Ejercicio"
+import EjercicioLayout from "@layouts/EjercicioLayout.astro";
+import { getEjercicios, getEjercicio } from '@services/ejercicios.ts'
 
 export async function getStaticPaths() {
     const data = await getEjercicios();
