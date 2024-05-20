@@ -3,19 +3,17 @@ import type { Usuario } from '@interfaces/Usuario';
 
 interface Props {
     usuario: Usuario;
-    image: string;
-    email: string;
 }
 
-const { usuario, image, email } = Astro.props;
+const { usuario } = Astro.props;
 
 const { nombre } = usuario;
 ---
 
 <div class="flex flex-col md:flex-row items-center justify-center w-full">
-    <img src={image} alt={nombre} class="w-24 h-24 rounded-full" />
+    <img src={usuario.image} alt={nombre} class="w-24 h-24 rounded-full" />
     <div class="mt-4 md:mt-0 md:ml-4 text-center md:text-left">
         <h2 class="text-2xl md:text-4xl text-wrap font-semibold">¡HOLA, {nombre}!</h2>
-        <p class="text-sm text-wrap text-gray-500">{email}</p>
+        <p class="text-sm text-wrap text-gray-500">{usuario.email}</p>
     </div>
 </div>

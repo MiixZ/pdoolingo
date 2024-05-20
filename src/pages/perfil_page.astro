@@ -3,34 +3,14 @@ import Layout from '@layouts/HomeLayout.astro';
 import Intro from '@components/perfil/Intro.astro';
 import Perfil from '@components/perfil/Perfil.astro';
 import NoUser from '@components/perfil/NoUser.astro';
-import { getUsuario } from '@services/usuario';
+import { getSesion } from '@services/login';
 
-import { getSession } from "auth-astro/server"
-
-const session = await getSession(Astro.request);
-const sessionUser = session ? session.user : null;
-
-const { email, name, image } = sessionUser || {};
-
-const nombre = name?.split(' ')[0];
-const apellidos = name?.split(' ').slice(1).join(' ');
-const usuarios = await getUsuario(nombre, apellidos);
-
-let usuario = {
-	id: "",
-	nombre: "",
-	apellidos: "",
-	DNI: "",
-	vidas: 0,
-	tipo: "",
-}
-
-usuarios?.length == 1 ? usuario = usuarios[0] : void 0;
+const usuario = await getSesion(Astro.request);
 ---
 
 <Layout title="PDOOLingo - Perfil">
 	<div class="flex flex-col items-center text-white min-h-screen pt-10 gap-20">
-		{session && usuarios?.length > 0 ? <Perfil email=`${email}` usuario={usuario} image=`${image}` /> : <Intro/>}
-		{session && usuarios == null ? <NoUser/> : void 0}
+		{usuario ? <Perfil usuario={usuario} /> : <Intro/>}
+		{usuario == null ? <NoUser/> : void 0}
 	</div>
 </Layout>

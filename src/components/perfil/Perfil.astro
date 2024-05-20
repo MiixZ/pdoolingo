@@ -5,15 +5,13 @@ import type { Usuario } from '@interfaces/Usuario';
 
 interface Props {
     usuario: Usuario;
-    image: string;
-    email: string;
 }
 
-const { usuario, image, email } = Astro.props;
+const { usuario } = Astro.props;
 ---
 
 <div class="flex flex-col relative p-10 bg-slate-700 rounded-lg w-full md:w-3/4"> 
-    <Header email={email} usuario={usuario} image={image} />
+    <Header usuario={usuario} />
     <Datos usuario={usuario} />
 </div>
 
