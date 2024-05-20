@@ -1,1 +1,12 @@
-<img class="w-8 h-8" src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="Perfil" title="Perfil">
+---
+import perfil from '@public/perfil.png';
+
+import { getSession } from 'auth-astro/server';
+
+const session = await getSession(Astro.request);
+const sessionUser = session ? session.user : null;
+
+const src = sessionUser ? sessionUser.image : perfil.src;
+---
+
+<img class="w-8 h-8" src={ src } alt="Perfil" title="Perfil">
