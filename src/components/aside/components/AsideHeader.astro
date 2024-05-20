@@ -6,7 +6,7 @@ import Perfil from '../../../icons/aside/Perfil.astro'
 let pathname : String = Astro.url.pathname;
 pathname = pathname.split("/")[1];
 
-let perfil = pathname == "perfil" ? "true" : "false";
+let perfil = pathname.includes("perfil") ? "true" : "false";
 let home = pathname == "home" ? "true" : "false";
 ---
  
