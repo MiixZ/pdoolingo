@@ -1,3 +1,4 @@
+import type { Ejercicio } from "@interfaces/Ejercicio";
 import { url } from "./comun";
 
 export const getEjercicios = async () => {
@@ -6,8 +7,10 @@ export const getEjercicios = async () => {
   return result.json();
 };
 
-export const getEjercicio = async (id: Number | undefined) => {
+export const getEjercicio = async (
+  id: Number | undefined
+): Promise<Ejercicio | null> => {
   const result = await fetch(url + `ejercicios/${id}`);
 
-  return result.json();
+  return (await result.json()).data as Ejercicio;
 };
