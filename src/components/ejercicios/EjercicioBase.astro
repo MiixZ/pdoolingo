@@ -1,5 +1,6 @@
 ---
 import EjercicioItem from '@components/mainMenu/EjercicioItem.astro';
+import NotLogged from '@components/NoLogged.astro';
 import type { Ejercicio } from '@interfaces/Ejercicio.ts';
 import { getEjercicios } from '@services/ejercicios.ts'
 import { getSesion } from '@services/login';
@@ -14,29 +15,23 @@ const ejercicios = data.data as Ejercicio[];
 ---
 
 { sesion ?
-        <div class="w-full flex flex-col overflow-auto">
-            <h2 class="text-center my-4 mt-20 text-3xl font-bold"> Ejercicios: </h2>
-            <div class="w-full flex items-center justify-center">
-                <table class="[width:40%] mt-0">
-                    {ejercicios && ejercicios.length > 0 ?
-                        ejercicios.map(ejercicio => (
-                            <EjercicioItem
-                                Ejercicio={ejercicio}
-                                numero={++cont}
-                            />
-                        ))
-                        :
-                        <tr><td class="text-center text-xl">No hay ejercicios disponibles :(</td></tr>
-                    }
-                </table>
-            </div>
-        </div> 
-        :
-        <div class="w-full flex flex-col items-center justify-center mt-20">
-            <h2 class="text-center text-3xl font-bold bg-red-500 rounded-xl p-5">
-                Debes 
-                 <a href="/perfil_page" class="text-blue-500 hover:underline hover:text-purple-700">iniciar sesión</a> 
-                 para empezar a navegar. 
-            </h2>
+    <div class="w-full flex flex-col overflow-auto">
+        <h2 class="text-center my-4 mt-20 text-3xl font-bold"> Ejercicios: </h2>
+        <div class="w-full flex items-center justify-center">
+            <table class="[width:40%] mt-0">
+                {ejercicios && ejercicios.length > 0 ?
+                    ejercicios.map(ejercicio => (
+                        <EjercicioItem
+                            Ejercicio={ejercicio}
+                            numero={++cont}
+                        />
+                    ))
+                    :
+                    <tr><td class="text-center text-xl">No hay ejercicios disponibles :(</td></tr>
+                }
+            </table>
         </div>
-    }
+    </div> 
+    :
+    <NotLogged />
+}
