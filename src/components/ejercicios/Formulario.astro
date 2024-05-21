@@ -1,0 +1,80 @@
+---
+
+---
+
+<form id="formulario" class="flex flex-col rounded-xl border p-7 gap-5">
+  <div class="flex flex-col sm:flex-row gap-2 rounded-xl bg-green-800 p-5">
+    <label class="font-bold" for="enunciado">Enunciado:</label>
+    <input
+      class="rounded-xl w-full pl-2 text-black"
+      type="text"
+      id="enunciado"
+      name="enunciado"
+    />
+  </div>
+
+  <div class="flex flex-col sm:flex-row gap-2 rounded-xl bg-green-800 p-3 items-center justify-center">
+    <label class="font-bold p-1" for="tipo">Tipo:</label>
+    <select class="rounded-xl p-1 w-full sm:w-auto" id="tipo" name="tipo">
+      <option value="tipo1">Flecha</option>
+      <option value="tipo2">Unir</option>
+    </select>
+  </div>
+
+  <div class="flex flex-col gap-2" id="respuestas">
+    <input
+      class="rounded-xl p-1"
+      type="text"
+      id="respuesta1"
+      name="respuesta1"
+      placeholder="Agrega el texto de la respuesta"
+    />
+    <input
+      class="rounded-xl p-1"
+      type="text"
+      id="respuesta2"
+      name="respuesta2"
+      placeholder="Agrega el texto de la respuesta"
+    />
+    <input
+      class="rounded-xl p-1"
+      type="text"
+      id="respuesta3"
+      name="respuesta3"
+      placeholder="Agrega el texto de la respuesta"
+    />
+    <input
+      class="rounded-xl p-1"
+      type="text"
+      id="respuesta4"
+      name="respuesta4"
+      placeholder="Agrega el texto de la respuesta"
+    />
+  </div>
+
+  <button class="rounded-xl p-3 bg-green-800 mt-4" type="button" id="agregarRespuestaBtn">
+    Agregar respuesta
+  </button>
+  <button class="rounded-xl p-3 bg-green-800 mt-2" type="submit">Registrar ejercicio</button>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    let respuestaCount = 4;
+
+    function agregarRespuesta() {
+      respuestaCount++;
+      const respuestasDiv = document.getElementById('respuestas');
+      const newInput = document.createElement('input');
+      newInput.setAttribute('type', 'text');
+      newInput.setAttribute('id', `respuesta${respuestaCount}`);
+      newInput.setAttribute('name', `respuesta${respuestaCount}`);
+      newInput.setAttribute('class', 'rounded-xl p-1');
+      newInput.setAttribute('placeholder', 'Agrega el texto de la respuesta');
+      respuestasDiv?.appendChild(newInput);
+    }
+
+    const agregarRespuestaBtn = document.getElementById('agregarRespuestaBtn');
+    agregarRespuestaBtn?.addEventListener('click', agregarRespuesta);
+  });
+</script>
