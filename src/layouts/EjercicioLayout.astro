@@ -1,10 +1,12 @@
 ---
+import type { Usuario } from "@interfaces/Usuario";
 import Head from "./head.astro";
 import type { Ejercicio } from "@interfaces/Ejercicio";
 
 interface Props {
   title: string;
   ejercicio?: Ejercicio | null;
+  usuario?: Usuario | null;
 }
 
 const { title, ejercicio } = Astro.props;

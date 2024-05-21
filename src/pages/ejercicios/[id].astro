@@ -2,6 +2,7 @@
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import EjercicioLayout from "@layouts/EjercicioLayout.astro";
 import { getEjercicios, getEjercicio } from "@services/ejercicios.ts";
+import { getUsuarioID } from "@services/usuario";
 
 export async function getStaticPaths() {
   const data = await getEjercicios();
@@ -14,7 +15,13 @@ export async function getStaticPaths() {
 const { id } = Astro.params;
 const ejercicio = await getEjercicio(id);
 
-console.log(ejercicio);
+const url = new URL(Astro.request.url);
+const id_usuario = url.searchParams.get("id_usuario");
+const usuario = await getUsuarioID(id_usuario);
 ---
 
-<EjercicioLayout title="PDOOLingo - Ejercicio" ejercicio={ejercicio} />
+<EjercicioLayout
+  title="PDOOLingo - Ejercicio"
+  ejercicio={ejercicio}
+  usuario={usuario}
+/>

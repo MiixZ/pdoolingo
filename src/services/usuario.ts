@@ -25,3 +25,11 @@ export const getUsuario = async (
 
   return usuario;
 };
+
+export const getUsuarioID = async (
+  id: string | null
+): Promise<Usuario | null> => {
+  const result = await fetch(url + `usuarios/${id}`);
+
+  return (await result.json()).data as Usuario;
+};
