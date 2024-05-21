@@ -4,7 +4,7 @@ import type { Ejercicio } from "@interfaces/Ejercicio";
 
 interface Props {
   title: string;
-  ejercicio: Ejercicio | null;
+  ejercicio?: Ejercicio | null;
 }
 
 const { title, ejercicio } = Astro.props;
@@ -14,20 +14,20 @@ const { title, ejercicio } = Astro.props;
   <body>
     <div id="ejercicio" class="w-full p-5 bg-slate-800 h-screen">
       <header
-        class="[grid-area:enunciado] w-full bg-slate-700 bg-ejercicio-background bg-center bg-custom bg-no-repeat text-white rounded-xl p-10 h-1/4 sm:h-1/3 md:h-1/2 lg:h-1/4"
+        class="[grid-area:enunciado] w-full bg-slate-700 bg-ejercicio-background bg-center bg-custom bg-no-repeat text-white rounded-xl p-10"
       >
-        {ejercicio?.enunciado}
+        <div class="h-1/2">
+          {ejercicio?.enunciado}
+        </div>
+
+        <div id="timer" class="text-3xl text-white w-full text-center h-1/2">
+          0
+        </div>
       </header>
 
       <div
         class="[grid-area:ejercicio] relative bg-slate-800 h-3/4 sm:h-2/3 md:h-1/2 lg:h-3/4"
       >
-        <div
-          id="timer"
-          class="text-3xl text-white w-full items-center justify-center text-center"
-        >
-          0
-        </div>
         <slot />
       </div>
     </div>
@@ -53,8 +53,10 @@ const { title, ejercicio } = Astro.props;
     display: grid;
     grid-template-areas:
       "enunciado"
+      "ejercicio"
+      "ejercicio"
       "ejercicio";
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 3fr;
   }
 </style>

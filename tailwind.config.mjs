@@ -10,7 +10,7 @@ export default {
         auto: "auto",
         cover: "cover",
         contain: "contain",
-        custom: "200px 50px",
+        custom: "300px 75px",
       },
       backgroundRepeat: {
         "no-repeat": "no-repeat",
