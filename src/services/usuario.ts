@@ -1,5 +1,5 @@
+import type { Usuario } from "@interfaces/Usuario";
 import { url } from "./comun";
-import type { Usuario } from "../interfaces/Usuario";
 
 export const getUsuario = async (
   nombre: string | undefined,
