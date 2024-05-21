@@ -2,6 +2,7 @@
 import TipoFlecha from '@icons/ejercicios/TipoFlecha.astro';
 import TipoUnir from '@icons/ejercicios/TipoUnir.astro';
 import TipoTexto from '@icons/ejercicios/TipoTexto.astro';
+import TipoRellenar from '@icons/ejercicios/TipoRellenar.astro';
 import type { Ejercicio } from '@interfaces/Ejercicio';
 
 interface Props {
@@ -26,6 +27,8 @@ const { Ejercicio, numero } = Astro.props;
               return <TipoUnir />;
             case 'texto':
               return <TipoTexto />;
+            case 'rellenar':
+              return <TipoRellenar />;
             default:
               return Ejercicio.tipo;
           }
