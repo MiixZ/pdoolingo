@@ -1,0 +1,149 @@
+---
+import type { Usuario } from '@interfaces/Usuario';
+import type { Ejercicio } from '@interfaces/Ejercicio';
+import type { Respuesta } from "@interfaces/Respuesta";
+import { insertEjercicio } from '@services/ejercicios';
+import Error from '@components/ejercicios/Error.astro';
+import RespuestaItem from './RespuestaItem.astro';
+import PistaItem from './PistaItem.astro';
+import ExperienciaTipoItem from './ExperienciaTipoItem.astro';
+import EnunciadoItem from './EnunciadoItem.astro';
+
+interface Props {
+  usuario : Usuario;
+}
+
+const { usuario } = Astro.props;
+const errors = { enunciado: "", experiencia: "", coste_pista: "" };
+let done = false;
+
+if (Astro.request.method === "POST" && usuario.tipo === "admin") { 
+  try {
+    const data = (await Astro.request.formData());
+    const enunciado = data.get('enunciado') as string;
+    const tipo = data.get('tipo') as string;
+    const experiencia = parseInt(data.get('Experiencia') as string);
+    const tipo_coste_pista = data.get('tipo_coste_pista') as string;
+    const coste_pista = parseInt(data.get('coste_pista') as string);
+
+    data.forEach((value, key) => {
+      data.delete(key);
+    });
+
+    if (experiencia > 1000 || experiencia < 1) {
+      errors.experiencia = 'La experiencia debe ser un número entre 1 y 1000';
+    }
+
+    if (tipo_coste_pista === 'Vidas' && (coste_pista > 5 || coste_pista < 0)) {
+      errors.coste_pista = 'No puedes sobrepasar el número de vidas máximo en el coste.';
+    } else if (tipo_coste_pista === 'Experiencia' && (coste_pista > experiencia || coste_pista < 0)) {
+      errors.coste_pista = 'El coste de la pista debe ser un número entre 0 y la experiencia del ejercicio.';
+    }
+
+    const bodyEjercicio : Ejercicio = {
+      enunciado,
+      tipo,
+      xp_base: experiencia,
+      tipo_coste_pista,
+      coste_pista,
+    };
+
+    let respuestaCount = 1;
+    let respuestas: Respuesta[] = [];
+
+    while (data.has(`respuesta${respuestaCount}`)) {
+      const valor = data.get(`respuesta${respuestaCount}`);
+      let respuesta : Respuesta = { texto: "", correcta: false };
+      if (valor) {
+        const texto = valor.toString();
+        respuesta.texto = texto;
+
+        const checkboxValor = data.get(`correcta${respuestaCount}`);
+        respuesta.correcta = checkboxValor === 'on';
+
+        respuestas.push(respuesta);
+      }
+      respuestaCount++;
+    }
+
+    const hasErrors = Object.values(errors).some(msg => msg)
+    if (!hasErrors) {
+      await insertEjercicio(bodyEjercicio, respuestas);
+      done = true;
+    }
+  } catch(error) {
+    console.error('Error al crear el ejercicio: ', error);
+  }
+}
+---
+
+<form method="POST" id="formulario" class="flex flex-col rounded-xl border p-7 mb-2 gap-5 w-full sm:w-4/5" data-done={done}>
+  <EnunciadoItem />
+  {errors.enunciado && <Error texto={errors.enunciado}/>}
+
+  <ExperienciaTipoItem />
+  {errors.experiencia && <Error texto={errors.experiencia}/>}
+
+  <PistaItem />
+  {errors.coste_pista && <Error texto={errors.coste_pista}/>}
+
+  <div class="flex flex-col gap-2" id="respuestas">
+    <RespuestaItem n_respuesta={1} />
+
+    <RespuestaItem n_respuesta={2} />
+
+    <RespuestaItem n_respuesta={3} />
+
+    <RespuestaItem n_respuesta={4} />
+  </div>
+
+  <button class="rounded-xl p-3 bg-green-800 mt-4 w-full md:w-1/4 mx-auto" type="button" id="agregarRespuestaBtn">
+    Agregar respuesta
+  </button>
+  <button class="rounded-xl p-3 bg-green-800 mt-2 w-full md:w-1/4 mx-auto" type="submit">Registrar ejercicio</button>
+
+  {done && <p class="text-green-800 text-center">Ejercicio registrado correctamente. <a href="/home">Pulsa aquí</a> para volver y ver los cambios.</p>}
+</form>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', (event) => {
+    let respuestaCount = 4;
+    function agregarRespuesta() {
+      respuestaCount++;
+      const respuestasDiv = document.getElementById('respuestas');
+      const newInput = document.createElement('input');
+      newInput.setAttribute('type', 'text');
+      newInput.setAttribute('id', `respuesta${respuestaCount}`);
+      newInput.setAttribute('name', `respuesta${respuestaCount}`);
+      newInput.setAttribute('class', 'rounded-xl p-1 text-center w-full lg:w-1/2 mx-auto');
+      newInput.setAttribute('placeholder', 'Agrega el texto de la respuesta');
+
+      const newLabel = document.createElement('label');
+      newLabel.setAttribute('class', 'font-bold p-1');
+      newLabel.setAttribute('for', `correcta${respuestaCount}`);
+      newLabel.textContent = '¿Es correcta?';
+
+      const newCheckbox = document.createElement('input');
+      newCheckbox.setAttribute('type', 'checkbox');
+      newCheckbox.setAttribute('id', `correcta${respuestaCount}`);
+      newCheckbox.setAttribute('name', `correcta${respuestaCount}`);
+      newCheckbox.setAttribute('class', 'rounded-xl p-1 text-center w-full sm:w-1/3 text-black');
+
+      const newCheckboxDiv = document.createElement('div');
+      newCheckboxDiv.setAttribute('class', 'flex flex-col h-auto w-full items-center justify-center lg:w-1/2');
+      newCheckboxDiv.appendChild(newLabel);
+      newCheckboxDiv.appendChild(newCheckbox);
+
+      const newDiv = document.createElement('div');
+      newDiv.setAttribute('class', 'flex flex-col sm:flex-row p-3 gap-0 rounded-xl bg-green-800 items-center justify-center w-full lg:w-1/2 mx-auto');
+      newDiv.appendChild(newInput);
+      newDiv.appendChild(newCheckboxDiv);
+
+      respuestasDiv?.appendChild(newDiv);
+    }
+
+    const agregarRespuestaBtn = document.getElementById('agregarRespuestaBtn');
+    agregarRespuestaBtn?.addEventListener('click', agregarRespuesta);
+  });
+</script>
