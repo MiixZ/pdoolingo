@@ -4,11 +4,13 @@ import EjercicioLayout from "@layouts/EjercicioLayout.astro";
 import { getEjercicios, getEjercicio } from "@services/ejercicios.ts";
 import { getUsuarioID } from "@services/usuario";
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const data = await getEjercicios();
   const ejercicios = data.data;
   return ejercicios.map((ejercicio: Ejercicio) => ({
-    params: { id: ejercicio.id.toString() },
+    params: { id: ejercicio.id?.toString() },
   }));
 }
 
