@@ -21,8 +21,6 @@ export const insertEjercicio = async (
   ejercicio: Ejercicio,
   respuestas: Respuesta[]
 ): Promise<void> => {
-  console.log("Ejercicio a crear: ", ejercicio);
-  console.log("Respuestas a crear: ", respuestas);
   const resultEjercicio = await fetch(url + "ejercicios", {
     method: "POST",
     headers: {
@@ -33,8 +31,6 @@ export const insertEjercicio = async (
 
   const responseEjercicio = (await resultEjercicio.json()) as Data;
   const ejercicioCreado = responseEjercicio.data as Ejercicio;
-
-  console.log("Ejercicio creado: ", ejercicioCreado);
 
   let respuestasCreadas: Respuesta[] = [];
 
@@ -49,8 +45,6 @@ export const insertEjercicio = async (
 
     const response = (await resultRespuesta.json()) as Data;
     const respuestaCreada = response.data as Respuesta;
-
-    console.log("Respuesta creada: ", respuestaCreada);
 
     if (response.success) {
       respuestasCreadas.push(respuestaCreada);
@@ -69,8 +63,6 @@ export const insertEjercicio = async (
 
       const responseAsignadas = (await resultAsignadas.json()) as Data;
       const asignadaCreada = responseAsignadas.data;
-
-      console.log("Asignada creada: ", asignadaCreada);
     }
   });
 };
