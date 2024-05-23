@@ -9,6 +9,6 @@ const usuario = await getSesion(Astro.request);
 <Layout title="PDOOLingo">
   <div class="flex flex-col justify-center items-center">
     <EjercicioBase />
-    { usuario && usuario.tipo === "admin" && <Formulario /> }
+    { usuario && usuario.tipo === "admin" && <Formulario usuario={usuario} /> }
   </div>
 </Layout>

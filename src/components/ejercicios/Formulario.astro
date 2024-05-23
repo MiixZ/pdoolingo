@@ -1,19 +1,24 @@
 ---
+import type { Usuario } from '@interfaces/Usuario';
+import type { Ejercicio } from '@interfaces/Ejercicio';
+import type { Respuesta } from "@interfaces/Respuesta";
 import Error from './Error.astro';
 
-interface Respuestas {
-  [key: string]: { texto: string };
+interface Props {
+  usuario : Usuario;
 }
+
+const { usuario } = Astro.props;
 
 const errors = { enunciado: "", experiencia: "", coste_pista: "" };
 
-if (Astro.request.method === "POST") { 
+if (Astro.request.method === "POST" && usuario.tipo === "admin") { 
   try {
     const data = await Astro.request.formData();
-    const enunciado = data.get('enunciado');
-    const tipo = data.get('tipo');
+    const enunciado = data.get('enunciado') as string;
+    const tipo = data.get('tipo') as string;
     const experiencia = parseInt(data.get('Experiencia') as string);
-    const tipo_coste_pista = data.get('tipo_coste_pista');
+    const tipo_coste_pista = data.get('tipo_coste_pista') as string;
     const coste_pista = parseInt(data.get('coste_pista') as string);
 
     if (experiencia > 1000 || experiencia < 1) {
@@ -26,22 +31,24 @@ if (Astro.request.method === "POST") {
       errors.coste_pista = 'El coste de la pista debe ser un número entre 0 y la experiencia del ejercicio.';
     }
 
-    const bodyEjercicio = {
+    const bodyEjercicio : Ejercicio = {
       enunciado,
       tipo,
-      experiencia,
+      xp_base : experiencia,
       tipo_coste_pista,
       coste_pista,
     };
 
     let respuestaCount = 1;
-    let respuestas: Respuestas = {};
+    let respuestas: Respuesta[] = [];
 
     while (data.has(`respuesta${respuestaCount}`)) {
       const valor = data.get(`respuesta${respuestaCount}`);
+      let respuesta : Respuesta = { texto: "" };
       if (valor) {
         const texto = valor.toString();
-        respuestas[`respuesta${respuestaCount}`] = { texto };
+        respuesta.texto = texto;
+        respuestas[respuestaCount - 1] = { texto };
       }
       respuestaCount++;
     }

@@ -14,3 +14,18 @@ export const getEjercicio = async (
 
   return (await result.json()).data as Ejercicio;
 };
+
+export const insertEjercicio = async (
+  ejercicio: Ejercicio,
+  respuesta: {}
+) => {
+  const result = await fetch(url + "ejercicios", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ...ejercicio, respuesta }),
+  });
+
+  return result.json();
+};
