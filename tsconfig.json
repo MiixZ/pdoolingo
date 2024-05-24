@@ -11,8 +11,8 @@
       "@interfaces/*": ["src/interfaces/*"],
       "@services/*": ["src/services/*"],
       "@pages/*": ["src/pages/*"],
-      "@layouts/*": ["src/layouts/*"]
-      // Añade tus propias rutas aquí
+      "@layouts/*": ["src/layouts/*"],
+      "@styles/*": ["public/styles/*"]
     }
   }
 }
