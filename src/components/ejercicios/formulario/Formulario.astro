@@ -10,12 +10,11 @@ import ExperienciaTipoItem from './ExperienciaTipoItem.astro';
 import EnunciadoItem from './EnunciadoItem.astro';
 
 interface Props {
-  usuario : Usuario;
+  usuario: Usuario;
 }
 
 const { usuario } = Astro.props;
 const errors = { enunciado: "", experiencia: "", coste_pista: "" };
-let done = false;
 
 if (Astro.request.method === "POST" && usuario.tipo === "admin") { 
   try {
@@ -26,16 +25,12 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
     const tipo_coste_pista = data.get('tipo_coste_pista') as string;
     const coste_pista = parseInt(data.get('coste_pista') as string);
 
-    data.forEach((value, key) => {
-      data.delete(key);
-    });
-
     if (experiencia > 1000 || experiencia < 1) {
       errors.experiencia = 'La experiencia debe ser un número entre 1 y 1000';
     }
 
     if (tipo_coste_pista === 'Vidas' && (coste_pista > 5 || coste_pista < 0)) {
-      errors.coste_pista = 'No puedes sobrepasar el número de vidas máximo en el coste.';
+      errors.coste_pista = 'No puedes sobrepasar el número de vidas máximo en el coste de la pista.';
     } else if (tipo_coste_pista === 'Experiencia' && (coste_pista > experiencia || coste_pista < 0)) {
       errors.coste_pista = 'El coste de la pista debe ser un número entre 0 y la experiencia del ejercicio.';
     }
@@ -69,7 +64,6 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
     const hasErrors = Object.values(errors).some(msg => msg)
     if (!hasErrors) {
       await insertEjercicio(bodyEjercicio, respuestas);
-      done = true;
     }
   } catch(error) {
     console.error('Error al crear el ejercicio: ', error);
@@ -77,15 +71,12 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
 }
 ---
 
-<form method="POST" id="formulario" class="flex flex-col rounded-xl border p-7 mb-2 gap-5 w-full sm:w-4/5" data-done={done}>
+<form method="POST" id="formulario" class="flex flex-col rounded-xl border p-7 mb-2 gap-5 w-full sm:w-4/5">
   <EnunciadoItem />
-  {errors.enunciado && <Error texto={errors.enunciado}/>}
 
   <ExperienciaTipoItem />
-  {errors.experiencia && <Error texto={errors.experiencia}/>}
 
   <PistaItem />
-  {errors.coste_pista && <Error texto={errors.coste_pista}/>}
 
   <div class="flex flex-col gap-2" id="respuestas">
     <RespuestaItem n_respuesta={1} />
@@ -100,13 +91,10 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
   <button class="rounded-xl p-3 bg-green-800 mt-4 w-full md:w-1/4 mx-auto" type="button" id="agregarRespuestaBtn">
     Agregar respuesta
   </button>
-  <button class="rounded-xl p-3 bg-green-800 mt-2 w-full md:w-1/4 mx-auto" type="submit">Registrar ejercicio</button>
-
-  {done && <p class="text-green-800 text-center">Ejercicio registrado correctamente. <a href="/home">Pulsa aquí</a> para volver y ver los cambios.</p>}
+  <button class="rounded-xl p-3 bg-green-800 mt-2 w-full md:w-1/4 mx-auto" type="submit" id="submitBtn">Registrar ejercicio</button>
 </form>
 
 <script>
-
   document.addEventListener('DOMContentLoaded', (event) => {
     let respuestaCount = 4;
     function agregarRespuesta() {
@@ -145,5 +133,24 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
 
     const agregarRespuestaBtn = document.getElementById('agregarRespuestaBtn');
     agregarRespuestaBtn?.addEventListener('click', agregarRespuesta);
+
+    const form = document.getElementById('formulario') as HTMLFormElement;
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+      submitBtn.disabled = true;
+
+      const formData = new FormData(form as HTMLFormElement);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        window.location.href = '/home';
+      } else {
+        submitBtn.disabled = false;
+      }
+    });
   });
 </script>
