@@ -84,7 +84,11 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
   </header>
   <PistaItem />
 
-  <div class="flex flex-col gap-2" id="respuestas">
+  <header>
+    <h2 class="text-2xl font-bold text-wrap text-white mt-10 truncate">Agrega las respuestas del ejercicio y marca la(s) correcta(s)</h2>
+  </header>
+
+  <div class="flex flex-col gap-5 w-full" id="respuestas">
     <RespuestaItem n_respuesta={1} />
 
     <RespuestaItem n_respuesta={2} />
