@@ -20,5 +20,23 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addComponents }) {
+      const newComponents = {
+        ".inputs::placeholder": {
+          color: "black",
+        },
+        ".inputs:focus::placeholder": {
+          color: "rgba(126, 119, 119, 0.733)",
+          transition: "all 0.75s ease-in-out",
+        },
+        ".inputs:hover::placeholder": {
+          color: "rgb(161, 157, 157)",
+          transition: "all 0.75s ease-in-out",
+        },
+      };
+
+      addComponents(newComponents);
+    },
+  ],
 };
