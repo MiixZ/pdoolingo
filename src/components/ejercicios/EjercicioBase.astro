@@ -18,7 +18,7 @@ const ejercicios = data.data as Ejercicio[];
     <div class="w-full flex flex-col overflow-auto">
       <h2 class="text-center my-4 mt-20 text-3xl font-bold"> Ejercicios: </h2>
       <div class="w-full flex items-center justify-center">
-        <table class="[width:40%] mt-0">
+        <table class="w-full lg:w-3/5 mt-0">
           {ejercicios && ejercicios.length > 0 ? (
             ejercicios.map((ejercicio) => (
               <EjercicioItem
