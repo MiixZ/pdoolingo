@@ -12,6 +12,8 @@ interface Props {
   usuario: Usuario;
 }
 
+let respuestaCount = 4;
+
 const { usuario } = Astro.props;
 const errors = { enunciado: "", experiencia: "", coste_pista: "" };
 
@@ -69,8 +71,7 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
   }
 }
 ---
-
-<form method="POST" id="formulario" class="flex flex-col rounded-xl border bg-slate-900 p-20 mb-2 gap-5 w-full lg:w-3/5">
+<form method="POST" id="formulario" class="flex flex-col rounded-xl border bg-slate-900 p-20 mb-2 gap-5 w-full xl:w-3/5">
   <header>
     <h1 class="text-4xl font-bold text-wrap text-white truncate">Crea un ejercicio</h1>
   </header>
@@ -89,19 +90,15 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
   </header>
 
   <div class="flex flex-col gap-5 w-full" id="respuestas">
-    <RespuestaItem n_respuesta={1} />
-
-    <RespuestaItem n_respuesta={2} />
-
-    <RespuestaItem n_respuesta={3} />
-
-    <RespuestaItem n_respuesta={4} />
+    { Array.from({ length: respuestaCount }, (_, i) => <RespuestaItem n_respuesta={i + 1} />) }
   </div>
 
-  <button class="rounded-xl p-3 bg-green-800 mt-4 w-full md:w-1/4 mx-auto" type="button" id="agregarRespuestaBtn">
+  <button class="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500" type="button" id="agregarRespuestaBtn">
     Agregar respuesta
   </button>
-  <button class="rounded-xl p-3 bg-green-800 mt-2 w-full md:w-1/4 mx-auto" type="submit" id="submitBtn">Registrar ejercicio</button>
+  <button class="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500" type="submit" id="submitBtn">
+    Registrar ejercicio
+  </button>
 </form>
 
 <script>
@@ -114,13 +111,8 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
       newInput.setAttribute('type', 'text');
       newInput.setAttribute('id', `respuesta${respuestaCount}`);
       newInput.setAttribute('name', `respuesta${respuestaCount}`);
-      newInput.setAttribute('class', 'rounded-xl p-1 text-center w-full lg:w-1/2 mx-auto');
+      newInput.setAttribute('class', 'inputs rounded-xl p-1 text-center w-full bg-gray-400 hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white duration-500 ease-in-out');
       newInput.setAttribute('placeholder', 'Agrega el texto de la respuesta');
-
-      const newLabel = document.createElement('label');
-      newLabel.setAttribute('class', 'font-bold p-1');
-      newLabel.setAttribute('for', `correcta${respuestaCount}`);
-      newLabel.textContent = '¿Es correcta?';
 
       const newCheckbox = document.createElement('input');
       newCheckbox.setAttribute('type', 'checkbox');
@@ -130,7 +122,6 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
 
       const newCheckboxDiv = document.createElement('div');
       newCheckboxDiv.setAttribute('class', 'flex flex-col h-auto w-full items-center justify-center lg:w-1/2');
-      newCheckboxDiv.appendChild(newLabel);
       newCheckboxDiv.appendChild(newCheckbox);
 
       const newDiv = document.createElement('div');
