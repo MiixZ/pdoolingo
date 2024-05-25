@@ -12,7 +12,8 @@
       "@services/*": ["src/services/*"],
       "@pages/*": ["src/pages/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@styles/*": ["public/styles/*"]
+      "@styles/*": ["public/styles/*"],
+      "@lib/*": ["src/lib/*"]
     }
   }
 }
