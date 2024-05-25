@@ -71,24 +71,18 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
   }
 }
 ---
+
 <form method="POST" id="formulario" class="flex flex-col rounded-xl border bg-slate-900 p-20 mb-2 gap-5 w-full xl:w-3/5">
-  <header>
-    <h1 class="text-4xl font-bold text-wrap text-white truncate">Crea un ejercicio</h1>
-  </header>
-  
+
   <EnunciadoItem />
 
   <ExperienciaTipoItem />
 
-  <header>
-    <h2 class="text-2xl font-bold text-wrap text-white mt-10 truncate">Agrega la lógica de las pistas</h2>
-  </header>
   <PistaItem />
 
   <header>
     <h2 class="text-2xl font-bold text-wrap text-white mt-10 truncate">Agrega las respuestas del ejercicio y marca la(s) correcta(s)</h2>
   </header>
-
   <div class="flex flex-col gap-5 w-full" id="respuestas">
     { Array.from({ length: respuestaCount }, (_, i) => <RespuestaItem n_respuesta={i + 1} />) }
   </div>
@@ -107,29 +101,31 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
     function agregarRespuesta() {
       respuestaCount++;
       const respuestasDiv = document.getElementById('respuestas');
-      const newInput = document.createElement('input');
-      newInput.setAttribute('type', 'text');
-      newInput.setAttribute('id', `respuesta${respuestaCount}`);
-      newInput.setAttribute('name', `respuesta${respuestaCount}`);
-      newInput.setAttribute('class', 'inputs rounded-xl p-1 text-center w-full bg-gray-400 hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white duration-500 ease-in-out');
-      newInput.setAttribute('placeholder', 'Agrega el texto de la respuesta');
-
-      const newCheckbox = document.createElement('input');
-      newCheckbox.setAttribute('type', 'checkbox');
-      newCheckbox.setAttribute('id', `correcta${respuestaCount}`);
-      newCheckbox.setAttribute('name', `correcta${respuestaCount}`);
-      newCheckbox.setAttribute('class', 'rounded-xl p-1 text-center w-full sm:w-1/3 text-black');
-
-      const newCheckboxDiv = document.createElement('div');
-      newCheckboxDiv.setAttribute('class', 'flex flex-col h-auto w-full items-center justify-center lg:w-1/2');
-      newCheckboxDiv.appendChild(newCheckbox);
-
-      const newDiv = document.createElement('div');
-      newDiv.setAttribute('class', 'flex flex-col sm:flex-row p-3 gap-0 rounded-xl bg-green-800 items-center justify-center w-full lg:w-1/2 mx-auto');
-      newDiv.appendChild(newInput);
-      newDiv.appendChild(newCheckboxDiv);
-
-      respuestasDiv?.appendChild(newDiv);
+      
+      const newRespuestaItem = document.createElement('div');
+      newRespuestaItem.setAttribute('class', 'flex flex-col lg:flex-row items-center text-black gap-5 text-xl rounded-xl w-full');
+      
+      newRespuestaItem.innerHTML = `
+        <input
+            class="inputs rounded-xl p-1 text-center w-full bg-gray-400 hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white duration-500 ease-in-out"
+            type="text"
+            id="respuesta${respuestaCount}"
+            name="respuesta${respuestaCount}"
+            placeholder="Agrega el texto de la respuesta"
+        />
+        <div class="checkbox-wrapper-44 items-center justify-center">
+            <label class="toggleButton">
+                <input type="checkbox" id="correcta${respuestaCount}" name="correcta${respuestaCount}">
+                <div>
+                  <svg viewBox="0 0 44 44">
+                      <path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
+                  </svg>
+                </div>
+            </label>
+        </div>
+      `;
+      
+      respuestasDiv?.appendChild(newRespuestaItem);
     }
 
     const agregarRespuestaBtn = document.getElementById('agregarRespuestaBtn');
