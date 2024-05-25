@@ -16,17 +16,12 @@ const { Ejercicio, numero, Usuario } = Astro.props;
 ---
 
 <tr
-  class="flex flex-col lg:flex-row items-center mb-4 p-6 border-4 rounded-lg border-gray-600 bg-slate-900 hover:bg-slate-500 transition-colors duration-300"
+  class="flex flex-col lg:flex-row w-full mb-4 p-6 border-4 rounded-lg border-gray-600 bg-slate-900 hover:bg-slate-500 transition-colors duration-300"
 >
   <td class="flex flex-col justify-center w-full">
     <slot />
-    <div class="flex flex-col lg:flex-row items-center w-full gap-4">
-      <p
-        class="py-2 flex justify-center items-center font-bold w-full lg:w-1/4 text-center text-2xl lg:text-4xl"
-      >
-        {numero}
-      </p>
-      <p class="flex w-full lg:w-1/4 text-center items-center justify-center">
+    <div class="flex flex-col lg:flex-row items-center justify-between w-full gap-4">
+      <p class="flex-none p-2">
         {
           (() => {
             switch (Ejercicio.tipo) {
@@ -43,6 +38,11 @@ const { Ejercicio, numero, Usuario } = Astro.props;
             }
           })()
         }
+      </p>
+      <p
+        class="py-2 font-bold text-2xl lg:text-4xl"
+      >
+        {numero}
       </p>
       <a
         href={`/ejercicios/${Ejercicio.id}?id_usuario=${Usuario.id}`}
