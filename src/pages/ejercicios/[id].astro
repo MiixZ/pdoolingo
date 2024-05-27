@@ -1,21 +1,11 @@
 ---
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import EjercicioLayout from "@layouts/EjercicioLayout.astro";
-import { getEjercicios, getEjercicio } from "@services/ejercicios.ts";
+import { getEjercicio } from "@services/ejercicios.ts";
 import { getUsuarioID } from "@services/usuario";
 
-export const prerender = true;
-
-export async function getStaticPaths() {
-  const data = await getEjercicios();
-  const ejercicios = data.data;
-  return ejercicios.map((ejercicio: Ejercicio) => ({
-    params: { id: ejercicio.id?.toString() },
-  }));
-}
-
 const { id } = Astro.params;
-const ejercicio = await getEjercicio(id);
+const ejercicio = await getEjercicio(Number(id));
 
 const url = new URL(Astro.request.url);
 const id_usuario = url.searchParams.get("id_usuario");
