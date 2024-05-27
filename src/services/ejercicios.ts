@@ -66,3 +66,13 @@ export const insertEjercicio = async (
     }
   });
 };
+
+export const deleteEjercicio = async (
+  id: Number | undefined
+): Promise<string> => {
+  const result = await fetch(url + `ejercicios/${id}`, {
+    method: "DELETE",
+  });
+
+  return result.json();
+};
