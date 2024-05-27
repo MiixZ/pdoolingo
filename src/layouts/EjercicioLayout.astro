@@ -1,7 +1,9 @@
 ---
 import type { Usuario } from "@interfaces/Usuario";
-import Head from "./head.astro";
 import type { Ejercicio } from "@interfaces/Ejercicio";
+
+import Head from "./head.astro";
+import Header from "@components/ejercicios/in/header.astro";
 
 interface Props {
   title: string;
@@ -15,18 +17,7 @@ const { title, ejercicio } = Astro.props;
 <Head title={title}>
   <body>
     <div id="ejercicio" class="w-full p-5 bg-slate-800 h-screen">
-      <header
-        class="[grid-area:enunciado] w-full bg-slate-700 bg-ejercicio-background bg-center bg-custom bg-no-repeat text-white rounded-xl p-10"
-      >
-        <div class="h-1/2">
-          {ejercicio?.enunciado}
-        </div>
-
-        <div id="timer" class="text-3xl text-white w-full text-center h-1/2">
-          0
-        </div>
-      </header>
-
+      <Header ejercicio={ejercicio} />
       <div
         class="[grid-area:ejercicio] relative bg-slate-800 h-3/4 sm:h-2/3 md:h-1/2 lg:h-3/4"
       >
@@ -35,20 +26,6 @@ const { title, ejercicio } = Astro.props;
     </div>
   </body>
 </Head>
-
-<script>
-  let counter = 0;
-  const timerElement = document.getElementById("timer");
-
-  const timer = setInterval(() => {
-    if (timerElement) {
-      timerElement.textContent = (++counter).toString();
-      if (counter === 60) {
-        clearInterval(timer);
-      }
-    }
-  }, 1000);
-</script>
 
 <style>
   #ejercicio {

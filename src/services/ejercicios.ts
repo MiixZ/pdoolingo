@@ -68,11 +68,30 @@ export const insertEjercicio = async (
 };
 
 export const deleteEjercicio = async (
-  id: Number | undefined
+  id_ejercicio: Number | undefined
 ): Promise<string> => {
-  const result = await fetch(url + `ejercicios/${id}`, {
+  console.log("ELIMINANDO");
+  const R_result = await fetch(url + `ejercicios-respuestas/${id_ejercicio}`);
+  const respuestas_ID = (await R_result.json()).data as Number[];
+
+  const ER_Result = await fetch(url + `ejercicios-respuestas/${id_ejercicio}`, {
     method: "DELETE",
   });
+  console.log(await ER_Result.json());
+
+  respuestas_ID.map(async (id_respuesta) => {
+    const result = await fetch(url + `respuestas/${id_respuesta}`, {
+      method: "DELETE",
+    });
+
+    console.log(await result.json());
+  });
+
+  const result = await fetch(url + `ejercicios/${id_ejercicio}`, {
+    method: "DELETE",
+  });
+
+  console.log(await result.json());
 
   return result.json();
 };

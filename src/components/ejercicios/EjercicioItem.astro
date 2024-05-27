@@ -3,9 +3,6 @@ import TipoFlecha from "@icons/ejercicios/TipoFlecha.astro";
 import TipoUnir from "@icons/ejercicios/TipoUnir.astro";
 import TipoTexto from "@icons/ejercicios/TipoTexto.astro";
 import TipoRellenar from "@icons/ejercicios/TipoRellenar.astro";
-import Basura from "@icons/utils/basura";
-
-import { deleteEjercicio } from "@services/ejercicios";
 
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Usuario } from "@interfaces/Usuario";
@@ -17,7 +14,6 @@ interface Props {
 }
 
 const { Ejercicio, numero, Usuario } = Astro.props;
-const isAdmin = Usuario.tipo === "admin";
 ---
 
 <tr class="flex flex-col lg:flex-row w-full mb-4 p-6 border-4 rounded-lg border-gray-600 bg-slate-900 hover:bg-slate-500 transition-colors duration-300">
@@ -55,13 +51,6 @@ const isAdmin = Usuario.tipo === "admin";
       <span class="justify-center items-center text-center p-3 text-2xl text-yellow-700 font-bold bg-lime-600 rounded-xl w-full lg:w-1/4">
         {Ejercicio.xp_base}
       </span>
-      
-      {isAdmin && 
-        <a href="/"
-          onclick={await deleteEjercicio(Ejercicio.id)}>
-          <Basura />
-        </a>
-      }
     </div>
   </td>
 </tr>

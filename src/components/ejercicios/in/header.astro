@@ -1,0 +1,64 @@
+---
+import type { Ejercicio } from '@interfaces/Ejercicio';
+
+import Vidas from '@components/perfil/Vidas.astro';
+
+interface Props {
+    ejercicio?: Ejercicio | null;
+}
+
+const { ejercicio } = Astro.props;
+---
+
+<header class="[grid-area:enunciado] w-full h-auto bg-slate-700 bg-ejercicio-background bg-center bg-custom bg-no-repeat text-white rounded-xl p-10">
+    <div class="h-auto text-3xl">
+        {ejercicio?.enunciado}
+    </div>
+
+    <div class="flex flex-auto justify-between relative p-5">
+        <div class="flex gap-4 text-2xl text-white w-full">
+            <span>
+                Tiempo transcurrido:
+            </span>
+            <span id="timer" class="">
+                0
+            </span>
+        </div>
+
+        <span class="flex flex-col w-auto">
+            <span class="text-2xl">
+                PISTAS
+            </span>
+            <span class="flex gap-2 w-auto">
+                {(() => {
+                    switch (ejercicio?.tipo_coste_pista) {
+                        case 'vidas':
+                            return <Vidas vidas={ejercicio.coste_pista} texto/>;
+                        case 'experiencia':
+                            <p>
+                                COSTE:
+                            </p>
+                            return <span>{ejercicio.coste_pista} XP</span>;
+                        default:
+                            return;
+                    }
+                })()}
+            </span>
+        </span>
+    </div>
+
+</header>
+
+<script>
+  let counter = 0;
+  const timerElement = document.getElementById("timer");
+
+  const timer = setInterval(() => {
+    if (timerElement) {
+      timerElement.textContent = (++counter).toString();
+      if (counter === 60) {
+        clearInterval(timer);
+      }
+    }
+  }, 1000);
+</script>
