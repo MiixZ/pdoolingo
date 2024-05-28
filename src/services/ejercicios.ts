@@ -3,6 +3,12 @@ import { url } from "./comun";
 import type { Respuesta } from "@interfaces/Respuesta";
 import type { Data } from "@interfaces/Data";
 
+interface respuestas {
+  id_ejercicio: number;
+  id_respuesta: number;
+  es_correcta: boolean;
+}
+
 export const getEjercicios = async () => {
   const result = await fetch(url + "ejercicios");
 
@@ -94,4 +100,23 @@ export const deleteEjercicio = async (
   console.log(await result.json());
 
   return result.json();
+};
+
+export const getRespuestas = async (id_ejercicio: Number | undefined) => {
+  const result = await fetch(url + "ejercicios-respuestas/" + id_ejercicio);
+
+  const id_respuestas = (await result.json()).data;
+
+  console.log(id_respuestas);
+
+  let respuestas: Respuesta[] = [];
+  id_respuestas.map(async (object: respuestas) => {
+    const result = await fetch(url + "respuestas/" + object.id_respuesta);
+
+    const respuesta = (await result.json()).data as Respuesta;
+    respuesta.correcta = object.es_correcta;
+    respuestas.push(respuesta);
+  });
+
+  return respuestas;
 };

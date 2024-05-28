@@ -18,6 +18,15 @@ export default {
       backgroundPosition: {
         center: "center",
       },
+      keyframes: {
+        spin: {
+          "0%": { transform: "rotate(45deg)" },
+          "100%": { transform: "rotate(-45deg)" },
+        },
+      },
+      animation: {
+        spin: "spin 5s linear infinite",
+      },
     },
   },
   plugins: [
