@@ -14,7 +14,7 @@ const Contador = () => {
   }, []);
 
   return (
-    <div class="flex gap-4 mt-4 text-2xl text-white sm:w-full lg:w-1/2 xl:w-1/3 w-1/4">
+    <div className="flex gap-4 mt-4 text-2xl text-white sm:w-full lg:w-1/2 xl:w-1/3 w-1/4">
       <h1>Tiempo transcurrido: {count}</h1>
     </div>
   );
