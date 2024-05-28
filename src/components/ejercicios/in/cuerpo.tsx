@@ -28,7 +28,22 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
       if (bothCorrect) {
         grupo1 = eliminarRespuesta(pair[0], grupo1);
         grupo2 = eliminarRespuesta(pair[1], grupo2);
-        setCompleted(true);
+
+        console.log(
+          "grupo1",
+          grupo1.filter((r) => r.correcta)
+        );
+        console.log(
+          "grupo2",
+          grupo2.filter((r) => r.correcta)
+        );
+
+        if (
+          grupo1.filter((r) => r.correcta).length === 0 &&
+          grupo2.filter((r) => r.correcta).length === 0
+        ) {
+          setCompleted(true);
+        }
       } else {
         setTimeout(() => {
           setLineColor(null);
@@ -157,7 +172,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   );
 
   return (
-    <div className="ejercicio-component">
+    <div className="rounded-xl bg-black">
       {ejercicio?.tipo === "flecha" && renderFlecha()}
       {ejercicio?.tipo === "unir" && renderUnir()}
     </div>
