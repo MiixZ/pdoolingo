@@ -23,9 +23,14 @@ export default {
           "0%": { transform: "rotate(45deg)" },
           "100%": { transform: "rotate(-45deg)" },
         },
+        spin2: {
+          "0%": { transform: "rotate(-45deg)" },
+          "100%": { transform: "rotate(45deg)" },
+        },
       },
       animation: {
-        spin: "spin 5s linear infinite",
+        spin: "spin 5s linear infinite alternate",
+        spin2: "spin2 5s linear infinite alternate",
       },
     },
   },
