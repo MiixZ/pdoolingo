@@ -29,8 +29,8 @@ export default {
         },
       },
       animation: {
-        spin: "spin 5s linear infinite alternate",
-        spin2: "spin2 5s linear infinite alternate",
+        spin: "spin 6s linear infinite alternate",
+        spin2: "spin2 4s ease-in-out infinite alternate",
       },
     },
   },
