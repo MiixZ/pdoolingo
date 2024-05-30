@@ -13,7 +13,7 @@ const GrupoRespuestas: React.FC<GrupoRespuestasProps> = ({
   selectedResponses,
   onSelect,
 }) => (
-  <div className="flex flex-col gap-4">
+  <div className="flex flex-col gap-4 h-full justify-evenly">
     {respuestas.map((respuesta, index) => (
       <RespuestaItem
         key={index}
