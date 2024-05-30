@@ -1,8 +1,8 @@
+// EjercicioComponent.tsx
 import React, { useState, useEffect } from "react";
-import { keyframes } from "@emotion/react";
-
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Respuesta } from "@interfaces/Respuesta";
+import GrupoRespuestas from "./GrupoRespuestas";
 
 interface EjercicioComponentProps {
   ejercicio?: Ejercicio | null;
@@ -19,31 +19,29 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
     null,
   ]);
   const [lineColor, setLineColor] = useState<string | null>(null);
+  const [grupo1, setGrupo1] = useState<Respuesta[]>([]);
+  const [grupo2, setGrupo2] = useState<Respuesta[]>([]);
   const [completed, setCompleted] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (respuestas) {
+      const [g1, g2] = dividirRespuestas(respuestas);
+      setGrupo1(g1);
+      setGrupo2(g2);
+    }
+  }, [respuestas]);
 
   useEffect(() => {
     if (pair[0] && pair[1]) {
       const bothCorrect = pair[0].correcta && pair[1].correcta;
       setLineColor(bothCorrect ? "green" : "red");
       if (bothCorrect) {
-        grupo1 = eliminarRespuesta(pair[0], grupo1);
-        grupo2 = eliminarRespuesta(pair[1], grupo2);
-
-        console.log(
-          "grupo1",
-          grupo1.filter((r) => r.correcta)
-        );
-        console.log(
-          "grupo2",
-          grupo2.filter((r) => r.correcta)
-        );
-
-        if (
-          grupo1.filter((r) => r.correcta).length === 0 &&
-          grupo2.filter((r) => r.correcta).length === 0
-        ) {
-          setCompleted(true);
-        }
+        setTimeout(() => {
+          setGrupo1((prev) => prev.filter((r) => r !== pair[0]));
+          setGrupo2((prev) => prev.filter((r) => r !== pair[1]));
+          setPair([null, null]);
+          setLineColor(null);
+        }, 1000);
       } else {
         setTimeout(() => {
           setLineColor(null);
@@ -53,10 +51,16 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
     }
   }, [pair]);
 
-  const eliminarRespuesta = (respuesta: Respuesta, grupo: Respuesta[]) => {
-    console.log(grupo.filter((r) => r !== respuesta));
-    return grupo.filter((r) => r !== respuesta);
-  };
+  useEffect(() => {
+    if (
+      grupo1.length > 0 &&
+      grupo2.length > 0 &&
+      !grupo1.some((respuesta) => respuesta.correcta) &&
+      !grupo2.some((respuesta) => respuesta.correcta)
+    ) {
+      setCompleted(true);
+    }
+  }, [grupo1, grupo2]);
 
   const dividirRespuestas = (
     respuestas: Respuesta[]
@@ -80,9 +84,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
     return [grupo1, grupo2];
   };
 
-  let [grupo1, grupo2] = dividirRespuestas(respuestas || []);
-
-  const handleSelect = (respuesta: Respuesta, grupo: number) => {
+  const handleSelect = (respuesta: Respuesta) => {
     setSelectedResponses((prev) => {
       const newSelected = prev.includes(respuesta)
         ? prev.filter((r) => r !== respuesta)
@@ -91,11 +93,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
         setPair([newSelected[0], newSelected[1]]);
         setSelectedResponses([]);
       } else if (newSelected.length > 2) {
-        console.log("newSelected", newSelected);
         newSelected.shift();
-      } else {
-        selectedResponses.push(respuesta);
-        console.log("selectedResponses", selectedResponses);
       }
       return newSelected;
     });
@@ -106,37 +104,16 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
 
   const renderFlecha = () => (
     <div className="flex rounded-xl p-10 bg-slate-700 justify-between h-auto relative">
-      <div className="flex flex-col gap-4">
-        {grupo1.map((respuesta, index) => (
-          <div
-            key={index}
-            className={`text-3xl text-white text-center w-auto p-7 cursor-pointer hover:bg-zinc-500 hover:text-4xl rounded-xl transition-all duration-700 ease-in-out ${
-              selectedResponses.includes(respuesta)
-                ? "bg-zinc-500"
-                : "bg-zinc-800"
-            } ${index % 2 === 0 ? "animate-spin" : "animate-spin2"}`}
-            onClick={() => handleSelect(respuesta, 1)}
-          >
-            {respuesta.texto}
-          </div>
-        ))}
-      </div>
-
-      <div className="flex flex-col gap-4">
-        {grupo2.map((respuesta, index) => (
-          <div
-            key={index}
-            className={`text-3xl text-white text-center w-auto p-7 cursor-pointer hover:bg-zinc-500 hover:text-4xl rounded-xl transition-all duration-700 ease-in-out ${
-              selectedResponses.includes(respuesta)
-                ? "bg-zinc-500"
-                : "bg-zinc-800"
-            } ${index % 2 === 0 ? "animate-spin" : "animate-spin2"}`}
-            onClick={() => handleSelect(respuesta, 2)}
-          >
-            {respuesta.texto}
-          </div>
-        ))}
-      </div>
+      <GrupoRespuestas
+        respuestas={grupo1}
+        selectedResponses={selectedResponses}
+        onSelect={(respuesta) => handleSelect(respuesta)}
+      />
+      <GrupoRespuestas
+        respuestas={grupo2}
+        selectedResponses={selectedResponses}
+        onSelect={(respuesta) => handleSelect(respuesta)}
+      />
       {pair[0] && pair[1] && (
         <div
           className={`absolute left-1/2 top-1/2 w-full h-full transition-all duration-2000`}
@@ -172,9 +149,12 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   );
 
   return (
-    <div className="rounded-xl bg-black">
+    <div className="rounded-xl">
       {ejercicio?.tipo === "flecha" && renderFlecha()}
       {ejercicio?.tipo === "unir" && renderUnir()}
+      {completed && (
+        <div className="text-white text-center mt-4">¡Completado!</div>
+      )}
     </div>
   );
 };
