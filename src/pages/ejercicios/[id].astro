@@ -31,5 +31,5 @@ const usuario = await getUsuarioID(id_usuario);
   usuario={usuario}
 >
   <Header ejercicio={ejercicio} />
-  <Cuerpo ejercicio={ejercicio} respuestas={respuestas} client:load></Cuerpo>
+  <Cuerpo ejercicio={ejercicio} respuestas={respuestas} id_usuario={id_usuario} client:load></Cuerpo>
 </EjercicioLayout>

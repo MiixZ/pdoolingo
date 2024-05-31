@@ -107,8 +107,6 @@ export const getRespuestas = async (id_ejercicio: Number | undefined) => {
 
   const id_respuestas = (await result.json()).data;
 
-  console.log(id_respuestas);
-
   let respuestas: Respuesta[] = [];
   id_respuestas.map(async (object: respuestas) => {
     const result = await fetch(url + "respuestas/" + object.id_respuesta);
@@ -119,4 +117,23 @@ export const getRespuestas = async (id_ejercicio: Number | undefined) => {
   });
 
   return respuestas;
+};
+
+export const realizaEjercicio = async (
+  id_usuario: string,
+  id_ejercicio: Number
+) => {
+  console.log("REALIZANDO EJERCICIO");
+  const result = await fetch(url + "usuario-ejercicios/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id_usuario, id_ejercicio }),
+  });
+
+  console.log(await result.json());
+
+  const resultado = (await result.json()).data;
+  return resultado;
 };

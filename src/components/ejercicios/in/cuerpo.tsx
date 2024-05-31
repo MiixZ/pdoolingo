@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
+
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Respuesta } from "@interfaces/Respuesta";
+
+import { realizaEjercicio } from "@services/ejercicios";
+
 import GrupoRespuestas from "./GrupoRespuestas";
 
 interface EjercicioComponentProps {
   ejercicio?: Ejercicio | null;
   respuestas?: Respuesta[];
+  id_usuario?: string | null;
 }
 
 const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   ejercicio,
   respuestas,
+  id_usuario,
 }) => {
   const [selectedResponses, setSelectedResponses] = useState<Respuesta[]>([]);
   const [pair, setPair] = useState<[Respuesta | null, Respuesta | null]>([
@@ -73,6 +79,14 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
     ) {
       setCompleted(true);
       setContainerBgColor("bg-green-500");
+      const performEjercicio = async () => {
+        console.log(id_usuario, ejercicio?.id);
+        if (ejercicio?.id && id_usuario) {
+          await realizaEjercicio(id_usuario, ejercicio.id);
+        }
+      };
+
+      performEjercicio();
     }
   }, [grupo1, grupo2, grupo3]);
 
