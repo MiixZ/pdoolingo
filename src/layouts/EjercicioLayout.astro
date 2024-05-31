@@ -3,21 +3,19 @@ import type { Usuario } from "@interfaces/Usuario";
 import type { Ejercicio } from "@interfaces/Ejercicio";
 
 import Head from "./head.astro";
-import Header from "@components/ejercicios/in/header.astro";
 
 interface Props {
   title: string;
-  ejercicio?: Ejercicio | null;
+  ejercicio?: Ejercicio;
   usuario?: Usuario | null;
 }
 
-const { title, ejercicio } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <Head title={title}>
   <body>
     <div id="ejercicio" class="flex flex-col gap-10 w-full p-5 bg-slate-800 h-screen">
-      <Header ejercicio={ejercicio} />
         <slot />
     </div>
   </body>

@@ -8,9 +8,16 @@ import { getUsuarioID } from "@services/usuario";
 import { getRespuestas } from "@services/ejercicios";
 
 import Cuerpo from "@components/ejercicios/in/cuerpo";
+import Header from "@components/ejercicios/in/header.astro";
 
 const { id } = Astro.params;
-const ejercicio = await getEjercicio(Number(id));
+const ejercicio: Ejercicio | null = await getEjercicio(Number(id));
+
+if (!ejercicio) {
+  Astro.response.status = 404;
+  return;
+}
+
 const respuestas: Respuesta[] = await getRespuestas(Number(id));
 
 const url = new URL(Astro.request.url);
@@ -23,5 +30,6 @@ const usuario = await getUsuarioID(id_usuario);
   ejercicio={ejercicio}
   usuario={usuario}
 >
+  <Header ejercicio={ejercicio} />
   <Cuerpo ejercicio={ejercicio} respuestas={respuestas} client:load></Cuerpo>
 </EjercicioLayout>
