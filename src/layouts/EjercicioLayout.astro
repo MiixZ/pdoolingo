@@ -16,7 +16,7 @@ const { title, ejercicio } = Astro.props;
 
 <Head title={title}>
   <body>
-    <div id="ejercicio" class="flex flex-col gap-10 w-full p-5 bg-slate-800 h-full">
+    <div id="ejercicio" class="flex flex-col gap-10 w-full p-5 bg-slate-800 h-screen">
       <Header ejercicio={ejercicio} />
         <slot />
     </div>
@@ -29,8 +29,9 @@ const { title, ejercicio } = Astro.props;
     grid-template-areas:
       "enunciado"
       "ejercicio"
+      "ejercicio"
       "ejercicio";
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 2fr;
+    grid-template-rows: 1fr 3fr;
   }
 </style>

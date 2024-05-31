@@ -23,7 +23,5 @@ const usuario = await getUsuarioID(id_usuario);
   ejercicio={ejercicio}
   usuario={usuario}
 >
-  <div class="[grid-area:ejercicio]">
-    <Cuerpo ejercicio={ejercicio} respuestas={respuestas} client:load></Cuerpo>
-  </div>
+  <Cuerpo ejercicio={ejercicio} respuestas={respuestas} client:load></Cuerpo>
 </EjercicioLayout>
