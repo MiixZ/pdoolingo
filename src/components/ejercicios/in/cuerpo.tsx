@@ -81,9 +81,9 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   ): [Respuesta[], Respuesta[], Respuesta[]] => {
     const tercioRespuestas = Math.floor(respuestas.length / 3);
 
-    const grupo1 = respuestas.slice(0, tercioRespuestas);
-    const grupo2 = respuestas.slice(tercioRespuestas, tercioRespuestas * 2);
-    const grupo3 = respuestas.slice(tercioRespuestas * 2);
+    const grupo3 = respuestas.slice(0, tercioRespuestas);
+    const grupo2 = respuestas.slice(tercioRespuestas, tercioRespuestas * 2 + 1);
+    const grupo1 = respuestas.slice(tercioRespuestas * 2 + 1);
 
     return [grupo1, grupo2, grupo3];
   };
@@ -109,16 +109,18 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
 
   const renderFlecha = () => (
     <div
-      className={`flex rounded-xl p-10 ${containerBgColor} justify-between h-full transition-colors duration-1000`}
+      className={` h-full transition-colors duration-1000 rounded-xl ${containerBgColor} `}
     >
-      {grupos.map((grupo, index) => (
-        <GrupoRespuestas
-          key={index}
-          respuestas={grupo}
-          selectedResponses={selectedResponses}
-          onSelect={(respuesta) => handleSelect(respuesta)}
-        />
-      ))}
+      <div className="flex h-full justify-between  p-10 w-full lg:w-3/4 mx-auto">
+        {grupos.map((grupo, index) => (
+          <GrupoRespuestas
+            key={index}
+            respuestas={grupo}
+            selectedResponses={selectedResponses}
+            onSelect={(respuesta) => handleSelect(respuesta)}
+          />
+        ))}
+      </div>
     </div>
   );
 
