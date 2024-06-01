@@ -1,5 +1,4 @@
 import React from "react";
-import Vidas from "@components/perfil/Vidas.astro";
 
 import type { Ejercicio } from "@interfaces/Ejercicio";
 
@@ -15,7 +14,12 @@ const Pista: React.FC<PistaProps> = ({ ejercicio }) => {
         {(() => {
           switch (ejercicio?.tipo_coste_pista) {
             case "vidas":
-              return <Vidas vidas={ejercicio.coste_pista} />;
+              return (
+                <>
+                  <p>COSTE:</p>
+                  <span>{ejercicio.coste_pista} Vida(s)</span>
+                </>
+              );
             case "experiencia":
               return (
                 <>
