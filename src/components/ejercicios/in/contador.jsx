@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-const Contador = () => {
+const Contador = ({ isCompleted }) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
+    if (isCompleted) return;
+
     const interval = setInterval(() => {
       setCount((prevCount) => prevCount + 1);
     }, 1000);
@@ -11,12 +13,12 @@ const Contador = () => {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [isCompleted]);
 
   return (
-    <div className="flex gap-4 mt-4 text-2xl text-white sm:w-full lg:w-1/2 xl:w-1/3 w-1/4">
-      <h1>Tiempo transcurrido: {count}</h1>
-    </div>
+    <h1 className="gap-4 text-center text-4xl text-white w-full lg:w-1/2">
+      {count}
+    </h1>
   );
 };
 

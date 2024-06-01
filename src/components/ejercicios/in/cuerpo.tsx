@@ -6,9 +6,11 @@ import type { Respuesta } from "@interfaces/Respuesta";
 import { realizaEjercicio } from "@services/ejercicios";
 
 import GrupoRespuestas from "./GrupoRespuestas";
+import Contador from "./contador";
+import Pista from "./Pista";
 
 interface EjercicioComponentProps {
-  ejercicio?: Ejercicio | null;
+  ejercicio?: Ejercicio;
   respuestas?: Respuesta[];
   id_usuario?: string | null;
 }
@@ -123,9 +125,9 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
 
   const renderFlecha = () => (
     <div
-      className={` h-full transition-colors duration-1000 rounded-xl ${containerBgColor} `}
+      className={`h-full transition-colors duration-1000 rounded-xl ${containerBgColor}`}
     >
-      <div className="flex h-full justify-between  p-10 w-full lg:w-3/4 mx-auto">
+      <div className="flex h-full justify-between p-10 w-full lg:w-3/4 mx-auto">
         {grupos.map((grupo, index) => (
           <GrupoRespuestas
             key={index}
@@ -161,24 +163,34 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   );
 
   return (
-    <div className="rounded-xl h-auto">
-      {completed ? (
-        <div className="flex flex-col items-center justify-center text-white text-center mt-4 py-4 w-full lg:w-1/2 mx-auto">
-          <span className="rounded-xl p-5 bg-green-950">¡COMPLETADO!</span>
-          <button
-            onClick={() => (window.location.href = "/ejercicios/ejercicios")}
-            className="flex mt-4 p-2 bg-blue-500 text-white rounded"
-          >
-            Volver
-          </button>
-        </div>
-      ) : (
-        <>
-          {ejercicio?.tipo === "flecha" && renderFlecha()}
-          {ejercicio?.tipo === "unir" && renderUnir()}
-        </>
-      )}
-    </div>
+    <>
+      <div className="flex flex-col lg:flex-row">
+        <Pista ejercicio={ejercicio} />
+        <Contador isCompleted={completed} />
+      </div>
+      <div className="rounded-xl h-screen">
+        {completed ? (
+          <>
+            <div className="flex flex-col items-center justify-center text-white text-center mt-4 py-4 w-full lg:w-1/2 mx-auto">
+              <span className="rounded-xl p-5 bg-green-950">¡COMPLETADO!</span>
+              <button
+                onClick={() =>
+                  (window.location.href = "/ejercicios/ejercicios")
+                }
+                className="flex mt-4 p-2 bg-blue-500 text-white rounded"
+              >
+                Volver
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            {ejercicio?.tipo === "flecha" && renderFlecha()}
+            {ejercicio?.tipo === "unir" && renderUnir()}
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

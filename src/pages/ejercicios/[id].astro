@@ -8,7 +8,6 @@ import { getUsuarioID } from "@services/usuario";
 import { getRespuestas } from "@services/ejercicios";
 
 import Cuerpo from "@components/ejercicios/in/cuerpo";
-import Header from "@components/ejercicios/in/header.astro";
 
 const { id } = Astro.params;
 const ejercicio: Ejercicio | null = await getEjercicio(Number(id));
@@ -30,6 +29,28 @@ const usuario = await getUsuarioID(id_usuario);
   ejercicio={ejercicio}
   usuario={usuario}
 >
-  <Header ejercicio={ejercicio} />
+  <header class="flex flex-col gap-4 w-full h-auto bg-slate-700 bg-ejercicio-background bg-center bg-custom bg-no-repeat text-white rounded-xl p-10">
+    <span class="h-auto text-3xl">
+        {ejercicio?.enunciado}
+    </span>
+
+    <span class="rounded-xl p-5 w-full lg:w-1/2 mx-auto text-center text-2xl to-transparent">
+      {(() => {
+        switch (ejercicio.tipo) {
+          case "flecha":
+            return "Junta una pareja de palabras que creas que puedan ser correctas. ¡Consigue emparejar a todas las respuestas correctas y gana!";
+          case "unir":
+            return ;
+          case "texto":
+            return ;
+          case "rellenar":
+            return ;
+          default:
+            return ;
+        }
+      })()}
+    </span>
+  </header>
+
   <Cuerpo ejercicio={ejercicio} respuestas={respuestas} id_usuario={id_usuario} client:load></Cuerpo>
 </EjercicioLayout>
