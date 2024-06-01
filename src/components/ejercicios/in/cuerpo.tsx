@@ -165,7 +165,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   return (
     <>
       <div className="flex flex-col lg:flex-row">
-        <Pista ejercicio={ejercicio} />
+        {!completed && <Pista ejercicio={ejercicio} />}
         <Contador isCompleted={completed} />
       </div>
       <div className="rounded-xl h-screen">
