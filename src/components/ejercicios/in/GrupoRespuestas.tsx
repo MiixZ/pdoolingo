@@ -6,12 +6,16 @@ interface GrupoRespuestasProps {
   respuestas: Respuesta[];
   selectedResponses: Respuesta[];
   onSelect: (respuesta: Respuesta) => void;
+  dragAndDrop?: boolean;
+  onDragStart?: (event: React.DragEvent, respuesta: Respuesta) => void;
 }
 
 const GrupoRespuestas: React.FC<GrupoRespuestasProps> = ({
   respuestas,
   selectedResponses,
   onSelect,
+  dragAndDrop,
+  onDragStart,
 }) => (
   <div className="flex flex-col gap-4 h-full justify-evenly">
     {respuestas.map((respuesta, index) => (
@@ -20,7 +24,12 @@ const GrupoRespuestas: React.FC<GrupoRespuestasProps> = ({
         respuesta={respuesta}
         index={index}
         isSelected={selectedResponses.includes(respuesta)}
-        onClick={() => onSelect(respuesta)}
+        onClick={() => {
+          if (!dragAndDrop) onSelect(respuesta);
+          else void 0;
+        }}
+        dragAndDrop={dragAndDrop}
+        onDragStart={(event) => onDragStart && onDragStart(event, respuesta)}
       />
     ))}
   </div>

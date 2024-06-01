@@ -5,6 +5,7 @@ export default {
     extend: {
       backgroundImage: (theme) => ({
         "ejercicio-background": "url('/logo.png')",
+        "pecera-background": "url('/pecera.jpg')",
       }),
       backgroundSize: {
         auto: "auto",
@@ -27,10 +28,18 @@ export default {
           "0%": { transform: "rotate(-45deg)" },
           "100%": { transform: "rotate(45deg)" },
         },
+        move: {
+          "0%": { transform: "translate(0px, 0px)" },
+          "25%": { transform: "translate(200px, 0px)" },
+          "50%": { transform: "translate(200px, 200px)" },
+          "75%": { transform: "translate(0px, 200px)" },
+          "100%": { transform: "translate(0px, 0px)" },
+        },
       },
       animation: {
         spin: "spin 6s linear infinite alternate",
         spin2: "spin2 4s ease-in-out infinite alternate",
+        move: "move 4s ease-in-out infinite",
       },
     },
   },

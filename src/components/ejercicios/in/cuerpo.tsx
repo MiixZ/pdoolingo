@@ -30,6 +30,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   const [grupo1, setGrupo1] = useState<Respuesta[]>([]);
   const [grupo2, setGrupo2] = useState<Respuesta[]>([]);
   const [grupo3, setGrupo3] = useState<Respuesta[]>([]);
+  const [droppedItems, setDroppedItems] = useState<Respuesta[]>([]);
   const grupos = [grupo1, grupo2, grupo3];
   const [completed, setCompleted] = useState<boolean>(false);
   const [initialized, setInitialized] = useState<boolean>(false);
@@ -120,8 +121,40 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
     });
   };
 
-  const handleDragStart = (event: React.DragEvent, respuesta: Respuesta) => {};
-  const handleDrop = (event: React.DragEvent) => {};
+  const handleDragStart = (
+    event: React.DragEvent,
+    respuesta: Respuesta,
+    grupoIndex: number
+  ) => {
+    event.dataTransfer.setData("respuesta", JSON.stringify(respuesta));
+    event.dataTransfer.setData("grupoIndex", grupoIndex.toString());
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    const respuestaData = event.dataTransfer.getData("respuesta");
+    const grupoIndex = parseInt(event.dataTransfer.getData("grupoIndex"), 10);
+    if (respuestaData) {
+      const respuesta: Respuesta = JSON.parse(respuestaData);
+      if (!respuesta.correcta) {
+        setContainerBgColor("bg-red-900");
+        setTimeout(() => {
+          setContainerBgColor("bg-slate-700");
+        }, 1000);
+        return;
+      }
+
+      setDroppedItems((prev) => [...prev, respuesta]);
+
+      if (grupoIndex === 0) {
+        setGrupo1((prev) => prev.filter((r) => r.id !== respuesta.id));
+      } else if (grupoIndex === 1) {
+        setGrupo2((prev) => prev.filter((r) => r.id !== respuesta.id));
+      } else if (grupoIndex === 2) {
+        setGrupo3((prev) => prev.filter((r) => r.id !== respuesta.id));
+      }
+    }
+  };
 
   const renderFlecha = () => (
     <div
@@ -141,23 +174,32 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   );
 
   const renderUnir = () => (
-    <div className="unir-container">
-      {respuestas?.map((respuesta, index) => (
-        <div
-          key={index}
-          className="response"
-          draggable
-          onDragStart={(event) => handleDragStart(event, respuesta)}
-        >
-          {respuesta.texto}
-        </div>
-      ))}
+    <div
+      className={`flex h-full w-auto rounded-xl justify-between ${containerBgColor}`}
+    >
+      <div className="flex h-full justify-between p-10 w-3/4 lg:w-1/2 mx-auto">
+        {grupos.map((grupo, index) => (
+          <GrupoRespuestas
+            key={index}
+            respuestas={grupo}
+            selectedResponses={selectedResponses}
+            onSelect={(respuesta) => handleSelect(respuesta)}
+            dragAndDrop={true}
+            onDragStart={(event, respuesta) =>
+              handleDragStart(event, respuesta, index)
+            }
+          />
+        ))}
+      </div>
+
       <div
-        className="drop-zone"
+        className="h-1/2 my-auto w-1/2 mx-auto bg-zinc-800 text-white text-center p-10 rounded-xl lg:w-1/4 bg-pecera-background bg-no-repeat bg-cover"
         onDrop={handleDrop}
         onDragOver={(event) => event.preventDefault()}
       >
-        Arrastra aquí
+        {droppedItems.map((item) => (
+          <div key={item.id}>{item.texto}</div>
+        ))}
       </div>
     </div>
   );
