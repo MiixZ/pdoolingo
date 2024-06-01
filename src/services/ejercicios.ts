@@ -76,28 +76,23 @@ export const insertEjercicio = async (
 export const deleteEjercicio = async (
   id_ejercicio: Number | undefined
 ): Promise<string> => {
-  console.log("ELIMINANDO");
+
   const R_result = await fetch(url + `ejercicios-respuestas/${id_ejercicio}`);
   const respuestas_ID = (await R_result.json()).data as Number[];
 
   const ER_Result = await fetch(url + `ejercicios-respuestas/${id_ejercicio}`, {
     method: "DELETE",
   });
-  console.log(await ER_Result.json());
 
   respuestas_ID.map(async (id_respuesta) => {
     const result = await fetch(url + `respuestas/${id_respuesta}`, {
       method: "DELETE",
     });
-
-    console.log(await result.json());
   });
 
   const result = await fetch(url + `ejercicios/${id_ejercicio}`, {
     method: "DELETE",
   });
-
-  console.log(await result.json());
 
   return result.json();
 };
@@ -123,7 +118,6 @@ export const realizaEjercicio = async (
   id_usuario: string,
   id_ejercicio: Number
 ) => {
-  console.log("REALIZANDO EJERCICIO");
   const result = await fetch(url + "usuario-ejercicios/", {
     method: "POST",
     headers: {
@@ -131,8 +125,6 @@ export const realizaEjercicio = async (
     },
     body: JSON.stringify({ id_usuario, id_ejercicio }),
   });
-
-  console.log(await result.json());
 
   const resultado = (await result.json()).data;
   return resultado;
