@@ -15,7 +15,7 @@ const RespuestaItem: React.FC<RespuestaItemProps> = ({
   onClick,
 }) => (
   <div
-    className={`text-3xl text-white text-center w-auto p-7 cursor-pointer hover:bg-zinc-500 hover:text-4xl rounded-xl transition-all duration-700 ease-in-out ${
+    className={`text-sm lg:text-xl xl:text-2xl 2xl:text-3xl text-white text-center w-auto p-7 cursor-pointer hover:bg-zinc-500 rounded-xl transition-all duration-700 ease-in-out ${
       isSelected ? "bg-zinc-500" : "bg-zinc-800"
     } ${index % 2 === 0 ? "animate-spin" : "animate-spin2"}
     `}
