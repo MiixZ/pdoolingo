@@ -34,7 +34,7 @@ export const getUsuarioID = async (
   return (await result.json()).data as Usuario;
 };
 
-export const usarPistaPorVida = async (
+export const updateVidas = async (
   id_usuario: string | null | undefined,
   coste: number
 ): Promise<Usuario | null> => {

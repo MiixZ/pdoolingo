@@ -4,21 +4,25 @@ import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Respuesta } from "@interfaces/Respuesta";
 
 import { realizaEjercicio } from "@services/ejercicios";
+import { updateVidas } from "@services/usuario";
 
 import GrupoRespuestas from "./GrupoRespuestas";
 import Contador from "./contador";
 import Pista from "./Pista";
+import type { Usuario } from "@interfaces/Usuario";
 
 interface EjercicioComponentProps {
   ejercicio?: Ejercicio;
   respuestas?: Respuesta[];
   id_usuario?: string | null;
+  usuario?: Usuario | null;
 }
 
 const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   ejercicio,
   respuestas,
   id_usuario,
+  usuario,
 }) => {
   const [selectedResponses, setSelectedResponses] = useState<Respuesta[]>([]);
   const [pair, setPair] = useState<[Respuesta | null, Respuesta | null]>([
@@ -35,6 +39,9 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   const [completed, setCompleted] = useState<boolean>(false);
   const [initialized, setInitialized] = useState<boolean>(false);
   const [pistaUsed, setPistaUsed] = useState<boolean>(false);
+  const [vidasIniciales, setVidasIniciales] = useState<number>(
+    usuario?.vidas ?? 0
+  );
 
   useEffect(() => {
     if (respuestas) {
@@ -67,6 +74,11 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
         }, 1000);
       } else {
         setContainerBgColor("bg-red-900");
+        const quitarVida = async () => {
+          await updateVidas(id_usuario, 1);
+        };
+        setVidasIniciales(vidasIniciales - 1);
+        quitarVida();
         setTimeout(() => {
           setPair([null, null]);
           setSelectedResponses([]);
@@ -109,6 +121,10 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
 
   const handlePista = () => {
     setPistaUsed(true);
+
+    if (ejercicio?.tipo_coste_pista === "vidas") {
+      setVidasIniciales(vidasIniciales - ejercicio.coste_pista);
+    }
 
     const gruposSinPista = grupos.map((grupo) => {
       const respuestasCorrectas = grupo.filter(
@@ -172,6 +188,11 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
       const respuesta: Respuesta = JSON.parse(respuestaData);
       if (!respuesta.correcta) {
         setContainerBgColor("bg-red-900");
+        const quitarVida = async () => {
+          await updateVidas(id_usuario, 1);
+        };
+        quitarVida();
+        setVidasIniciales(vidasIniciales - 1);
         setTimeout(() => {
           setContainerBgColor("bg-slate-700");
         }, 1000);
@@ -246,16 +267,24 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   return (
     <>
       <div className="flex flex-col lg:flex-row">
-        {!completed && (
+        {!completed && vidasIniciales > 0 ? (
           <Pista
             ejercicio={ejercicio}
             PistaUsed={pistaUsed}
             onClick={handlePista}
             id_usuario={id_usuario}
           />
+        ) : (
+          <div className="text-white">
+            No tienes vidas restantes.
+            <a href="/" className="text-blue-500 underline">
+              Volver al inicio
+            </a>
+          </div>
         )}
         <Contador isCompleted={completed} />
       </div>
+
       <div className="rounded-xl h-screen">
         {completed ? (
           <>
@@ -271,12 +300,12 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
               </button>
             </div>
           </>
-        ) : (
+        ) : vidasIniciales > 0 ? (
           <>
             {ejercicio?.tipo === "flecha" && renderFlecha()}
             {ejercicio?.tipo === "unir" && renderUnir()}
           </>
-        )}
+        ) : null}
       </div>
     </>
   );

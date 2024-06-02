@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Usuario } from "@interfaces/Usuario";
 
-import { getUsuarioID, usarPistaPorVida } from "@services/usuario";
+import { getUsuarioID, updateVidas } from "@services/usuario";
 
 interface PistaProps {
   ejercicio?: Ejercicio;
@@ -35,7 +35,7 @@ const Pista: React.FC<PistaProps> = ({
     }
 
     if (ejercicio?.tipo_coste_pista === "vidas") {
-      await usarPistaPorVida(id_usuario, ejercicio.coste_pista);
+      await updateVidas(id_usuario, ejercicio.coste_pista);
     }
     if (onClick) {
       onClick();
