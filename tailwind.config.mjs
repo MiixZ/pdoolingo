@@ -3,10 +3,10 @@ export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     extend: {
-      backgroundImage: (theme) => ({
+      backgroundImage: {
         "ejercicio-background": "url('/logo.png')",
         "pecera-background": "url('/pecera.jpg')",
-      }),
+      },
       backgroundSize: {
         auto: "auto",
         cover: "cover",
@@ -20,26 +20,18 @@ export default {
         center: "center",
       },
       keyframes: {
-        spin: {
-          "0%": { transform: "rotate(45deg)" },
-          "100%": { transform: "rotate(-45deg)" },
+        moveUpDown: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(50px)" },
         },
-        spin2: {
-          "0%": { transform: "rotate(-45deg)" },
-          "100%": { transform: "rotate(45deg)" },
-        },
-        move: {
-          "0%": { transform: "translate(0px, 0px)" },
-          "25%": { transform: "translate(200px, 0px)" },
-          "50%": { transform: "translate(200px, 200px)" },
-          "75%": { transform: "translate(0px, 200px)" },
-          "100%": { transform: "translate(0px, 0px)" },
+        moveLeftRight: {
+          "0%, 100%": { transform: "translateX(0px)" },
+          "50%": { transform: "translateX(50px)" },
         },
       },
       animation: {
-        spin: "spin 6s linear infinite alternate",
-        spin2: "spin2 4s ease-in-out infinite alternate",
-        move: "move 4s ease-in-out infinite",
+        moveUpDown: "moveUpDown 2s ease-in-out infinite",
+        moveLeftRight: "moveLeftRight 2s linear infinite",
       },
     },
   },

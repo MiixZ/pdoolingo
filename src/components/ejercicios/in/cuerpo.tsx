@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Respuesta } from "@interfaces/Respuesta";
-
 import { realizaEjercicio } from "@services/ejercicios";
-
 import GrupoRespuestas from "./GrupoRespuestas";
 import Contador from "./contador";
 import Pista from "./Pista";
@@ -198,7 +195,12 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
         onDragOver={(event) => event.preventDefault()}
       >
         {droppedItems.map((item) => (
-          <div key={item.id}>{item.texto}</div>
+          <div
+            key={item.id}
+            className="p-2 bg-sky-800 rounded mb-2 w-auto mx-auto"
+          >
+            {item.texto}
+          </div>
         ))}
       </div>
     </div>
