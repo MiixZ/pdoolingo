@@ -21,6 +21,11 @@ const respuestas: Respuesta[] = await getRespuestas(Number(id));
 
 const url = new URL(Astro.request.url);
 const id_usuario = url.searchParams.get("id_usuario");
+
+if (!id_usuario) {
+  return Astro.redirect("/home");
+}
+
 const usuario = await getUsuarioID(id_usuario);
 ---
 
