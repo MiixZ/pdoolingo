@@ -8,6 +8,7 @@ import { getUsuarioID } from "@services/usuario";
 import { getRespuestas } from "@services/ejercicios";
 
 import Cuerpo from "@components/ejercicios/in/cuerpo";
+import Vidas from "@components/perfil/Vidas.astro";
 
 const { id } = Astro.params;
 const ejercicio: Ejercicio | null = await getEjercicio(Number(id));
@@ -54,6 +55,10 @@ const usuario = await getUsuarioID(id_usuario);
             return ;
         }
       })()}
+    </span>
+
+    <span>
+      <Vidas vidas={(usuario?.vidas ?? 0)} />
     </span>
   </header>
 

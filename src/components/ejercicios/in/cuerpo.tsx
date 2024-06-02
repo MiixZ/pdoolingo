@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Respuesta } from "@interfaces/Respuesta";
+
 import { realizaEjercicio } from "@services/ejercicios";
+
 import GrupoRespuestas from "./GrupoRespuestas";
 import Contador from "./contador";
 import Pista from "./Pista";
@@ -245,6 +248,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
             ejercicio={ejercicio}
             PistaUsed={pistaUsed}
             onClick={handlePista}
+            id_usuario={id_usuario}
           />
         )}
         <Contador isCompleted={completed} />

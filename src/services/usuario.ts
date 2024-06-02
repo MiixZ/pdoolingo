@@ -27,9 +27,34 @@ export const getUsuario = async (
 };
 
 export const getUsuarioID = async (
-  id: string | null
+  id: string | null | undefined
 ): Promise<Usuario | null> => {
   const result = await fetch(url + `usuarios/${id}`);
 
   return (await result.json()).data as Usuario;
+};
+
+export const usarPistaPorVida = async (
+  id_usuario: string | null | undefined,
+  coste: number
+): Promise<Usuario | null> => {
+  const usuario = await getUsuarioID(id_usuario);
+
+  if (!usuario) return null;
+
+  const body = {
+    vidas: usuario.vidas - coste,
+  };
+
+  const result = await fetch(url + `usuarios/${id_usuario}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const user = await result.json();
+
+  return user.data as Usuario;
 };
