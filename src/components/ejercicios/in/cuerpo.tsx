@@ -31,6 +31,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   const grupos = [grupo1, grupo2, grupo3];
   const [completed, setCompleted] = useState<boolean>(false);
   const [initialized, setInitialized] = useState<boolean>(false);
+  const [pistaUsed, setPistaUsed] = useState<boolean>(false);
 
   useEffect(() => {
     if (respuestas) {
@@ -100,6 +101,36 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
     const grupo1 = respuestas.slice(tercioRespuestas * 2 + 1);
 
     return [grupo1, grupo2, grupo3];
+  };
+
+  const handlePista = () => {
+    setPistaUsed(true);
+
+    const gruposSinPista = grupos.map((grupo) => {
+      const respuestasCorrectas = grupo.filter(
+        (respuesta) => respuesta.correcta
+      );
+      const respuestasIncorrectas = grupo.filter(
+        (respuesta) => !respuesta.correcta
+      );
+
+      if (respuestasIncorrectas.length > 0) {
+        const randomIndex = Math.floor(
+          Math.random() * respuestasIncorrectas.length
+        );
+        const respuestasConPista = [
+          ...respuestasIncorrectas.slice(0, randomIndex),
+          ...respuestasIncorrectas.slice(randomIndex + 1),
+        ];
+        return [...respuestasCorrectas, ...respuestasConPista];
+      } else {
+        return grupo;
+      }
+    });
+
+    setGrupo1(gruposSinPista[0]);
+    setGrupo2(gruposSinPista[1]);
+    setGrupo3(gruposSinPista[2]);
   };
 
   const handleSelect = (respuesta: Respuesta) => {
@@ -209,7 +240,13 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   return (
     <>
       <div className="flex flex-col lg:flex-row">
-        {!completed && <Pista ejercicio={ejercicio} />}
+        {!completed && (
+          <Pista
+            ejercicio={ejercicio}
+            PistaUsed={pistaUsed}
+            onClick={handlePista}
+          />
+        )}
         <Contador isCompleted={completed} />
       </div>
       <div className="rounded-xl h-screen">
