@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Usuario } from "@interfaces/Usuario";
@@ -18,12 +18,19 @@ const Pista: React.FC<PistaProps> = ({
   onClick,
   id_usuario,
 }) => {
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
+
+  useEffect(() => {
+    const fetchUsuario = async () => {
+      const fetchedUsuario = await getUsuarioID(id_usuario);
+      setUsuario(fetchedUsuario);
+    };
+
+    fetchUsuario();
+  }, [id_usuario]);
+
   const handleClick = useCallback(async () => {
-    const usuario = await getUsuarioID(id_usuario);
-
-    console.log("usuario", usuario);
-
-    if (!usuario || usuario.vidas < (ejercicio?.coste_pista ?? 0)) {
+    if ((usuario?.vidas ?? -1) < (ejercicio?.coste_pista ?? 0)) {
       return;
     }
 
@@ -33,7 +40,7 @@ const Pista: React.FC<PistaProps> = ({
     if (onClick) {
       onClick();
     }
-  }, [PistaUsed, ejercicio, id_usuario, onClick]);
+  }, [usuario, PistaUsed, ejercicio, id_usuario, onClick]);
 
   return (
     <span
@@ -42,7 +49,11 @@ const Pista: React.FC<PistaProps> = ({
           ? "cursor-not-allowed opacity-50"
           : "cursor-pointer bg-lime-800"
       }`}
-      onClick={PistaUsed ? undefined : handleClick}
+      onClick={
+        PistaUsed || (usuario?.vidas ?? -1) < (ejercicio?.coste_pista ?? 0)
+          ? undefined
+          : handleClick
+      }
     >
       <span className="text-2xl">¡Pista! 🕵️‍♂️</span>
       <span className="flex gap-2 w-auto mx-auto items-center justify-center">

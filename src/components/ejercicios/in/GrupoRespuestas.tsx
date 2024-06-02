@@ -26,7 +26,6 @@ const GrupoRespuestas: React.FC<GrupoRespuestasProps> = ({
         isSelected={selectedResponses.includes(respuesta)}
         onClick={() => {
           if (!dragAndDrop) onSelect(respuesta);
-          else void 0;
         }}
         dragAndDrop={dragAndDrop}
         onDragStart={(event) => onDragStart && onDragStart(event, respuesta)}

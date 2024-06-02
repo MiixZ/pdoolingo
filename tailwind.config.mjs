@@ -28,10 +28,20 @@ export default {
           "0%, 100%": { transform: "translateX(0px)" },
           "50%": { transform: "translateX(50px)" },
         },
+        spin: {
+          "0%": { transform: "rotate(45deg)" },
+          "100%": { transform: "rotate(-45deg)" },
+        },
+        spin2: {
+          "0%": { transform: "rotate(-45deg)" },
+          "100%": { transform: "rotate(45deg)" },
+        },
       },
       animation: {
         moveUpDown: "moveUpDown 2s ease-in-out infinite",
         moveLeftRight: "moveLeftRight 2s linear infinite",
+        spin: "spin 6s linear infinite alternate",
+        spin2: "spin2 4s ease-in-out infinite alternate",
       },
     },
   },

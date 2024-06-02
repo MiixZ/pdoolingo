@@ -62,12 +62,14 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
             prev.filter((r) => r !== pair[0] && r !== pair[1])
           );
           setPair([null, null]);
+          setSelectedResponses([]);
           setContainerBgColor("bg-slate-700");
         }, 1000);
       } else {
         setContainerBgColor("bg-red-900");
         setTimeout(() => {
           setPair([null, null]);
+          setSelectedResponses([]);
           setContainerBgColor("bg-slate-700");
         }, 1000);
       }
@@ -84,7 +86,6 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
       setCompleted(true);
       setContainerBgColor("bg-green-500");
       const performEjercicio = async () => {
-        console.log(id_usuario, ejercicio?.id);
         if (ejercicio?.id && id_usuario) {
           await realizaEjercicio(id_usuario, ejercicio.id);
         }
@@ -143,11 +144,13 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
         : [...prev, respuesta];
 
       if (newSelected.length === 2) {
+        console.log(newSelected);
         setPair([newSelected[0], newSelected[1]]);
         setSelectedResponses([]);
       } else if (newSelected.length > 2) {
         newSelected.shift();
       }
+
       return newSelected;
     });
   };
