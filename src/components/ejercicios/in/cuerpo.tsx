@@ -91,9 +91,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   useEffect(() => {
     if (
       initialized &&
-      !grupo1.some((respuesta) => respuesta.correcta) &&
-      !grupo2.some((respuesta) => respuesta.correcta) &&
-      !grupo3.some((respuesta) => respuesta.correcta)
+      grupos.flat().every((respuesta) => !respuesta.correcta)
     ) {
       setCompleted(true);
       setContainerBgColor("bg-green-500");
@@ -110,11 +108,12 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   const dividirRespuestas = (
     respuestas: Respuesta[]
   ): [Respuesta[], Respuesta[], Respuesta[]] => {
-    const tercioRespuestas = Math.floor(respuestas.length / 3);
+    const totalRespuestas = respuestas.length;
+    const tercioRespuestas = Math.ceil(totalRespuestas / 3);
 
-    const grupo3 = respuestas.slice(0, tercioRespuestas);
-    const grupo2 = respuestas.slice(tercioRespuestas, tercioRespuestas * 2 + 1);
-    const grupo1 = respuestas.slice(tercioRespuestas * 2 + 1);
+    const grupo1 = respuestas.slice(0, tercioRespuestas);
+    const grupo2 = respuestas.slice(tercioRespuestas, tercioRespuestas * 2);
+    const grupo3 = respuestas.slice(tercioRespuestas * 2);
 
     return [grupo1, grupo2, grupo3];
   };

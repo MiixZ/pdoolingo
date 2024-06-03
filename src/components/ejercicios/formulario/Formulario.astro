@@ -2,7 +2,9 @@
 import type { Usuario } from '@interfaces/Usuario';
 import type { Ejercicio } from '@interfaces/Ejercicio';
 import type { Respuesta } from "@interfaces/Respuesta";
+
 import { insertEjercicio } from '@services/ejercicios';
+
 import RespuestaItem from './RespuestaItem.astro';
 import PistaItem from './PistaItem.astro';
 import ExperienciaTipoItem from './ExperienciaTipoItem.astro';
@@ -12,7 +14,7 @@ interface Props {
   usuario: Usuario;
 }
 
-let respuestaCount = 4;
+let respuestaCount = 5;
 
 const { usuario } = Astro.props;
 const errors = { enunciado: "", experiencia: "", coste_pista: "" };
