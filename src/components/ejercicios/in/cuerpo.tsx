@@ -276,7 +276,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
             />
             <Contador isCompleted={completed} />
           </>
-        ) : (
+        ) : vidasIniciales <= 0 ? (
           <div className="flex items-center justify-center w-full">
             <div className="flex gap-4 text-4xl rounded-lg p-10 bg-red-800">
               ¡No te quedan vidas!
@@ -285,7 +285,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
               </a>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
 
       <div className="rounded-xl h-screen">
