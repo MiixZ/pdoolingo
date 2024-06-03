@@ -268,21 +268,25 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
     <>
       <div className="flex flex-col lg:flex-row">
         {!completed && vidasIniciales > 0 ? (
-          <Pista
-            ejercicio={ejercicio}
-            PistaUsed={pistaUsed}
-            onClick={handlePista}
-            id_usuario={id_usuario}
-          />
+          <>
+            <Pista
+              ejercicio={ejercicio}
+              PistaUsed={pistaUsed}
+              onClick={handlePista}
+              id_usuario={id_usuario}
+            />
+            <Contador isCompleted={completed} />
+          </>
         ) : (
-          <div className="text-white">
-            No tienes vidas restantes.
-            <a href="/" className="text-blue-500 underline">
-              Volver al inicio
-            </a>
+          <div className="flex items-center justify-center w-full">
+            <div className="flex gap-4 text-4xl rounded-lg p-10 bg-red-800">
+              ¡No te quedan vidas!
+              <a href="/" className="text-blue-500 underline">
+                Volver al inicio
+              </a>
+            </div>
           </div>
         )}
-        <Contador isCompleted={completed} />
       </div>
 
       <div className="rounded-xl h-screen">
