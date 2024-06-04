@@ -46,29 +46,29 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
       coste_pista,
     };
 
-    let respuestaCount = 1;
+    let respuestaContador = 1;
     let respuestasCorrectas = 0;
     let respuestas: Respuesta[] = [];
 
-    while (data.has(`respuesta${respuestaCount}`)) {
-      const valor = data.get(`respuesta${respuestaCount}`);
+    while (data.has(`respuesta${respuestaContador}`)) {
+      const valor = data.get(`respuesta${respuestaContador}`);
       let respuesta : Respuesta = { texto: "", correcta: false };
       if (valor) {
         const texto = valor.toString();
         respuesta.texto = texto;
 
-        const checkboxValor = data.get(`correcta${respuestaCount}`);
+        const checkboxValor = data.get(`correcta${respuestaContador}`);
         respuesta.correcta = checkboxValor === 'on';
 
         if (respuesta.correcta) respuestasCorrectas++;
 
         respuestas.push(respuesta);
       }
-      respuestaCount++;
+      respuestaContador++;
     }
 
-    if ((respuestasCorrectas % 2 !== 0 && tipo === 'Flecha') || respuestasCorrectas === 0) {
-      errors.respuestasImpares = 'Debe haber un número par de respuestas correctas en el ejercicio de tipo flecha o debe haber al menos una respuesta correcta.';
+    if ((respuestasCorrectas % 2 !== 0 && tipo === 'Parejas') || respuestasCorrectas === 0) {
+      errors.respuestasImpares = 'Debe haber un número par de respuestas correctas en el ejercicio de tipo parejas o debe haber al menos una respuesta correcta.';
     }
 
     const hasErrors = Object.values(errors).some(msg => msg)
@@ -120,7 +120,7 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
 
 <script>
   document.addEventListener('DOMContentLoaded', (event) => {
-    let respuestaCount = 4;
+    let respuestaCount = 5;
     function agregarRespuesta() {
       respuestaCount++;
       const respuestasDiv = document.getElementById('respuestas');
