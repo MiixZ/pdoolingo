@@ -12,6 +12,7 @@ interface respuestas {
 interface usuario_ejercicios {
   id_usuario: string;
   id_ejercicio: number;
+  xp_ganada: number;
 }
 
 export const getEjercicios = async () => {
@@ -120,17 +121,26 @@ export const getRespuestas = async (id_ejercicio: Number | undefined) => {
 
 export const realizaEjercicio = async (
   id_usuario: string,
-  id_ejercicio: Number
+  id_ejercicio: Number,
+  usa_pistas: boolean
 ) => {
+  const ejercicio = await getEjercicio(id_ejercicio);
+  const xp_base = ejercicio?.xp_base ?? 0;
+  let xp_ganada = xp_base;
+
+  if (ejercicio?.tipo_coste_pista === "experiencia" && usa_pistas)
+    xp_ganada -= ejercicio?.coste_pista ?? 0;
+
   const result = await fetch(url + "usuario-ejercicios/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id_usuario, id_ejercicio }),
+    body: JSON.stringify({ id_usuario, id_ejercicio, xp_ganada }),
   });
 
   const resultado = (await result.json()).data;
+
   return resultado;
 };
 
@@ -143,16 +153,9 @@ export const xpTotalUsuario = async (id_usuario: string): Promise<number> => {
 
   let xpTotal = 0;
 
-  await Promise.all(
-    data.map(async (object: usuario_ejercicios) => {
-      const result = await fetch(url + "ejercicios/" + object.id_ejercicio);
-
-      const resultado = await result.json();
-
-      const ejercicio = resultado.data as Ejercicio;
-      xpTotal += ejercicio.xp_base;
-    })
-  );
+  data.map((object: usuario_ejercicios) => {
+    xpTotal += object.xp_ganada;
+  });
 
   return xpTotal;
 };

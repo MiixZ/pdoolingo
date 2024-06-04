@@ -97,7 +97,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
       setContainerBgColor("bg-green-500");
       const performEjercicio = async () => {
         if (ejercicio?.id && id_usuario) {
-          await realizaEjercicio(id_usuario, ejercicio.id);
+          await realizaEjercicio(id_usuario, ejercicio.id, pistaUsed);
         }
       };
 
