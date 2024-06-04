@@ -30,7 +30,10 @@ const Pista: React.FC<PistaProps> = ({
   }, [id_usuario]);
 
   const handleClick = useCallback(async () => {
-    if ((usuario?.vidas ?? -1) < (ejercicio?.coste_pista ?? 0)) {
+    if (
+      (usuario?.vidas ?? -1) < (ejercicio?.coste_pista ?? 0) &&
+      ejercicio?.tipo_coste_pista === "vidas"
+    ) {
       return;
     }
 
@@ -50,7 +53,9 @@ const Pista: React.FC<PistaProps> = ({
           : "cursor-pointer bg-lime-800"
       }`}
       onClick={
-        PistaUsed || (usuario?.vidas ?? -1) < (ejercicio?.coste_pista ?? 0)
+        PistaUsed ||
+        ((usuario?.vidas ?? -1) < (ejercicio?.coste_pista ?? 0) &&
+          ejercicio?.tipo_coste_pista === "vidas")
           ? undefined
           : handleClick
       }
