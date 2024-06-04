@@ -9,6 +9,11 @@ interface respuestas {
   es_correcta: boolean;
 }
 
+interface usuario_ejercicios {
+  id_usuario: string;
+  id_ejercicio: number;
+}
+
 export const getEjercicios = async () => {
   const result = await fetch(url + "ejercicios");
 
@@ -76,7 +81,6 @@ export const insertEjercicio = async (
 export const deleteEjercicio = async (
   id_ejercicio: Number | undefined
 ): Promise<string> => {
-
   const R_result = await fetch(url + `ejercicios-respuestas/${id_ejercicio}`);
   const respuestas_ID = (await R_result.json()).data as Number[];
 
@@ -128,4 +132,27 @@ export const realizaEjercicio = async (
 
   const resultado = (await result.json()).data;
   return resultado;
+};
+
+export const xpTotalUsuario = async (id_usuario: string): Promise<number> => {
+  const result = await fetch(url + "usuario-ejercicios/" + id_usuario);
+
+  const resultados = await result.json();
+
+  const data = resultados.data as usuario_ejercicios[];
+
+  let xpTotal = 0;
+
+  await Promise.all(
+    data.map(async (object: usuario_ejercicios) => {
+      const result = await fetch(url + "ejercicios/" + object.id_ejercicio);
+
+      const resultado = await result.json();
+
+      const ejercicio = resultado.data as Ejercicio;
+      xpTotal += ejercicio.xp_base;
+    })
+  );
+
+  return xpTotal;
 };

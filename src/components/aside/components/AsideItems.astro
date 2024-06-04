@@ -4,6 +4,7 @@ import AsideMenuItem from './AsideMenuItem.astro'
 import type { Usuario } from '@interfaces/Usuario'
 
 import { getSesion } from '@services/login'
+import { xpTotalUsuario } from '@services/ejercicios'
 
 import Temas from '@icons/aside/Temas.astro'
 import Ejercicios from '@icons/aside/Ejercicios.astro'
@@ -19,6 +20,7 @@ let ejercicios = pathname == "ejercicios" ? "true" : "false";
 let insignias = pathname == "insignias" ? "true" : "false";
 
 const usuario = await getSesion(Astro.request) as Usuario;
+const xp = await xpTotalUsuario(usuario?.id) ?? 0;
 ---
 
 <div class="bg-slate-900 rounded-lg p-2 flex-1" >
@@ -43,10 +45,9 @@ const usuario = await getSesion(Astro.request) as Usuario;
             <Vidas/>
         </AsideMenuItem>
 
-        <!--
-        <AsideMenuItem text="0/5000" selected="false" notSelectable='true'>
+        <AsideMenuItem text={xp} selected="false" notSelectable='true'>
             <Experience/>
         </AsideMenuItem>
-        -->
+        
     </ul>
 </div>
