@@ -1,6 +1,6 @@
 ---
-import TipoFlecha from "@icons/ejercicios/TipoFlecha.astro";
-import TipoUnir from "@icons/ejercicios/TipoUnir.astro";
+import TipoParejas from "@icons/ejercicios/TipoParejas.astro";
+import TipoPescar from "@icons/ejercicios/TipoPescar.astro";
 import TipoTexto from "@icons/ejercicios/TipoTexto.astro";
 import TipoRellenar from "@icons/ejercicios/TipoRellenar.astro";
 
@@ -23,10 +23,10 @@ const { Ejercicio, numero, Usuario } = Astro.props;
       <p class="flex-none p-2">
         {(() => {
           switch (Ejercicio.tipo) {
-            case "flecha":
-              return <TipoFlecha />;
-            case "unir":
-              return <TipoUnir />;
+            case "parejas":
+              return <TipoParejas />;
+            case "pescar":
+              return <TipoPescar />;
             case "texto":
               return <TipoTexto />;
             case "rellenar":

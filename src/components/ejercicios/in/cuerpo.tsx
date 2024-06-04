@@ -210,7 +210,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
     }
   };
 
-  const renderFlecha = () => (
+  const renderParejas = () => (
     <div
       className={`h-full transition-colors duration-1000 rounded-xl ${containerBgColor}`}
     >
@@ -227,7 +227,7 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
     </div>
   );
 
-  const renderUnir = () => (
+  const renderPescar = () => (
     <div
       className={`flex h-full w-auto rounded-xl justify-between ${containerBgColor}`}
     >
@@ -305,8 +305,8 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
           </>
         ) : vidasIniciales > 0 ? (
           <>
-            {ejercicio?.tipo === "flecha" && renderFlecha()}
-            {ejercicio?.tipo === "unir" && renderUnir()}
+            {ejercicio?.tipo === "parejas" && renderParejas()}
+            {ejercicio?.tipo === "pescar" && renderPescar()}
           </>
         ) : null}
       </div>

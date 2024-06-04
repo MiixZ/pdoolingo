@@ -17,7 +17,7 @@ interface Props {
 let respuestaCount = 5;
 
 const { usuario } = Astro.props;
-const errors = { enunciado: "", experiencia: "", coste_pista: "" };
+const errors = { enunciado: "", experiencia: "", coste_pista: "", respuestasImpares: "" };
 
 if (Astro.request.method === "POST" && usuario.tipo === "admin") { 
   try {
@@ -47,6 +47,7 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
     };
 
     let respuestaCount = 1;
+    let respuestasCorrectas = 0;
     let respuestas: Respuesta[] = [];
 
     while (data.has(`respuesta${respuestaCount}`)) {
@@ -59,9 +60,15 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
         const checkboxValor = data.get(`correcta${respuestaCount}`);
         respuesta.correcta = checkboxValor === 'on';
 
+        if (respuesta.correcta) respuestasCorrectas++;
+
         respuestas.push(respuesta);
       }
       respuestaCount++;
+    }
+
+    if ((respuestasCorrectas % 2 !== 0 && tipo === 'Flecha') || respuestasCorrectas === 0) {
+      errors.respuestasImpares = 'Debe haber un número par de respuestas correctas en el ejercicio de tipo flecha o debe haber al menos una respuesta correcta.';
     }
 
     const hasErrors = Object.values(errors).some(msg => msg)
@@ -75,6 +82,21 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
 ---
 
 <form method="POST" id="formulario" class="flex flex-col rounded-xl border bg-slate-900 p-20 mb-2 gap-5 w-full xl:w-3/5">
+  <header>
+    <h1 class="text-4xl font-bold text-wrap text-white truncate">Crea un ejercicio</h1>
+  </header>
+
+  <details class="rounded-xl p-3 bg-red-900 border-gray-950 text-white mt-4 w-full 2xl:w-1/3 mx-auto">
+    <summary class="text-2xl cursor-pointer">¡A TENER EN CUENTA!</summary>
+    <ol class="flex flex-col gap-4 p-5">
+      <li>Todos los campos visibles deben ser completados.</li>
+      <li>El coste de la pista no debe ser mayor a la experiencia del ejercicio o a las vidas máximas (5)</li>
+      <li>Debe haber al menos 1 respuesta correcta.</li>
+      <li>Si el ejercicio es de tipo parejas, el número de respuestas correctas debe ser par.</li>
+      <li>Si no todos estos avisos son cumplidos, no se creará el ejercicio.</li>
+    </ol>
+  </details>
+  
   <EnunciadoItem />
 
   <ExperienciaTipoItem />
@@ -113,6 +135,7 @@ if (Astro.request.method === "POST" && usuario.tipo === "admin") {
             id="respuesta${respuestaCount}"
             name="respuesta${respuestaCount}"
             placeholder="Agrega el texto de la respuesta"
+            required
         />
         <div class="checkbox-wrapper-44 items-center justify-center">
             <label class="toggleButton">
