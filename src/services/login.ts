@@ -15,14 +15,17 @@ export const getSesion = async (
 
   const nombre = name?.split(" ")[0];
   const apellidos = name?.split(" ").slice(1).join(" ");
-  const usuarios = await getUsuario(nombre, apellidos);
+  const emailUsuario = email ?? "";
+
+  const usuarios = await getUsuario(nombre, apellidos, emailUsuario);
+
+  console.log(usuarios);
 
   if (usuarios == null) {
     return null;
   }
 
   const usuario = usuarios[0];
-  usuario.email = email;
   usuario.image = image;
 
   return usuario;

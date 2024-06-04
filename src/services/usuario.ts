@@ -3,13 +3,15 @@ import { url } from "./comun";
 
 export const getUsuario = async (
   nombre: string | undefined,
-  apellidos: string | undefined
+  apellidos: string | undefined,
+  email: string | undefined
 ) => {
   const pet = url + "usuarios/nombre";
 
   const body = {
     nombre: nombre,
     apellidos: apellidos,
+    email: email,
   };
 
   const response = await fetch(pet, {
