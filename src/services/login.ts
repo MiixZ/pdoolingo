@@ -19,8 +19,6 @@ export const getSesion = async (
 
   const usuarios = await getUsuario(nombre, apellidos, emailUsuario);
 
-  console.log(usuarios);
-
   if (usuarios == null) {
     return null;
   }
