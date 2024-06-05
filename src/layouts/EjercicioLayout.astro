@@ -1,0 +1,55 @@
+---
+import type { Usuario } from "@interfaces/Usuario";
+import type { Ejercicio } from "@interfaces/Ejercicio";
+
+import Head from "./head.astro";
+
+interface Props {
+  title: string;
+  ejercicio?: Ejercicio;
+  usuario?: Usuario | null;
+}
+
+const { title } = Astro.props;
+---
+
+<Head title={title}>
+  <body>
+    <div id="ejercicio" class="flex flex-col gap-10 w-full h-screen p-5 bg-slate-800">
+        <slot />
+    </div>
+  </body>
+</Head>
+
+<style is:global>
+    :root {
+        --accent: 136, 58, 234;
+        --accent-light: 224, 204, 250;
+        --accent-dark: 49, 10, 101;
+        --accent-gradient: linear-gradient(
+            45deg,
+            rgb(var(--accent)),
+            rgb(var(--accent-light)) 30%,
+            white 60%
+        );
+    }
+    html {
+        font-family: din-round, sans-serif;
+        background: #1f2f57;
+        background-size: 224px;
+        --tw-text-opacity: 1;
+        color: rgb(229 231 235 / var(--tw-text-opacity));
+        min-width: 800px;
+    }
+    code {
+        font-family:
+            Menlo,
+            Monaco,
+            Lucida Console,
+            Liberation Mono,
+            DejaVu Sans Mono,
+            Bitstream Vera Sans Mono,
+            Courier New,
+            monospace;
+    }
+</style>

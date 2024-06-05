@@ -1,0 +1,28 @@
+---
+import type { Usuario } from '@interfaces/Usuario';
+import Vidas from './Vidas.astro';
+import PerfilItem from './PerfilItem.astro';
+
+interface Props {
+    usuario: Usuario;
+}
+
+const { usuario } = Astro.props;
+
+const { nombre, apellidos, DNI, vidas, tipo } = usuario;
+---
+
+<h1 class="text-3xl font-semibold mt-10 pl-10">Tus datos:</h1>
+
+<div class="flex flex-col md:flex-row p-10 gap-10">
+    <PerfilItem data={nombre} subtitle="Nombre" />
+    <PerfilItem data={apellidos} subtitle="Apellidos" />
+</div>
+
+<div class="flex flex-col lg:flex-row p-10 gap-5">
+    <PerfilItem data="" subtitle="Vidas">
+        <Vidas vidas={vidas} texto={false} />
+    </PerfilItem>
+    <PerfilItem data={tipo} subtitle="Tipo" />
+    <PerfilItem data={DNI} subtitle="DNI" />
+</div>

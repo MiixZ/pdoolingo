@@ -1,33 +1,8 @@
 ---
-import EjercicioItem from '../components/mainMenu/EjercicioItem.astro';
-import Layout from '../layouts/Layout.astro';
-import type { Ejercicio } from '../interfaces/Ejercicio.ts';
-import { getEjercicios } from '../services/ejercicios.ts'
-
-let data = await getEjercicios();
-let cont = 0;
-
-data.success ? console.log('Data fetched successfully') : console.error(data.error);
-
-const ejercicios = data.data as Ejercicio[];
+import Layout from '@layouts/HomeLayout.astro';
+import EjercicioBase from '@components/ejercicios/EjercicioBase.astro';
 ---
 
 <Layout title="PDOOLingo">
-    <div class="w-full flex flex-col overflow-auto">
-        <h2 class="[width:70%] text-center my-4 mt-20 text-3xl font-bold"> Ejercicios: </h2>
-        <div class="w-full flex items-center justify-center">
-            <table class="[width:40%] mt-0">
-                {ejercicios && ejercicios.length > 0 ?
-                    ejercicios.map(ejercicio => (
-                        <EjercicioItem
-                            Ejercicio={ejercicio}
-                            numero={++cont}
-                        />
-                    ))
-                    :
-                    <tr><td class="text-center text-xl">No hay ejercicios disponibles :(</td></tr>
-                }
-            </table>
-        </div>
-    </div>
+    <EjercicioBase />
 </Layout>

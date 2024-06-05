@@ -1,0 +1,60 @@
+import type { Usuario } from "@interfaces/Usuario";
+import { url } from "./comun";
+
+export const getUsuario = async (
+  nombreCompleto: string | undefined,
+  email: string | undefined
+) => {
+  const pet = url + "usuarios/nombre";
+
+  const body = {
+    nombreCompleto: nombreCompleto,
+    email: email,
+  };
+
+  const response = await fetch(pet, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const data = await response.json();
+  const usuario = data.data as Usuario[];
+
+  return usuario;
+};
+
+export const getUsuarioID = async (
+  id: string | null | undefined
+): Promise<Usuario | null> => {
+  const result = await fetch(url + `usuarios/${id}`);
+
+  return (await result.json()).data as Usuario;
+};
+
+export const updateVidas = async (
+  id_usuario: string | null | undefined,
+  coste: number
+): Promise<Usuario | null> => {
+  const usuario = await getUsuarioID(id_usuario);
+
+  if (!usuario) return null;
+
+  const body = {
+    vidas: usuario.vidas - coste,
+  };
+
+  const result = await fetch(url + `usuarios/${id_usuario}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const user = await result.json();
+
+  return user.data as Usuario;
+};

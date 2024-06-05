@@ -1,0 +1,28 @@
+---
+import Header from "./Header.astro";
+import Datos from "./Datos.astro";
+import type { Usuario } from '@interfaces/Usuario';
+
+interface Props {
+    usuario: Usuario;
+}
+
+const { usuario } = Astro.props;
+---
+
+<div class="flex flex-col relative p-10 bg-slate-700 rounded-lg w-full md:w-3/4"> 
+    <Header usuario={usuario} />
+    <Datos usuario={usuario} />
+</div>
+
+<button id="logout" class="bg-red-500 p-3 rounded-xl"> Cerrar sesión </button>
+
+<script>
+    const { signOut } = await import("auth-astro/client")
+
+    const logout = document.getElementById("logout");
+
+    logout?.addEventListener("click", async () => {
+        await signOut()
+    });
+</script>

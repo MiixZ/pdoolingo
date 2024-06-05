@@ -1,0 +1,16 @@
+---
+import Vida from "@icons/perfil/vida.astro"
+import Vida_Vacia from "@icons/perfil/vida_vacia.astro"
+
+interface Props {
+    vidas: number
+    texto?: boolean
+}
+
+const { vidas, texto } = Astro.props;
+---
+
+<div class="flex flex-col sm:flex-row items-baseline gap-2">
+    {texto && <h2 class="text-2xl mr-2"> Vidas:</h2>}
+    {Array.from({ length: 5 }).map((_, i) => vidas < i+1 ? <Vida_Vacia /> : <Vida />)}
+</div>

@@ -1,11 +1,16 @@
 ---
 import AsideMenuItem from './AsideMenuItem.astro'
 
-import Temas from '../icons/Temas.astro'
-import Ejercicios from '../icons/Ejercicios.astro'
-import Insignia from '../icons/Insignia.astro'
-import Vidas from '../icons/Vidas.astro'
-import Experience from '../icons/Experience.astro'
+import type { Usuario } from '@interfaces/Usuario'
+
+import { getSesion } from '@services/login'
+import { xpTotalUsuario } from '@services/ejercicios'
+
+import Temas from '@icons/aside/Temas.astro'
+import Ejercicios from '@icons/aside/Ejercicios.astro'
+import Insignia from '@icons/aside/Insignia.astro'
+import Vidas from '@icons/aside/Vidas.astro'
+import Experience from '@icons/aside/Experience.astro'
 
 let pathname : String = Astro.url.pathname;
 pathname = pathname.split("/")[1];
@@ -13,28 +18,36 @@ pathname = pathname.split("/")[1];
 let temas = pathname == "temas" ? "true" : "false";
 let ejercicios = pathname == "ejercicios" ? "true" : "false";
 let insignias = pathname == "insignias" ? "true" : "false";
+
+const usuario = await getSesion(Astro.request) as Usuario;
+const xp = await xpTotalUsuario(usuario?.id) ?? 0;
 ---
 
 <div class="bg-slate-900 rounded-lg p-2 flex-1" >
     <ul>
-        <AsideMenuItem href="./" text="TEMAS" selected={temas}>   <!-- TODO: cambiar href -->
+        <!--
+        <AsideMenuItem href="/home" text="TEMAS" selected={temas}>   
             <Temas/>
         </AsideMenuItem>
+        -->
 
-        <AsideMenuItem href="./" text="EJERCICIOS" selected={ejercicios}>   <!-- TODO: cambiar href -->
+        <AsideMenuItem href="/ejercicios/ejercicios" text="EJERCICIOS" selected={ejercicios}>   <!-- TODO: cambiar href -->
             <Ejercicios/>
         </AsideMenuItem>
 
+        <!--
         <AsideMenuItem href="/insignias/" text="INSIGNIAS" selected={insignias}>
             <Insignia/>
-        </AsideMenuItem>
+        </AsideMenuItem> 
+        -->
 
-        <AsideMenuItem text="5/5" selected="false" notSelectable='true'>
+        <AsideMenuItem text={usuario?.vidas ?? 0} selected="false" notSelectable='true'>
             <Vidas/>
         </AsideMenuItem>
 
-        <AsideMenuItem text="0/5000" selected="false" notSelectable='true'>    <!-- TODO: Cambiar experiencia -->
+        <AsideMenuItem text={xp} selected="false" notSelectable='true'>
             <Experience/>
         </AsideMenuItem>
+        
     </ul>
 </div>

@@ -1,0 +1,177 @@
+---
+import type { Usuario } from '@interfaces/Usuario';
+import type { Ejercicio } from '@interfaces/Ejercicio';
+import type { Respuesta } from "@interfaces/Respuesta";
+
+import { insertEjercicio } from '@services/ejercicios';
+
+import RespuestaItem from './RespuestaItem.astro';
+import PistaItem from './PistaItem.astro';
+import ExperienciaTipoItem from './ExperienciaTipoItem.astro';
+import EnunciadoItem from './EnunciadoItem.astro';
+
+interface Props {
+  usuario: Usuario;
+}
+
+let respuestaCount = 5;
+
+const { usuario } = Astro.props;
+const errors = { enunciado: "", experiencia: "", coste_pista: "", respuestasImpares: "" };
+
+if (Astro.request.method === "POST" && usuario.tipo === "admin") { 
+  try {
+    const data = (await Astro.request.formData());
+    const enunciado = data.get('enunciado') as string;
+    const tipo = data.get('tipo') as string;
+    const experiencia = parseInt(data.get('Experiencia') as string);
+    const tipo_coste_pista = data.get('tipo_coste_pista') as string;
+    const coste_pista = parseInt(data.get('coste_pista') as string);
+
+    if (experiencia > 1000 || experiencia < 1) {
+      errors.experiencia = 'La experiencia debe ser un número entre 1 y 1000';
+    }
+
+    if (tipo_coste_pista === 'Vidas' && (coste_pista > 5 || coste_pista < 0)) {
+      errors.coste_pista = 'No puedes sobrepasar el número de vidas máximo en el coste de la pista.';
+    } else if (tipo_coste_pista === 'Experiencia' && (coste_pista > experiencia || coste_pista < 0)) {
+      errors.coste_pista = 'El coste de la pista debe ser un número entre 0 y la experiencia del ejercicio.';
+    }
+
+    const bodyEjercicio : Ejercicio = {
+      enunciado,
+      tipo,
+      xp_base: experiencia,
+      tipo_coste_pista,
+      coste_pista,
+    };
+
+    let respuestaContador = 1;
+    let respuestasCorrectas = 0;
+    let respuestas: Respuesta[] = [];
+
+    while (data.has(`respuesta${respuestaContador}`)) {
+      const valor = data.get(`respuesta${respuestaContador}`);
+      let respuesta : Respuesta = { texto: "", correcta: false };
+      if (valor) {
+        const texto = valor.toString();
+        respuesta.texto = texto;
+
+        const checkboxValor = data.get(`correcta${respuestaContador}`);
+        respuesta.correcta = checkboxValor === 'on';
+
+        if (respuesta.correcta) respuestasCorrectas++;
+
+        respuestas.push(respuesta);
+      }
+      respuestaContador++;
+    }
+
+    if ((respuestasCorrectas % 2 !== 0 && tipo === 'Parejas') || respuestasCorrectas === 0) {
+      errors.respuestasImpares = 'Debe haber un número par de respuestas correctas en el ejercicio de tipo parejas o debe haber al menos una respuesta correcta.';
+    }
+
+    const hasErrors = Object.values(errors).some(msg => msg)
+    if (!hasErrors) {
+      await insertEjercicio(bodyEjercicio, respuestas);
+    }
+  } catch(error) {
+    console.error('Error al crear el ejercicio: ', error);
+  }
+}
+---
+
+<form method="POST" id="formulario" class="flex flex-col rounded-xl border bg-slate-900 p-20 mb-2 gap-5 w-full xl:w-3/5">
+  <header>
+    <h1 class="text-4xl font-bold text-wrap text-white truncate">Crea un ejercicio</h1>
+  </header>
+
+  <details class="rounded-xl p-3 bg-red-900 border-gray-950 text-white mt-4 w-full 2xl:w-1/3 mx-auto">
+    <summary class="text-2xl cursor-pointer">¡A TENER EN CUENTA!</summary>
+    <ol class="flex flex-col gap-4 p-5">
+      <li>Todos los campos visibles deben ser completados.</li>
+      <li>El coste de la pista no debe ser mayor a la experiencia del ejercicio o a las vidas máximas (5)</li>
+      <li>Debe haber al menos 1 respuesta correcta.</li>
+      <li>Si el ejercicio es de tipo parejas, el número de respuestas correctas debe ser par.</li>
+      <li>Si no todos estos avisos son cumplidos, no se creará el ejercicio.</li>
+    </ol>
+  </details>
+  
+  <EnunciadoItem />
+
+  <ExperienciaTipoItem />
+
+  <PistaItem />
+
+  <header>
+    <h2 class="text-2xl font-bold text-wrap text-white mt-10 truncate">Agrega las respuestas del ejercicio y marca la(s) correcta(s)</h2>
+  </header>
+  <div class="flex flex-col gap-5 w-full" id="respuestas">
+    { Array.from({ length: respuestaCount }, (_, i) => <RespuestaItem n_respuesta={i + 1} />) }
+  </div>
+
+  <button class="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500" type="button" id="agregarRespuestaBtn">
+    Agregar respuesta
+  </button>
+  <button class="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500" type="submit" id="submitBtn">
+    Registrar ejercicio
+  </button>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    let respuestaCount = 5;
+    function agregarRespuesta() {
+      respuestaCount++;
+      const respuestasDiv = document.getElementById('respuestas');
+      
+      const newRespuestaItem = document.createElement('div');
+      newRespuestaItem.setAttribute('class', 'flex flex-col lg:flex-row items-center text-black gap-5 text-xl rounded-xl w-full');
+      
+      newRespuestaItem.innerHTML = `
+        <input
+            class="inputs rounded-xl p-1 text-center w-full bg-gray-400 hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white duration-500 ease-in-out"
+            type="text"
+            id="respuesta${respuestaCount}"
+            name="respuesta${respuestaCount}"
+            placeholder="Agrega el texto de la respuesta"
+            required
+        />
+        <div class="checkbox-wrapper-44 items-center justify-center">
+            <label class="toggleButton">
+                <input type="checkbox" id="correcta${respuestaCount}" name="correcta${respuestaCount}">
+                <div>
+                  <svg viewBox="0 0 44 44">
+                      <path d="M14,24 L21,31 L39.7428882,11.5937758 C35.2809627,6.53125861 30.0333333,4 24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,19.3 42.5809627,15.1645919 39.7428882,11.5937758" transform="translate(-2.000000, -2.000000)"></path>
+                  </svg>
+                </div>
+            </label>
+        </div>
+      `;
+      
+      respuestasDiv?.appendChild(newRespuestaItem);
+    }
+
+    const agregarRespuestaBtn = document.getElementById('agregarRespuestaBtn');
+    agregarRespuestaBtn?.addEventListener('click', agregarRespuesta);
+
+    const form = document.getElementById('formulario') as HTMLFormElement;
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+      submitBtn.disabled = true;
+
+      const formData = new FormData(form as HTMLFormElement);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        window.location.href = '/home';
+      } else {
+        submitBtn.disabled = false;
+      }
+    });
+  });
+</script>
