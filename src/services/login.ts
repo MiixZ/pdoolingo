@@ -13,11 +13,10 @@ export const getSesion = async (
   const sessionUser = session ? session.user : null;
   const { email, name, image } = sessionUser || {};
 
-  const nombre = name?.split(" ")[0];
-  const apellidos = name?.split(" ").slice(1).join(" ");
+  const nombreCompleto = name ?? "";
   const emailUsuario = email ?? "";
 
-  const usuarios = await getUsuario(nombre, apellidos, emailUsuario);
+  const usuarios = await getUsuario(nombreCompleto, emailUsuario);
 
   if (usuarios == null) {
     return null;
