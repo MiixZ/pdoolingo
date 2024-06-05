@@ -42,9 +42,9 @@ const usuario = await getUsuarioID(id_usuario);
     <span class="rounded-xl p-5 w-full lg:w-1/2 mx-auto text-center text-2xl to-transparent">
       {(() => {
         switch (ejercicio.tipo) {
-          case "flecha":
+          case "parejas":
             return "Junta una pareja de palabras que creas que puedan ser correctas. ¡Consigue emparejar a todas las respuestas correctas y gana!";
-          case "unir":
+          case "pescar":
             return "¡Hora de pescar! Arrastra las respuestas correctas a la pecera para poder completar el ejercicio.";
           case "texto":
             return ;
