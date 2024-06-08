@@ -4,6 +4,9 @@ import TipoPescar from "@icons/ejercicios/TipoPescar.astro";
 import TipoTexto from "@icons/ejercicios/TipoTexto.astro";
 import TipoRellenar from "@icons/ejercicios/TipoRellenar.astro";
 
+import Edit from "@components/ejercicios/formulario/edit/Edit.astro";
+import Delete from "@components/ejercicios/formulario/edit/Delete";
+
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Usuario } from "@interfaces/Usuario";
 
@@ -36,7 +39,7 @@ const { Ejercicio, numero, Usuario } = Astro.props;
           }
         })()}
       </p>
-      
+
       <p class="py-2 font-bold text-2xl lg:text-4xl">
         {numero}
       </p>
@@ -51,6 +54,11 @@ const { Ejercicio, numero, Usuario } = Astro.props;
       <span class="justify-center items-center text-center p-3 text-2xl text-yellow-700 font-bold bg-lime-600 rounded-xl w-full lg:w-1/4">
         {Ejercicio.xp_base}
       </span>
+
+      {Usuario.tipo === "admin" && (
+        <Edit />
+        <Delete id_ejercicio={Ejercicio.id} client:load />
+      )}
     </div>
   </td>
 </tr>
