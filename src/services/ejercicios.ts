@@ -86,6 +86,10 @@ export const deleteEjercicio = async (
     method: "DELETE",
   });
 
+  const UE_Result = await fetch(url + `usuario-ejercicios/${id_ejercicio}`, {
+    method: "DELETE",
+  });
+
   const result = await fetch(url + `ejercicios/${id_ejercicio}`, {
     method: "DELETE",
   });
