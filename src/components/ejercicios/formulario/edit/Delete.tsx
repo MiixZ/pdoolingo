@@ -10,7 +10,7 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({ id_ejercicio }) => {
   const handleDelete = async () => {
     const result = await deleteEjercicio(id_ejercicio);
 
-    window.location.reload();
+    //window.location.reload();
   };
 
   return (

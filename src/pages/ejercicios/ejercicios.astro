@@ -2,13 +2,13 @@
 import Layout from "@layouts/HomeLayout.astro";
 import EjercicioBase from "@components/ejercicios/EjercicioBase.astro";
 import { getSesion } from "@services/login";
-import Formulario from "@components/ejercicios/formulario/Formulario.astro";
+import Formulario from "@components/ejercicios/formulario/crear/Formulario";
 
 const usuario = await getSesion(Astro.request);
 ---
 <Layout title="PDOOLingo">
   <div class="flex flex-col justify-center items-center">
     <EjercicioBase />
-    { usuario && usuario.tipo === "admin" && <Formulario usuario={usuario} /> }
+    { usuario && usuario.tipo === "admin" && <Formulario usuario={usuario} client:load /> }
   </div>
 </Layout>
