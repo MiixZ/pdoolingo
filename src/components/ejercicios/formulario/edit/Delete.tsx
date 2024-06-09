@@ -15,7 +15,7 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({ id_ejercicio }) => {
 
   return (
     <a
-      href="/home"
+      href="#"
       className="flex-none"
       onClick={(e) => {
         e.preventDefault();
