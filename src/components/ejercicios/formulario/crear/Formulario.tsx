@@ -6,10 +6,10 @@ import type { Respuesta } from "@interfaces/Respuesta";
 
 import { insertEjercicio } from "@services/ejercicios";
 
-import RespuestaItem from "./RespuestaItem";
-import PistaItem from "./PistaItem";
-import ExperienciaTipoItem from "./ExperienciaTipoItem";
-import EnunciadoItem from "./EnunciadoItem";
+import RespuestaItem from "../RespuestaItem";
+import PistaItem from "../PistaItem";
+import ExperienciaTipoItem from "../ExperienciaTipoItem";
+import EnunciadoItem from "../EnunciadoItem";
 
 interface Props {
   usuario: Usuario;
