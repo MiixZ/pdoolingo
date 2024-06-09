@@ -36,7 +36,12 @@ const FormularioEjercicio: React.FC<Props> = ({ usuario }) => {
       const tipo_coste_pista = formData.get("tipo_coste_pista") as string;
       const coste_pista = parseInt(formData.get("coste_pista") as string);
 
-      let currentErrors = { ...errors };
+      let currentErrors = {
+        enunciado: "",
+        experiencia: "",
+        coste_pista: "",
+        respuestasImpares: "",
+      };
 
       if (experiencia > 1000 || experiencia < 1) {
         currentErrors.experiencia =
@@ -97,7 +102,7 @@ const FormularioEjercicio: React.FC<Props> = ({ usuario }) => {
       const hasErrors = Object.values(currentErrors).some((msg) => msg);
       if (!hasErrors) {
         await insertEjercicio(bodyEjercicio, respuestas);
-        window.location.href = "/home";
+        window.location.reload();
       } else {
         setErrors(currentErrors);
       }
@@ -144,9 +149,19 @@ const FormularioEjercicio: React.FC<Props> = ({ usuario }) => {
 
       <EnunciadoItem />
 
+      {errors.enunciado && <p className="text-red-500">{errors.enunciado}</p>}
+
       <ExperienciaTipoItem />
 
+      {errors.experiencia && (
+        <p className="text-red-500">{errors.experiencia}</p>
+      )}
+
       <PistaItem />
+
+      {errors.coste_pista && (
+        <p className="text-red-500">{errors.coste_pista}</p>
+      )}
 
       <header>
         <h2 className="text-2xl font-bold text-wrap text-white mt-10 truncate">
@@ -158,6 +173,10 @@ const FormularioEjercicio: React.FC<Props> = ({ usuario }) => {
           <RespuestaItem key={i} n_respuesta={i + 1} />
         ))}
       </div>
+
+      {errors.respuestasImpares && (
+        <p className="text-red-500">{errors.respuestasImpares}</p>
+      )}
 
       <button
         className="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500"
