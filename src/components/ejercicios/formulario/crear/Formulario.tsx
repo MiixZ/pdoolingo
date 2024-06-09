@@ -117,7 +117,7 @@ const FormularioEjercicio: React.FC<Props> = ({ usuario }) => {
     <form
       method="POST"
       id="formulario"
-      className="flex flex-col rounded-xl border bg-slate-900 p-20 mb-2 gap-5 w-full xl:w-3/5"
+      className="flex flex-col rounded-xl border-4 border-gray-600 bg-slate-900 p-20 mb-2 gap-5 w-full xl:w-3/5"
       onSubmit={handleSubmit}
     >
       <header>
