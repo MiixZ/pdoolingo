@@ -12,7 +12,7 @@
       "@services/*": ["src/services/*"],
       "@pages/*": ["src/pages/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@styles/*": ["public/styles/*"],
+      "@styles/*": ["styles/*"],
       "@lib/*": ["src/lib/*"]
     }
   }
