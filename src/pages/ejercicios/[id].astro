@@ -5,7 +5,7 @@ import type { Respuesta } from "@interfaces/Respuesta";
 import EjercicioLayout from "@layouts/EjercicioLayout.astro";
 import { getEjercicio } from "@services/ejercicios";
 import { getUsuarioID } from "@services/usuario";
-import { getRespuestas } from "@services/ejercicios";
+import { getRespuestasEjercicio } from "@services/ejercicios";
 
 import Cuerpo from "@components/ejercicios/in/cuerpo";
 
@@ -17,7 +17,7 @@ if (!ejercicio) {
   return;
 }
 
-const respuestas: Respuesta[] = await getRespuestas(Number(id));
+const respuestas: Respuesta[] = await getRespuestasEjercicio(Number(id));
 
 const url = new URL(Astro.request.url);
 const id_usuario = url.searchParams.get("id_usuario");

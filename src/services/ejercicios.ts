@@ -1,5 +1,6 @@
-import type { Ejercicio } from "@interfaces/Ejercicio";
 import { url } from "./comun";
+
+import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Respuesta } from "@interfaces/Respuesta";
 import type { Data } from "@interfaces/Data";
 
@@ -27,6 +28,20 @@ export const getEjercicio = async (
   const result = await fetch(url + `ejercicios/${id}`);
 
   return (await result.json()).data as Ejercicio;
+};
+
+export const getRespuestasEjercicio = async (
+  id: Number | undefined
+): Promise<Respuesta[]> => {
+  const result = await fetch(url + `ejercicios-respuestas/${id}`);
+
+  const data = (await result.json()) as Data;
+
+  const respuestas = data.data.respuestas as Respuesta[];
+
+  console.log(respuestas);
+
+  return respuestas;
 };
 
 export const insertEjercicio = async (
@@ -97,21 +112,14 @@ export const deleteEjercicio = async (
   return result.json();
 };
 
-export const getRespuestas = async (id_ejercicio: Number | undefined) => {
-  const result = await fetch(url + "ejercicios-respuestas/" + id_ejercicio);
-
-  const id_respuestas = (await result.json()).data;
-
-  let respuestas: Respuesta[] = [];
-  id_respuestas.map(async (object: respuestas) => {
-    const result = await fetch(url + "respuestas/" + object.id_respuesta);
-
-    const respuesta = (await result.json()).data as Respuesta;
-    respuesta.correcta = object.es_correcta;
-    respuestas.push(respuesta);
+export const deleteRespuestasEjercicio = async (
+  id_ejercicio: Number | undefined
+): Promise<string> => {
+  const result = await fetch(url + `ejercicios-respuestas/${id_ejercicio}`, {
+    method: "DELETE",
   });
 
-  return respuestas;
+  return result.json();
 };
 
 export const realizaEjercicio = async (

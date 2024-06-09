@@ -3,9 +3,15 @@ import Checkbox from "@components/utils/checkbox";
 
 interface Props {
   n_respuesta: number;
+  defaultValue?: string;
+  defaultCorrecta?: boolean;
 }
 
-const RespuestaItem: React.FC<Props> = ({ n_respuesta }) => {
+const RespuestaItem: React.FC<Props> = ({
+  n_respuesta,
+  defaultValue = "",
+  defaultCorrecta = false,
+}) => {
   return (
     <div className="flex flex-col lg:flex-row items-center text-black gap-5 text-xl rounded-xl w-full">
       <input
@@ -14,10 +20,14 @@ const RespuestaItem: React.FC<Props> = ({ n_respuesta }) => {
         id={`respuesta${n_respuesta}`}
         name={`respuesta${n_respuesta}`}
         placeholder="Agrega el texto de la respuesta"
+        defaultValue={defaultValue}
         required
       />
-
-      <Checkbox id={`correcta${n_respuesta}`} name={`correcta${n_respuesta}`} />
+      <Checkbox
+        id={`correcta${n_respuesta}`}
+        name={`correcta${n_respuesta}`}
+        defaultChecked={defaultCorrecta}
+      />
     </div>
   );
 };

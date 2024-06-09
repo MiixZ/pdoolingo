@@ -2,15 +2,21 @@ import React from "react";
 import "@styles/checkboxes.css";
 
 interface Props {
-  id?: string;
-  name?: string;
+  id: string;
+  name: string;
+  defaultChecked?: boolean;
 }
 
-const Checkbox: React.FC<Props> = ({ id, name }) => {
+const Checkbox: React.FC<Props> = ({ id, name, defaultChecked = false }) => {
   return (
     <div className="checkbox-wrapper-44 items-center justify-center">
       <label className="toggleButton">
-        <input type="checkbox" id={id} name={name} />
+        <input
+          type="checkbox"
+          id={id}
+          name={name}
+          defaultChecked={defaultChecked}
+        />
         <div>
           <svg viewBox="0 0 44 44">
             <path
