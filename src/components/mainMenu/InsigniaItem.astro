@@ -11,7 +11,7 @@ interface Props {
 const { insignia } = Astro.props;
 ---
 
-<div class="flex flex-col lg:flex-row justify-between items-center gap-5 p-5 rounded-xl bg-zinc-800">
+<div class="flex flex-col lg:flex-row justify-between items-center gap-5 p-10 w-full text-xl rounded-xl bg-zinc-800">
     {
         insignia?.conseguida ? (
             <PremioRanking />
@@ -21,10 +21,10 @@ const { insignia } = Astro.props;
     }
 
     {insignia?.n_ejercicios && (
-        <p> Consigue un total de {insignia.n_ejercicios} ejercicios para este tema. </p>
+        <p> Supera {insignia.n_ejercicios} ejercicios para este tema. </p>
     )}
 
     {insignia?.xp && (
-        <p> Consigue un total de {insignia.xp} xp en este tema. </p>
+        <p> Consigue {insignia.xp} xp en este tema. </p>
     )}
 </div>
