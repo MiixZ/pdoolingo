@@ -159,7 +159,6 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
         : [...prev, respuesta];
 
       if (newSelected.length === 2) {
-        console.log(newSelected);
         setPair([newSelected[0], newSelected[1]]);
         setSelectedResponses([]);
       } else if (newSelected.length > 2) {
