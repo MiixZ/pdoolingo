@@ -2,14 +2,12 @@
 import type { Tema } from "@interfaces/Tema";
 import type { Usuario } from "@interfaces/Usuario";
 
-import Formulario from "@components/ejercicios/formulario/crear/Formulario";
-
 interface Props {
     tema?: Tema;
     usuario?: Usuario | null | false;
 }
 
-const { tema, usuario } = Astro.props;
+const { tema } = Astro.props;
 ---
 
 <div class="flex flex-col justify-center items-center rounded-lg w-full p-10 bg-slate-700 bg-opacity-80">
