@@ -1,48 +1,30 @@
 ---
+import type { Insignia } from '@interfaces/Insignia'
+
+import PremioRanking from '@icons/insignias/premioRanking.astro'
+import SinInsignia from '@icons/insignias/SinInsignia.astro'
+
 interface Props {
-  text?: string;
-  description?: string;
-  experience: number;
-  experienceMax: number;
+    insignia?: Insignia
 }
 
-const { text, experience, experienceMax, description } = Astro.props;
-const filledWidth = (experience / experienceMax) * 100;
+const { insignia } = Astro.props;
 ---
 
-<tr class="flex items-center mb-2 p-2 border-4 rounded-lg border-gray-600">
-    <td class="flex flex-row justify-between w-full">
-        <slot/>
-        <div class="p-2 flex flex-col items-end w-full">
-          <div class="flex flex-row justify-between w-full">
-            <p class="py-2 items-start"> { text } </p>
-            <div class="py-2 flex flex-row items-end">
-                <p> { experience } </p>
-                <p> / { experienceMax } </p>
-            </div>
-          </div>
-          <!-- Barra de experiencia -->
-          <div class="experience-bar">
-              <div class="experience-filled" style={{ width: `${filledWidth}%` }}></div>
-          </div>
+<div class="flex flex-col lg:flex-row justify-between items-center gap-5 p-5 rounded-xl bg-zinc-800">
+    {
+        insignia?.conseguida ? (
+            <PremioRanking />
+        ) : (
+            <SinInsignia />
+        )
+    }
 
-          <p class="py-2 items-start w-full"> { description } </p>
-        </div>
-    </td>
-</tr>
+    {insignia?.n_ejercicios && (
+        <p> Consigue un total de {insignia.n_ejercicios} ejercicios para este tema. </p>
+    )}
 
-<style>
-.experience-bar {
-  width: 100%;
-  height: 10px;
-  background-color: #f3f3f3;
-  border-radius: 5px;
-  margin-top: 5px;
-}
-
-.experience-filled {
-  height: 100%;
-  background-color: #4CAF50;
-  border-radius: 5px;
-}
-</style>
+    {insignia?.xp && (
+        <p> Consigue un total de {insignia.xp} xp en este tema. </p>
+    )}
+</div>

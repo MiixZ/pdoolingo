@@ -3,17 +3,14 @@ import { url } from "./comun";
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Respuesta } from "@interfaces/Respuesta";
 import type { Data } from "@interfaces/Data";
+import type { Insignia } from "@interfaces/Insignia";
 
-interface respuestas {
-  id_ejercicio: number;
-  id_respuesta: number;
-  es_correcta: boolean;
-}
+import { getInsigniasTema } from "./temas";
 
 interface usuario_ejercicios {
   id_usuario: string;
   id_ejercicio: number;
-  xp_ganada: number;
+  XP_GANADA: number;
 }
 
 export const getEjercicios = async () => {
@@ -38,8 +35,6 @@ export const getRespuestasEjercicio = async (
   const data = (await result.json()) as Data;
 
   const respuestas = data.data.respuestas as Respuesta[];
-
-  console.log(respuestas);
 
   return respuestas;
 };
@@ -142,9 +137,39 @@ export const realizaEjercicio = async (
     body: JSON.stringify({ id_usuario, id_ejercicio, xp_ganada }),
   });
 
+  await comprobarInsignias(ejercicio?.id_tema, id_usuario);
+
   const resultado = (await result.json()).data;
 
   return resultado;
+};
+
+export const comprobarInsignias = async (
+  id_tema?: number,
+  id_usuario?: string
+) => {
+  const insignias = await getInsigniasTema(id_tema);
+  if (!id_usuario || !id_tema || !insignias) return;
+
+  const xpTotal = await xpTotalPorTema(id_usuario, id_tema);
+  const n_ejercicios = await ejerciciosTotalesUsuario(id_usuario, id_tema);
+
+  await Promise.all(
+    insignias.map(async (insignia: Insignia) => {
+      if (
+        (insignia?.xp && xpTotal >= insignia.xp) ||
+        (insignia?.n_ejercicios && n_ejercicios >= insignia.n_ejercicios)
+      ) {
+        const result = await fetch(url + "usuarios-insignias", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id_usuario, id_insignia: insignia.id }),
+        });
+      }
+    })
+  );
 };
 
 export const xpTotalUsuario = async (id_usuario: string): Promise<number> => {
@@ -157,7 +182,41 @@ export const xpTotalUsuario = async (id_usuario: string): Promise<number> => {
   let xpTotal = 0;
 
   data.map((object: usuario_ejercicios) => {
-    xpTotal += object.xp_ganada;
+    xpTotal += object.XP_GANADA;
+  });
+
+  return xpTotal;
+};
+
+export const ejerciciosTotalesUsuario = async (
+  id_usuario: string,
+  id_tema: number
+) => {
+  const result = await fetch(
+    url + `usuario-ejercicios/temas/${id_usuario}/${id_tema}`
+  );
+
+  const resultados = await result.json();
+
+  return resultados.data.length as number;
+};
+
+export const xpTotalPorTema = async (
+  id_usuario: string,
+  id_tema: number
+): Promise<number> => {
+  const result = await fetch(
+    url + `usuario-ejercicios/temas/${id_usuario}/${id_tema}`
+  );
+
+  const resultados = await result.json();
+
+  const data = resultados.data as usuario_ejercicios[];
+
+  let xpTotal: number = 0;
+
+  data.map((object) => {
+    xpTotal += object.XP_GANADA;
   });
 
   return xpTotal;

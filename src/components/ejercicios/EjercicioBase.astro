@@ -14,12 +14,11 @@ let cont = 0;
 
 const usuario = await getSesion(Astro.request);
 const { ejercicios } = Astro.props;
-
 ---
 
 {
   usuario ? (
-    <div class="w-full flex flex-col overflow-auto">
+    <div class="w-full flex flex-col">
       <h2 class="text-center my-4 mt-20 text-3xl font-bold"> Ejercicios: </h2>
       <div class="w-full flex items-center justify-center">
         <table class="w-full">
