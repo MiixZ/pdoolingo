@@ -1,16 +1,20 @@
 ---
 import EjercicioItem from "@components/ejercicios/EjercicioItem.astro";
 import NotLogged from "@components/NoLogged.astro";
+
 import type { Ejercicio } from "@interfaces/Ejercicio.ts";
-import { getEjercicios } from "@services/ejercicios.ts";
+
 import { getSesion } from "@services/login";
 
-let data = await getEjercicios();
+interface Props {
+  ejercicios?: Ejercicio[] | null;
+}
+
 let cont = 0;
 
 const usuario = await getSesion(Astro.request);
+const { ejercicios } = Astro.props;
 
-const ejercicios = data.data as Ejercicio[];
 ---
 
 {
@@ -18,7 +22,7 @@ const ejercicios = data.data as Ejercicio[];
     <div class="w-full flex flex-col overflow-auto">
       <h2 class="text-center my-4 mt-20 text-3xl font-bold"> Ejercicios: </h2>
       <div class="w-full flex items-center justify-center">
-        <table class="w-full xl:w-3/5">
+        <table class="w-full">
           {ejercicios && ejercicios.length > 0 ? (
             ejercicios.map((ejercicio) => (
               <EjercicioItem

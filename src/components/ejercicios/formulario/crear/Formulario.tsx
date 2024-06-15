@@ -10,19 +10,27 @@ import RespuestaItem from "../RespuestaItem";
 import PistaItem from "../PistaItem";
 import ExperienciaTipoItem from "../ExperienciaTipoItem";
 import EnunciadoItem from "../EnunciadoItem";
+import AgregarEjercicio from "../AgregarEjercicio";
 
 interface Props {
   usuario: Usuario;
+  id_tema?: number;
+  visible?: boolean;
 }
 
-const FormularioEjercicio: React.FC<Props> = ({ usuario }) => {
+const FormularioEjercicio: React.FC<Props> = ({ usuario, id_tema }) => {
   const [respuestaCount, setRespuestaCount] = useState(5);
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [errors, setErrors] = useState({
     enunciado: "",
     experiencia: "",
     coste_pista: "",
     respuestasImpares: "",
   });
+
+  const handleToggleFormulario = () => {
+    setMostrarFormulario(!mostrarFormulario);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -68,6 +76,7 @@ const FormularioEjercicio: React.FC<Props> = ({ usuario }) => {
         xp_base: experiencia,
         tipo_coste_pista,
         coste_pista,
+        id_tema: id_tema,
       };
 
       let respuestaContador = 1;
@@ -114,86 +123,95 @@ const FormularioEjercicio: React.FC<Props> = ({ usuario }) => {
   };
 
   return (
-    <form
-      method="POST"
-      id="formulario"
-      className="flex flex-col rounded-xl border-4 border-gray-600 bg-slate-900 p-20 mb-2 gap-5 w-full xl:w-3/5"
-      onSubmit={handleSubmit}
-    >
-      <header>
-        <h1 className="text-4xl font-bold text-wrap text-white truncate">
-          Crea un ejercicio
-        </h1>
-      </header>
+    <div className="w-full">
+      <AgregarEjercicio handleClick={handleToggleFormulario} />
 
-      <details className="rounded-xl p-3 bg-red-900 border-gray-950 text-white mt-4 w-full 2xl:w-1/3 mx-auto">
-        <summary className="text-2xl cursor-pointer">
-          ¡A TENER EN CUENTA!
-        </summary>
-        <ol className="flex flex-col gap-4 p-5">
-          <li>Todos los campos visibles deben ser completados.</li>
-          <li>
-            El coste de la pista no debe ser mayor a la experiencia del
-            ejercicio o a las vidas máximas (5)
-          </li>
-          <li>Debe haber al menos 1 respuesta correcta.</li>
-          <li>
-            Si el ejercicio es de tipo parejas, el número de respuestas
-            correctas debe ser par.
-          </li>
-          <li>
-            Si no todos estos avisos son cumplidos, no se creará el ejercicio.
-          </li>
-        </ol>
-      </details>
+      {mostrarFormulario && (
+        <form
+          method="POST"
+          id="formulario"
+          className="flex flex-col rounded-xl border-4 border-gray-600 bg-slate-900 p-20 mb-2 gap-5 w-full"
+          onSubmit={handleSubmit}
+        >
+          <header>
+            <h1 className="text-4xl font-bold text-wrap text-white truncate">
+              Crea un ejercicio
+            </h1>
+          </header>
 
-      <EnunciadoItem />
+          <details className="rounded-xl p-3 bg-red-900 border-gray-950 text-white mt-4 w-full 2xl:w-1/3 mx-auto">
+            <summary className="text-2xl cursor-pointer">
+              ¡A TENER EN CUENTA!
+            </summary>
+            <ol className="flex flex-col gap-4 p-5">
+              <li>Todos los campos visibles deben ser completados.</li>
+              <li>
+                El coste de la pista no debe ser mayor a la experiencia del
+                ejercicio o a las vidas máximas (5)
+              </li>
+              <li>Debe haber al menos 1 respuesta correcta.</li>
+              <li>
+                Si el ejercicio es de tipo parejas, el número de respuestas
+                correctas debe ser par.
+              </li>
+              <li>
+                Si no todos estos avisos son cumplidos, no se creará el
+                ejercicio.
+              </li>
+            </ol>
+          </details>
 
-      {errors.enunciado && <p className="text-red-500">{errors.enunciado}</p>}
+          <EnunciadoItem />
 
-      <ExperienciaTipoItem />
+          {errors.enunciado && (
+            <p className="text-red-500">{errors.enunciado}</p>
+          )}
 
-      {errors.experiencia && (
-        <p className="text-red-500">{errors.experiencia}</p>
+          <ExperienciaTipoItem />
+
+          {errors.experiencia && (
+            <p className="text-red-500">{errors.experiencia}</p>
+          )}
+
+          <PistaItem />
+
+          {errors.coste_pista && (
+            <p className="text-red-500">{errors.coste_pista}</p>
+          )}
+
+          <header>
+            <h2 className="text-2xl font-bold text-wrap text-white mt-10 truncate">
+              Agrega las respuestas del ejercicio y marca la(s) correcta(s)
+            </h2>
+          </header>
+          <div className="flex flex-col gap-5 w-full" id="respuestas">
+            {Array.from({ length: respuestaCount }, (_, i) => (
+              <RespuestaItem key={i} n_respuesta={i + 1} />
+            ))}
+          </div>
+
+          {errors.respuestasImpares && (
+            <p className="text-red-500">{errors.respuestasImpares}</p>
+          )}
+
+          <button
+            className="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500"
+            type="button"
+            id="agregarRespuestaBtn"
+            onClick={agregarRespuesta}
+          >
+            Agregar respuesta
+          </button>
+          <button
+            className="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500"
+            type="submit"
+            id="submitBtn"
+          >
+            Registrar ejercicio
+          </button>
+        </form>
       )}
-
-      <PistaItem />
-
-      {errors.coste_pista && (
-        <p className="text-red-500">{errors.coste_pista}</p>
-      )}
-
-      <header>
-        <h2 className="text-2xl font-bold text-wrap text-white mt-10 truncate">
-          Agrega las respuestas del ejercicio y marca la(s) correcta(s)
-        </h2>
-      </header>
-      <div className="flex flex-col gap-5 w-full" id="respuestas">
-        {Array.from({ length: respuestaCount }, (_, i) => (
-          <RespuestaItem key={i} n_respuesta={i + 1} />
-        ))}
-      </div>
-
-      {errors.respuestasImpares && (
-        <p className="text-red-500">{errors.respuestasImpares}</p>
-      )}
-
-      <button
-        className="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500"
-        type="button"
-        id="agregarRespuestaBtn"
-        onClick={agregarRespuesta}
-      >
-        Agregar respuesta
-      </button>
-      <button
-        className="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500"
-        type="submit"
-        id="submitBtn"
-      >
-        Registrar ejercicio
-      </button>
-    </form>
+    </div>
   );
 };
 
