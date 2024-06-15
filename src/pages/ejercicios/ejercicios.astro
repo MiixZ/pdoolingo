@@ -3,6 +3,7 @@ import Layout from "@layouts/HomeLayout.astro";
 
 import EjercicioBase from "@components/ejercicios/EjercicioBase.astro";
 import TemaItem from "@components/temas/TemaItem.astro";
+import Formulario from "@components/ejercicios/formulario/crear/Formulario";
 
 import { getSesion } from "@services/login";
 import { getTemas } from "@services/temas";
@@ -16,6 +17,7 @@ const temas = await getTemas();
     {temas?.map((tema) => 
       <TemaItem tema={tema} usuario={usuario}>
         <EjercicioBase ejercicios={ tema?.ejercicios }/>
+        { usuario && usuario.tipo === "admin" && <Formulario usuario={usuario} id_tema={tema?.id} client:load /> }
       </TemaItem>)
     }
   </div>

@@ -4,8 +4,6 @@ import type { Usuario } from "@interfaces/Usuario";
 
 import Formulario from "@components/ejercicios/formulario/crear/Formulario";
 
-import { getEjerciciosTema } from "@services/temas";
-
 interface Props {
     tema?: Tema;
     usuario?: Usuario | null | false;
@@ -21,5 +19,4 @@ const { tema, usuario } = Astro.props;
     </span>
 
     <slot />
-    { usuario && usuario.tipo === "admin" && <Formulario usuario={usuario} id_tema={tema?.id} client:load /> }
 </div>
