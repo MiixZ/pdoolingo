@@ -79,7 +79,7 @@ const FormularioTema: React.FC<Props> = ({ tema, editing }) => {
 
           <input
             type="text"
-            className="inputs rounded-xl relative text-xl p-5 text-center resize-none h-auto w-full bg-gray-400 text-black truncate hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white transition-all duration-500 ease-in-out"
+            className="inputs rounded-xl relative text-xl p-5 text-center resize-none h-auto w-full bg-gray-400 text-black hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white transition-all duration-500 ease-in-out"
             placeholder="Agrega el título del tema"
             defaultValue={tema?.titulo}
             name="titulo"
@@ -87,7 +87,7 @@ const FormularioTema: React.FC<Props> = ({ tema, editing }) => {
           {errors.titulo && <span>{errors.titulo}</span>}
 
           <textarea
-            className="inputs rounded-xl relative text-xl p-5 text-center resize-none h-auto w-full bg-gray-400 text-black truncate hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white transition-all duration-500 ease-in-out"
+            className="inputs rounded-xl relative text-xl p-5 text-center resize-none h-auto w-full bg-gray-400 text-black hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white transition-all duration-500 ease-in-out"
             id="descripcion"
             placeholder="Agrega la descripción del tema"
             defaultValue={tema?.descripcion}
