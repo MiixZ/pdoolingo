@@ -4,6 +4,8 @@ import type { Insignia } from '@interfaces/Insignia'
 import PremioRanking from '@icons/insignias/premioRanking.astro'
 import SinInsignia from '@icons/insignias/SinInsignia.astro'
 
+import DeleteComponent from './DeleteInsignia'
+
 interface Props {
     insignia?: Insignia
 }
@@ -27,4 +29,6 @@ const { insignia } = Astro.props;
     {insignia?.xp && (
         <p> Consigue {insignia.xp} xp en este tema. </p>
     )}
+
+    <DeleteComponent id_insignia={insignia?.id} client:load />
 </div>
