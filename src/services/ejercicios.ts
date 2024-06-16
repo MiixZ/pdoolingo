@@ -179,8 +179,6 @@ export const xpTotalUsuario = async (id_usuario: string): Promise<number> => {
 
   const data = resultados.data as usuario_ejercicios[];
 
-  console.log("EXPERIENCIA TOTAL: ", data);
-
   let xpTotal = 0;
 
   data.map((object: usuario_ejercicios) => {

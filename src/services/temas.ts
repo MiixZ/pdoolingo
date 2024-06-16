@@ -72,7 +72,19 @@ export const insertTema = async (tema: Tema): Promise<boolean> => {
     body: JSON.stringify(tema),
   });
 
-  console.log("RESUTADO DE INSERTAR TEMA: ", await result.json());
+  return result.ok;
+};
+
+export const insertInsignia = async (insignia: Insignia): Promise<boolean> => {
+  const result = await fetch(url + "insignias", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(insignia),
+  });
+
+  console.log("RESUTADO DE INSERTAR INSIGNIA: ", await result.json());
 
   return result.ok;
 };

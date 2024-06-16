@@ -3,6 +3,7 @@ import Layout from '@layouts/HomeLayout.astro';
 
 import TemaItem from "@components/temas/TemaItem.astro";
 import InsigniaBase from '@components/mainMenu/InsigniaBase.astro';
+import FormularioInsignia from '@components/mainMenu/FormularioInsignia';
 
 import { getTemas } from "@services/temas";
 import { getSesion } from "@services/login";
@@ -20,6 +21,7 @@ if (!usuario) {
     {temas?.map((tema) => 
       <TemaItem tema={tema} usuario={usuario}>
         <InsigniaBase id_tema={tema.id} id_usuario={usuario.id}/>
+        {usuario && usuario.tipo === "admin" && <FormularioInsignia id_tema={tema.id} client:load/>}
       </TemaItem>)
     }
   </div>
