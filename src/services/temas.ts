@@ -5,6 +5,8 @@ import type { Data } from "@interfaces/Data";
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Insignia } from "@interfaces/Insignia";
 
+import { deleteEjercicio } from "./ejercicios";
+
 interface usuarios_insignias {
   id_usuario: string;
   id_insignia: number;
@@ -59,4 +61,46 @@ export const getInsigniasConseguidas = async (
   const insigniasData = (await result.json()) as Data;
 
   return insigniasData.data as usuarios_insignias[];
+};
+
+export const deleteTema = async (id: number | undefined): Promise<boolean> => {
+  const ejercicios = await getEjerciciosTema(id);
+  if (ejercicios) {
+    await Promise.all(
+      ejercicios.map(async (ejercicio) => {
+        await deleteEjercicio(ejercicio.id);
+      })
+    );
+  }
+
+  const insignias = await getInsigniasTema(id);
+  if (insignias) {
+    await Promise.all(
+      insignias.map(async (insignia) => {
+        await deleteInsignia(insignia.id);
+      })
+    );
+  }
+
+  const result = await fetch(url + `temas/${id}`, {
+    method: "DELETE",
+  });
+
+  console.log("RESUTADO DE ELIMINAR TEMA: ", await result.json());
+
+  return result.ok;
+};
+
+export const deleteInsignia = async (
+  id: number | undefined
+): Promise<boolean> => {
+  await fetch(url + `usuarios-insignias/insignia/delete/${id}`, {
+    method: "DELETE",
+  });
+
+  const result = await fetch(url + `insignias/${id}`, {
+    method: "DELETE",
+  });
+
+  return result.ok;
 };
