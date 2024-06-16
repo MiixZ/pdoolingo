@@ -7,7 +7,6 @@ import { realizaEjercicio } from "@services/ejercicios";
 import { updateVidas } from "@services/usuario";
 
 import GrupoRespuestas from "./GrupoRespuestas";
-import Contador from "./contador";
 import Pista from "./Pista";
 import type { Usuario } from "@interfaces/Usuario";
 
@@ -42,6 +41,18 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   const [vidasIniciales, setVidasIniciales] = useState<number>(
     usuario?.vidas ?? 0
   );
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!completed && count < 60) {
+      const interval = setInterval(() => {
+        setCount((prevCount) => prevCount + 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [completed, count]);
 
   useEffect(() => {
     if (respuestas) {
@@ -273,7 +284,13 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
               onClick={handlePista}
               id_usuario={id_usuario}
             />
-            <Contador isCompleted={completed} />
+            <h1
+              className={`gap-4 text-center text-4xl text-white w-full lg:${
+                completed ? "w-full" : "w-1/2"
+              }`}
+            >
+              {count}
+            </h1>
           </>
         ) : vidasIniciales <= 0 ? (
           <div className="flex items-center justify-center w-full">
