@@ -10,7 +10,7 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({ id_tema }) => {
   const handleDelete = async () => {
     await deleteTema(id_tema);
 
-    //window.location.reload();
+    window.location.reload();
   };
 
   return (
