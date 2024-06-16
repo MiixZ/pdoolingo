@@ -6,6 +6,7 @@ import type { Data } from "@interfaces/Data";
 import type { Insignia } from "@interfaces/Insignia";
 
 import { getInsigniasTema } from "./temas";
+import { getUsuarioID, updateRacha } from "./usuario";
 
 interface usuario_ejercicios {
   id_usuario: string;
@@ -120,16 +121,38 @@ export const deleteRespuestasEjercicio = async (
 export const realizaEjercicio = async (
   id_usuario: string,
   id_ejercicio: Number,
-  usa_pistas: boolean
+  usa_pistas: boolean,
+  contador?: number
 ) => {
   const ejercicio = await getEjercicio(id_ejercicio);
+  const usuario = await getUsuarioID(id_usuario);
   const xp_base = ejercicio?.xp_base ?? 0;
+
+  const realiza = await getUsuarioEjercicios(id_usuario, id_ejercicio);
+
   let xp_ganada = xp_base;
 
   if (ejercicio?.tipo_coste_pista === "experiencia" && usa_pistas)
     xp_ganada -= ejercicio?.coste_pista ?? 0;
 
-  const result = await fetch(url + "usuario-ejercicios/", {
+  realiza.success
+    ? (xp_ganada = ponderarEjercicio(xp_ganada, contador ?? 60, false))
+    : (xp_ganada = ponderarEjercicio(xp_ganada, contador ?? 60, true));
+
+  let racha = usuario?.racha ?? 0;
+  if (!realiza.success) {
+    racha = (await updateRacha(id_usuario)) ?? 0;
+
+    if (racha > 5) {
+      xp_ganada = xp_ganada * 1.5;
+    }
+
+    if (racha > 10) {
+      xp_ganada = xp_ganada * 2;
+    }
+  }
+
+  await fetch(url + "usuario-ejercicios/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -139,9 +162,36 @@ export const realizaEjercicio = async (
 
   await comprobarInsignias(ejercicio?.id_tema, id_usuario);
 
-  const resultado = (await result.json()).data;
+  return { xp_ganada, racha };
+};
 
-  return resultado;
+export const getUsuarioEjercicios = async (
+  id_usuario: string,
+  id_ejercicio: Number
+) => {
+  const result = await fetch(
+    url + `usuario-ejercicios/${id_usuario}/${id_ejercicio}`
+  );
+
+  return await result.json();
+};
+
+const ponderarEjercicio = (
+  xp: number,
+  contador: number,
+  pondera: boolean
+): number => {
+  if (contador < 20 && pondera) {
+    return xp * 1.25;
+  } else if ((contador >= 20 && contador < 30) || (contador < 20 && !pondera)) {
+    return xp;
+  } else if (contador >= 30 && contador < 45) {
+    return xp * 0.75;
+  } else if (contador >= 45 && contador < 60) {
+    return xp * 0.5;
+  } else {
+    return xp * 0.25;
+  }
 };
 
 export const comprobarInsignias = async (

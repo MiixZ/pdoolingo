@@ -6,5 +6,6 @@ export interface Usuario {
   DNI: string;
   vidas: number;
   tipo: string;
+  racha: number;
   image: string | null | undefined;
 }

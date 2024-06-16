@@ -44,6 +44,7 @@ export const updateVidas = async (
 
   const body = {
     vidas: usuario.vidas - coste,
+    racha: 0,
   };
 
   const result = await fetch(url + `usuarios/${id_usuario}`, {
@@ -57,4 +58,28 @@ export const updateVidas = async (
   const user = await result.json();
 
   return user.data as Usuario;
+};
+
+export const updateRacha = async (
+  id_usuario: string | null | undefined
+): Promise<number | null> => {
+  const usuario = await getUsuarioID(id_usuario);
+
+  if (!usuario) return null;
+
+  const body = {
+    racha: usuario.racha + 1,
+  };
+
+  const result = await fetch(url + `usuarios/${id_usuario}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const user = await result.json();
+
+  return user.data.racha as number;
 };
