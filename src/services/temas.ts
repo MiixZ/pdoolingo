@@ -133,6 +133,10 @@ export const updateInsignia = async (insignia: Insignia): Promise<boolean> => {
     body: JSON.stringify(insignia),
   });
 
+  await fetch(url + `usuarios-insignias/insignia/delete/${insignia.id}`, {
+    method: "DELETE",
+  });
+
   return result.ok;
 };
 
