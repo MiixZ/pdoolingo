@@ -160,6 +160,10 @@ export const realizaEjercicio = async (
     body: JSON.stringify({ id_usuario, id_ejercicio, xp_ganada }),
   });
 
+  if (realiza.success && realiza.data.xp_ganada > xp_ganada) {
+    xp_ganada = realiza.data.xp_ganada;
+  }
+
   await comprobarInsignias(ejercicio?.id_tema, id_usuario);
 
   return { xp_ganada, racha };
