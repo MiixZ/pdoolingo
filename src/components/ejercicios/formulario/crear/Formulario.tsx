@@ -10,7 +10,7 @@ import RespuestaItem from "../RespuestaItem";
 import PistaItem from "../PistaItem";
 import ExperienciaTipoItem from "../ExperienciaTipoItem";
 import EnunciadoItem from "../EnunciadoItem";
-import AgregarEjercicio from "../AgregarEjercicio";
+import AgregarItem from "../AgregarItem";
 
 interface Props {
   usuario: Usuario;
@@ -124,7 +124,10 @@ const FormularioEjercicio: React.FC<Props> = ({ usuario, id_tema }) => {
 
   return (
     <div className="w-full">
-      <AgregarEjercicio handleClick={handleToggleFormulario} />
+      <AgregarItem
+        handleClick={handleToggleFormulario}
+        text="Agregar Ejercicio"
+      />
 
       {mostrarFormulario && (
         <form

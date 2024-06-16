@@ -63,6 +63,20 @@ export const getInsigniasConseguidas = async (
   return insigniasData.data as usuarios_insignias[];
 };
 
+export const insertTema = async (tema: Tema): Promise<boolean> => {
+  const result = await fetch(url + "temas", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(tema),
+  });
+
+  console.log("RESUTADO DE INSERTAR TEMA: ", await result.json());
+
+  return result.ok;
+};
+
 export const deleteTema = async (id: number | undefined): Promise<boolean> => {
   const ejercicios = await getEjerciciosTema(id);
   if (ejercicios) {
