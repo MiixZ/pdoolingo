@@ -10,7 +10,7 @@ import { getInsigniasTema } from "./temas";
 interface usuario_ejercicios {
   id_usuario: string;
   id_ejercicio: number;
-  XP_GANADA: number;
+  xp_ganada: number;
 }
 
 export const getEjercicios = async () => {
@@ -179,10 +179,12 @@ export const xpTotalUsuario = async (id_usuario: string): Promise<number> => {
 
   const data = resultados.data as usuario_ejercicios[];
 
+  console.log("EXPERIENCIA TOTAL: ", data);
+
   let xpTotal = 0;
 
   data.map((object: usuario_ejercicios) => {
-    xpTotal += object.XP_GANADA;
+    xpTotal += object.xp_ganada;
   });
 
   return xpTotal;
@@ -216,7 +218,7 @@ export const xpTotalPorTema = async (
   let xpTotal: number = 0;
 
   data.map((object) => {
-    xpTotal += object.XP_GANADA;
+    xpTotal += object.xp_ganada;
   });
 
   return xpTotal;
