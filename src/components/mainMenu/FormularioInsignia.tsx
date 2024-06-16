@@ -3,17 +3,22 @@ import React, { useState } from "react";
 import type { Insignia } from "@interfaces/Insignia";
 
 import { getEjerciciosTema } from "@services/temas";
-import { insertInsignia } from "@services/temas";
+import { insertInsignia, updateInsignia } from "@services/temas";
 
 import AgregarItem from "@components/ejercicios/formulario/AgregarItem";
 
 interface Props {
   insignia?: Insignia;
   id_tema?: number;
+  editing?: boolean;
 }
 
-const FormularioInsignia: React.FC<Props> = ({ insignia, id_tema }) => {
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+const FormularioInsignia: React.FC<Props> = ({
+  insignia,
+  id_tema,
+  editing,
+}) => {
+  const [mostrarFormulario, setMostrarFormulario] = useState(editing || false);
   const [errors, setErrors] = useState({
     xp: "",
     n_ejercicios: "",
@@ -78,7 +83,11 @@ const FormularioInsignia: React.FC<Props> = ({ insignia, id_tema }) => {
         id_tema,
       };
 
-      await insertInsignia(bodyInsignia);
+      if (editing) {
+        await updateInsignia({ id: insignia?.id, ...bodyInsignia });
+      } else {
+        await insertInsignia(bodyInsignia);
+      }
       window.location.reload();
     } else {
       setErrors(currentErrors);
@@ -86,11 +95,13 @@ const FormularioInsignia: React.FC<Props> = ({ insignia, id_tema }) => {
   };
 
   return (
-    <div>
-      <AgregarItem
-        handleClick={handleToggleFormulario}
-        text="Agrega una insignia"
-      />
+    <div className="w-full xl:w-1/2">
+      {!editing && (
+        <AgregarItem
+          handleClick={handleToggleFormulario}
+          text="Crear insignia"
+        />
+      )}
       {mostrarFormulario && (
         <form
           className="flex flex-col rounded-xl border-4 border-gray-600 bg-slate-900 p-20 mb-2 gap-5 w-full"
@@ -98,8 +109,11 @@ const FormularioInsignia: React.FC<Props> = ({ insignia, id_tema }) => {
         >
           <header>
             <h1 className="text-4xl font-bold text-wrap text-white truncate">
-              Crea una insignia
+              {editing ? "Editar insignia" : "Crear insignia"}
             </h1>
+            {editing && (
+              <h4>Si quieres eliminar un requisito, deja vacío el campo.</h4>
+            )}
           </header>
 
           <input
@@ -124,7 +138,7 @@ const FormularioInsignia: React.FC<Props> = ({ insignia, id_tema }) => {
             className="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500"
             type="submit"
           >
-            Agregar Insignia
+            {editing ? "Editar" : "Crear"}
           </button>
         </form>
       )}

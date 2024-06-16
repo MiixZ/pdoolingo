@@ -33,6 +33,29 @@ export const getTemas = async (): Promise<Tema[] | null> => {
   return data.data as Tema[];
 };
 
+export const getTema = async (id: number | undefined): Promise<Tema | null> => {
+  const result = await fetch(url + `temas/${id}`);
+
+  const data = (await result.json()) as Data;
+  const tema = data.data as Tema;
+
+  tema.ejercicios = await getEjerciciosTema(tema.id);
+  tema.insignias = await getInsigniasTema(tema.id);
+
+  return tema;
+};
+
+export const getInsignia = async (
+  id: number | undefined
+): Promise<Insignia | null> => {
+  const result = await fetch(url + `insignias/${id}`);
+
+  const data = (await result.json()) as Data;
+  const insignia = data.data as Insignia;
+
+  return insignia;
+};
+
 export const getEjerciciosTema = async (
   id: number | undefined
 ): Promise<Ejercicio[] | null> => {
@@ -85,6 +108,30 @@ export const insertInsignia = async (insignia: Insignia): Promise<boolean> => {
   });
 
   console.log("RESUTADO DE INSERTAR INSIGNIA: ", await result.json());
+
+  return result.ok;
+};
+
+export const updateTema = async (tema: Tema): Promise<boolean> => {
+  const result = await fetch(url + `temas/${tema.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(tema),
+  });
+
+  return result.ok;
+};
+
+export const updateInsignia = async (insignia: Insignia): Promise<boolean> => {
+  const result = await fetch(url + `insignias/${insignia.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(insignia),
+  });
 
   return result.ok;
 };

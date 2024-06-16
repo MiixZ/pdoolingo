@@ -4,6 +4,8 @@ import type { Insignia } from '@interfaces/Insignia'
 import PremioRanking from '@icons/insignias/premioRanking.astro'
 import SinInsignia from '@icons/insignias/SinInsignia.astro'
 
+import Edit from './Edit.astro'
+
 import DeleteComponent from './DeleteInsignia'
 
 interface Props {
@@ -23,12 +25,15 @@ const { insignia } = Astro.props;
     }
 
     {insignia?.n_ejercicios && (
-        <p> Supera {insignia.n_ejercicios} ejercicios para este tema. </p>
+        <p> Supera {insignia.n_ejercicios} ejercicios. </p>
     )}
 
     {insignia?.xp && (
-        <p> Consigue {insignia.xp} xp en este tema. </p>
+        <p> Consigue {insignia.xp} xp. </p>
     )}
 
-    <DeleteComponent id_insignia={insignia?.id} client:load />
+    <div class="flex w:full 2xl:w-1/5 justify-between">
+        <Edit id_insignia={insignia?.id} />
+        <DeleteComponent id_insignia={insignia?.id} client:load />
+    </div>
 </div>

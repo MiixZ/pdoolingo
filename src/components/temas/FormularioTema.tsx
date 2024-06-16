@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import type { Tema } from "@interfaces/Tema";
 
 import { insertTema } from "@services/temas";
+import { updateTema } from "@services/temas";
 
 import AgregarItem from "@components/ejercicios/formulario/AgregarItem";
 
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const FormularioTema: React.FC<Props> = ({ tema, editing }) => {
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [mostrarFormulario, setMostrarFormulario] = useState(editing || false);
   const [errors, setErrors] = useState({
     titulo: "",
     descripcion: "",
@@ -52,7 +53,7 @@ const FormularioTema: React.FC<Props> = ({ tema, editing }) => {
       if (!editing) {
         await insertTema({ titulo, descripcion });
       } else {
-        // await updateTema({ titulo, descripcion });
+        await updateTema({ id: tema?.id, titulo, descripcion });
       }
       window.location.reload();
     } else {
@@ -62,7 +63,9 @@ const FormularioTema: React.FC<Props> = ({ tema, editing }) => {
 
   return (
     <div>
-      <AgregarItem handleClick={handleToggleFormulario} text="Agregar tema" />
+      {!editing && (
+        <AgregarItem handleClick={handleToggleFormulario} text="Agregar tema" />
+      )}
       {mostrarFormulario && (
         <form
           className="flex flex-col rounded-xl border-4 border-gray-600 bg-slate-900 p-20 mb-2 gap-5 w-full"
@@ -70,7 +73,7 @@ const FormularioTema: React.FC<Props> = ({ tema, editing }) => {
         >
           <header>
             <h1 className="text-4xl font-bold text-wrap text-white truncate">
-              Crea un tema
+              {editing ? "Editar tema" : "Crear tema"}
             </h1>
           </header>
 
@@ -97,7 +100,7 @@ const FormularioTema: React.FC<Props> = ({ tema, editing }) => {
             className="rounded-xl p-3 bg-green-700 border-gray-950 text-white mt-4 w-full md:w-1/4 mx-auto hover:text-gray-300 hover:bg-zinc-800 transition-all duration-500"
             type="submit"
           >
-            Crear
+            {editing ? "Editar" : "Crear"}
           </button>
         </form>
       )}

@@ -3,6 +3,7 @@ import type { Tema } from "@interfaces/Tema";
 import type { Usuario } from "@interfaces/Usuario";
 
 import DeleteComponent from "./DeleteTema";
+import Edit from "./Edit.astro";
 
 interface Props {
     tema?: Tema;
@@ -16,6 +17,10 @@ const { tema, usuario } = Astro.props;
     <span class="flex w-full justify-between items-center gap-20">
         <h1 class="text-4xl font-bold text-white"> {tema?.titulo}</h1>
         <p class="text-2xl text-white">{ tema?.descripcion }</p>
+        {
+            usuario && usuario.tipo === "admin" && 
+            <Edit id_tema={tema?.id} />
+        }
         {
             usuario && usuario.tipo === "admin" && 
             <DeleteComponent id_tema={tema?.id} client:load />
