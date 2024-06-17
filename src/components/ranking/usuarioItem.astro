@@ -17,15 +17,16 @@ const xp = await xpTotalUsuario(usuario.id);
 const ejercicios = await ejerciciosTotalesUsuarioSinTema(usuario.id);
 ---
 
-<div class="flex p-4 gap-10 w-full justify-between items-center rounded-xl bg-slate-900">
+<div class="flex flex-col p-4 gap-10 w-full justify-between items-center rounded-xl bg-slate-900">
     {puesto < 4 ? (
             <div class="text-4xl font-bold text-gray-500">{ puesto === 1 ? <PrimerPuesto /> : puesto === 2 ? <SegundoPuesto /> : puesto === 3 ? <TercerPuesto /> : {puesto} }</div>
-            <div class="ml-4 text-3xl text-emerald-800 p-5 rounded-xl"> { ejercicios } </div>
-            <div class="text-3xl font-bold">{ usuario.nombre }</div>
-            <div class="text-3xl text-gray-500">{ xp }</div>
+            <div class="ml-4 text-3xl text-emerald-800 p-5 rounded-xl"> { ejercicios } ejercicios </div>
+            <div class="text-3xl font-bold">{ usuario.nombre + " " + usuario.apellidos }</div>
+            <div class="text-3xl text-gray-500">{ xp } XP</div>
         ) : (
             <div class="text-4xl font-bold text-gray-500 px-8">{ puesto }</div>
-            <div class="text-2xl font-bold">{ usuario.nombre + " " + usuario.apellidos } </div>
+            <div class="text-xl font-bold">{ usuario.nombre + " " + usuario.apellidos } </div>
+            <div class="text-xl text-gray-500">{ xp } XP</div>
         )
     }
 </div>

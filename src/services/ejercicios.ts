@@ -7,6 +7,7 @@ import type { Insignia } from "@interfaces/Insignia";
 
 import { getInsigniasTema } from "./temas";
 import { getUsuarioID, updateRacha } from "./usuario";
+import type { Usuario } from "@interfaces/Usuario";
 
 interface usuario_ejercicios {
   id_usuario: string;
@@ -285,3 +286,15 @@ export const xpTotalPorTema = async (
 
   return xpTotal;
 };
+
+export const usuariosOrdenadosPorXP = async (usuarios: Usuario[]) => {
+  const usuariosXP = await Promise.all(usuarios.map(async (usuario) => {
+    const xp = await xpTotalUsuario(usuario.id);
+    return { ...usuario, xp };
+  }));
+
+  return usuariosXP.sort((a, b) => b.xp - a.xp).map(usuario => {
+    const { xp, ...rest } = usuario;
+    return rest;
+  });
+}
