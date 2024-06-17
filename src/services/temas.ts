@@ -12,11 +12,26 @@ interface usuarios_insignias {
   id_insignia: number;
 }
 
-export const getTemas = async (): Promise<Tema[] | null> => {
+interface Grupo {
+  id: number;
+  codigo: string;
+}
+
+export const getGrupos = async (): Promise<Grupo[] | null> => {
+  const result = await fetch(url + "grupos");
+
+  const data = (await result.json()) as Data;
+
+  return data.data as Grupo[];
+};
+
+export const getTemas = async (id_grupo?: number): Promise<Tema[] | null> => {
   const result = await fetch(url + "temas");
 
   const data = (await result.json()) as Data;
   const temas = data.data as Tema[];
+
+  if (!temas) return null;
 
   await Promise.all(
     temas.map(async (tema) => {
@@ -30,10 +45,26 @@ export const getTemas = async (): Promise<Tema[] | null> => {
     })
   );
 
+  await Promise.all(
+    temas.map(async (tema) => {
+      const result = await fetch(
+        url + `temas-grupos/${tema.id}/${id_grupo ?? 0}`
+      );
+      const data = (await result.json()) as Data;
+
+      if (data.data) {
+        tema.bloqueado = data.data.bloqueado;
+      }
+    })
+  );
+
   return data.data as Tema[];
 };
 
-export const getTema = async (id: number | undefined): Promise<Tema | null> => {
+export const getTema = async (
+  id: number | undefined,
+  id_grupo?: number
+): Promise<Tema | null> => {
   const result = await fetch(url + `temas/${id}`);
 
   const data = (await result.json()) as Data;
@@ -41,6 +72,18 @@ export const getTema = async (id: number | undefined): Promise<Tema | null> => {
 
   tema.ejercicios = await getEjerciciosTema(tema.id);
   tema.insignias = await getInsigniasTema(tema.id);
+
+  if (!id_grupo) return tema;
+
+  const resultBloqueado = await fetch(
+    url + `temas-grupos/${tema.id}/${id_grupo}`
+  );
+
+  const dataBloqueado = (await resultBloqueado.json()) as Data;
+
+  if (dataBloqueado.data) {
+    tema.bloqueado = dataBloqueado.data.bloqueado;
+  }
 
   return tema;
 };
@@ -95,6 +138,29 @@ export const insertTema = async (tema: Tema): Promise<boolean> => {
     body: JSON.stringify(tema),
   });
 
+  const resultado = (await result.json()) as Data;
+  const new_tema = resultado.data as Tema;
+  const grupos = await getGrupos();
+
+  if (!grupos) return false;
+
+  await Promise.all(
+    grupos.map(async (grupo) => {
+      console.log("TEMA: ", tema);
+      await fetch(url + "temas-grupos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id_grupo: grupo.id,
+          id_tema: new_tema.id,
+          bloqueado: false,
+        }),
+      });
+    })
+  );
+
   return result.ok;
 };
 
@@ -112,12 +178,14 @@ export const insertInsignia = async (insignia: Insignia): Promise<boolean> => {
   return result.ok;
 };
 
-export const updateTema = async (tema?: Tema): Promise<boolean> => {
+export const updateTema = async (
+  tema?: Tema,
+  id_grupo?: number
+): Promise<boolean> => {
   if (!tema) return false;
 
-  const { ejercicios, insignias, ...temaToSend } = tema;
+  const { ejercicios, insignias, bloqueado, ...temaToSend } = tema;
 
-  console.log("ACTUALIZANDO TEMA: ", temaToSend);
   const result = await fetch(url + `temas/${tema.id}`, {
     method: "PUT",
     headers: {
@@ -126,7 +194,43 @@ export const updateTema = async (tema?: Tema): Promise<boolean> => {
     body: JSON.stringify(temaToSend),
   });
 
-  console.log("RESULTADO DE ACTUALIZAR TEMA: ", await result.json());
+  const grupos = await getGrupos();
+
+  if (!grupos) return false;
+
+  if (!id_grupo) {
+    await Promise.all(
+      grupos.map(async (grupo) => {
+        console.log("DATA A ENVIAR: ", tema.id, grupo.id, bloqueado);
+        await fetch(url + `temas-grupos`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_grupo: grupo.id,
+            id_tema: tema.id,
+            bloqueado,
+          }),
+        });
+      })
+    );
+  } else {
+    console.log("UPDATEANDO: ", id_grupo, tema.id, bloqueado);
+    const resultadoo = await fetch(url + `temas-grupos`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id_grupo: id_grupo,
+        id_tema: tema.id,
+        bloqueado,
+      }),
+    });
+
+    console.log("RESULTADO DE UPDATE: ", await resultadoo.json());
+  }
 
   return result.ok;
 };
@@ -166,11 +270,17 @@ export const deleteTema = async (id: number | undefined): Promise<boolean> => {
     );
   }
 
-  const result = await fetch(url + `temas/${id}`, {
+  const grupos = await getGrupos();
+
+  if (!grupos) return false;
+
+  await fetch(url + `temas-grupos/temas/${id}`, {
     method: "DELETE",
   });
 
-  console.log("RESUTADO DE ELIMINAR TEMA: ", await result.json());
+  const result = await fetch(url + `temas/${id}`, {
+    method: "DELETE",
+  });
 
   return result.ok;
 };

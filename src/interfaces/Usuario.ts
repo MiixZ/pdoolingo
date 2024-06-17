@@ -7,5 +7,6 @@ export interface Usuario {
   vidas: number;
   tipo: string;
   racha: number;
+  grupo: number;
   image: string | null | undefined;
 }

@@ -235,6 +235,8 @@ export const xpTotalUsuario = async (id_usuario: string): Promise<number> => {
 
   let xpTotal = 0;
 
+  if (!data) return 0;
+
   data.map((object: usuario_ejercicios) => {
     xpTotal += object.xp_ganada;
   });

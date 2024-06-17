@@ -21,7 +21,7 @@ interface Props {
 const { Ejercicio, numero, Usuario } = Astro.props;
 const id_tema = Ejercicio.id_tema;
 
-const tema = await getTema(id_tema);
+const tema = await getTema(id_tema, Usuario.grupo);
 ---
 
 <tr class="flex flex-col xl:flex-row w-full mb-4 p-6 border-4 rounded-lg border-gray-600 bg-slate-900 hover:bg-slate-500 transition-colors duration-300">

@@ -3,6 +3,7 @@ import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Respuesta } from "@interfaces/Respuesta";
 
 import EjercicioLayout from "@layouts/EjercicioLayout.astro";
+
 import { getEjercicio } from "@services/ejercicios";
 import { getUsuarioID } from "@services/usuario";
 import { getRespuestasEjercicio } from "@services/ejercicios";
@@ -13,8 +14,7 @@ const { id } = Astro.params;
 const ejercicio: Ejercicio | null = await getEjercicio(Number(id));
 
 if (!ejercicio) {
-  Astro.response.status = 404;
-  return;
+  return Astro.redirect("/home");
 }
 
 const respuestas: Respuesta[] = await getRespuestasEjercicio(Number(id));

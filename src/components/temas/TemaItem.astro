@@ -29,7 +29,7 @@ const { tema, usuario } = Astro.props;
         }
         {
             usuario && (usuario.tipo === "admin" || usuario.tipo === "profesor") && 
-            <CheckboxTema tema={tema} defaultChecked={!tema?.bloqueado} client:load />
+            <CheckboxTema tema={tema} defaultChecked={!tema?.bloqueado} usuario={usuario} client:load />
         }
     </span>
 

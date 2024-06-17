@@ -4,18 +4,24 @@ import "@styles/checkboxes.css";
 import type { Tema } from "@interfaces/Tema";
 
 import { updateTema } from "@services/temas";
+import type { Usuario } from "@interfaces/Usuario";
 
 interface Props {
   tema?: Tema;
   defaultChecked?: boolean;
+  usuario?: Usuario;
 }
 
-const CheckboxTema: React.FC<Props> = ({ tema, defaultChecked = false }) => {
+const CheckboxTema: React.FC<Props> = ({
+  tema,
+  usuario,
+  defaultChecked = false,
+}) => {
   const handleBlock = async () => {
     if (tema) {
       tema.bloqueado = !tema.bloqueado;
     }
-    await updateTema(tema);
+    await updateTema(tema, usuario?.grupo);
     window.location.reload();
   };
 
