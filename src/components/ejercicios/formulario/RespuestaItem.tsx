@@ -1,16 +1,28 @@
 import React from "react";
+
 import Checkbox from "@components/utils/checkbox";
+import DeleteRespuesta from "./edit/DeleteRespuesta";
+
+import type { Respuesta } from "@interfaces/Respuesta";
 
 interface Props {
   n_respuesta: number;
   defaultValue?: string;
   defaultCorrecta?: boolean;
+  isEditingEnabled?: boolean;
+  id_ejercicio?: number;
+  respuesta?: Respuesta;
+  deletable?: boolean;
 }
 
 const RespuestaItem: React.FC<Props> = ({
   n_respuesta,
   defaultValue = "",
   defaultCorrecta = false,
+  isEditingEnabled = false,
+  id_ejercicio,
+  deletable,
+  respuesta,
 }) => {
   return (
     <div className="flex flex-col lg:flex-row items-center text-black gap-5 text-xl rounded-xl w-full">
@@ -22,12 +34,19 @@ const RespuestaItem: React.FC<Props> = ({
         placeholder="Agrega el texto de la respuesta"
         defaultValue={defaultValue}
         required
+        disabled={isEditingEnabled}
       />
       <Checkbox
         id={`correcta${n_respuesta}`}
         name={`correcta${n_respuesta}`}
         defaultChecked={defaultCorrecta}
       />
+      {deletable && (
+        <DeleteRespuesta
+          id_ejercicio={id_ejercicio}
+          id_respuesta={respuesta?.id}
+        />
+      )}
     </div>
   );
 };

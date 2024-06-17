@@ -91,6 +91,130 @@ export const insertEjercicio = async (
   });
 };
 
+export const updateEjercicio = async (
+  ejercicio: Ejercicio,
+  respuestas: Respuesta[]
+): Promise<void> => {
+  const resultEjercicio = await fetch(url + "ejercicios/" + ejercicio.id, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ...ejercicio }),
+  });
+
+  const responseEjercicio = (await resultEjercicio.json()) as Data;
+  const ejercicioActualizado = responseEjercicio.data as Ejercicio;
+
+  if (!responseEjercicio.success) {
+    throw new Error("Error al actualizar el ejercicio");
+  }
+
+  let respuestasActualizadas: Respuesta[] = [];
+
+  for (const respuesta of respuestas) {
+    let respuestaExistente = null;
+
+    const resultVerificarRespuesta = await fetch(
+      url + "respuestas/texto/" + encodeURIComponent(respuesta.texto)
+    );
+    const responseVerificarRespuesta =
+      (await resultVerificarRespuesta.json()) as Data;
+
+    if (responseVerificarRespuesta.success) {
+      respuestaExistente = responseVerificarRespuesta.data;
+    }
+
+    if (respuesta.id) {
+      const resultActualizarRespuesta = await fetch(
+        url + "respuestas/" + respuesta.id,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ texto: respuesta.texto }),
+        }
+      );
+
+      const responseActualizarRespuesta =
+        (await resultActualizarRespuesta.json()) as Data;
+      const respuestaActualizada =
+        responseActualizarRespuesta.data as Respuesta;
+
+      if (responseActualizarRespuesta.success) {
+        respuestasActualizadas.push(respuestaActualizada);
+
+        const resultAsignadas = await fetch(
+          url + "ejercicios-respuestas/" + ejercicio.id + "/" + respuesta.id,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id_ejercicio: ejercicioActualizado.id,
+              id_respuesta: respuestaActualizada.id,
+              es_correcta: respuesta.correcta,
+            }),
+          }
+        );
+
+        const responseAsignadas = (await resultAsignadas.json()) as Data;
+        const asignadaActualizada = responseAsignadas.data;
+      }
+    } else if (!respuestaExistente) {
+      const resultNuevaRespuesta = await fetch(url + "respuestas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ texto: respuesta.texto }),
+      });
+
+      const responseNuevaRespuesta =
+        (await resultNuevaRespuesta.json()) as Data;
+      const nuevaRespuesta = responseNuevaRespuesta.data as Respuesta;
+
+      if (responseNuevaRespuesta.success) {
+        respuestasActualizadas.push(nuevaRespuesta);
+
+        const resultAsignadas = await fetch(url + "ejercicios-respuestas", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_ejercicio: ejercicioActualizado.id,
+            id_respuesta: nuevaRespuesta.id,
+            es_correcta: respuesta.correcta,
+          }),
+        });
+
+        const responseAsignadas = (await resultAsignadas.json()) as Data;
+        const asignadaCreada = responseAsignadas.data;
+      }
+    } else {
+      respuestasActualizadas.push(respuestaExistente);
+
+      const resultAsignadas = await fetch(url + "ejercicios-respuestas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id_ejercicio: ejercicioActualizado.id,
+          id_respuesta: respuestaExistente.id,
+          es_correcta: respuesta.correcta,
+        }),
+      });
+
+      const responseAsignadas = (await resultAsignadas.json()) as Data;
+      const asignadaCreada = responseAsignadas.data;
+    }
+  }
+};
+
 export const deleteEjercicio = async (
   id_ejercicio: Number | undefined
 ): Promise<string> => {
@@ -105,6 +229,22 @@ export const deleteEjercicio = async (
   const result = await fetch(url + `ejercicios/${id_ejercicio}`, {
     method: "DELETE",
   });
+
+  return result.json();
+};
+
+export const deleteRespuesta = async (
+  id_ejercicio: Number | undefined,
+  id_respuesta: Number | undefined
+): Promise<string> => {
+  console.log(id_ejercicio, id_respuesta);
+
+  const result = await fetch(
+    url + `ejercicios-respuestas/${id_ejercicio}/${id_respuesta}`,
+    {
+      method: "DELETE",
+    }
+  );
 
   return result.json();
 };

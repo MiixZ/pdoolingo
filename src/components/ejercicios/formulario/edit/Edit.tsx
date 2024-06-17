@@ -8,6 +8,7 @@ import RespuestaItem from "../RespuestaItem";
 import PistaItem from "../PistaItem";
 import ExperienciaTipoItem from "../ExperienciaTipoItem";
 import EnunciadoItem from "../EnunciadoItem";
+import { updateEjercicio } from "@services/ejercicios";
 
 interface Props {
   usuario?: Usuario;
@@ -21,13 +22,13 @@ const FormularioEdicion: React.FC<Props> = ({
   respuestasIniciales = [],
 }) => {
   const n_respuestas = respuestasIniciales?.length ?? 0;
-
   const [respuestaCount, setRespuestaCount] = useState(n_respuestas);
   const [errors, setErrors] = useState({
     enunciado: "",
     experiencia: "",
     coste_pista: "",
     respuestasImpares: "",
+    respuestasIguales: "",
   });
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const FormularioEdicion: React.FC<Props> = ({
         experiencia: "",
         coste_pista: "",
         respuestasImpares: "",
+        respuestasIguales: "",
       };
 
       if (experiencia > 1000 || experiencia < 1) {
@@ -85,9 +87,15 @@ const FormularioEdicion: React.FC<Props> = ({
       let respuestasCorrectas = 0;
       let respuestas: Respuesta[] = [];
 
+      console.log(formData);
+
       while (formData.has(`respuesta${respuestaContador}`)) {
         const valor = formData.get(`respuesta${respuestaContador}`);
-        let respuesta: Respuesta = { texto: "", correcta: false };
+        let respuesta: Respuesta = {
+          id: respuestasIniciales[respuestaContador - 1]?.id,
+          texto: "",
+          correcta: false,
+        };
         if (valor) {
           const texto = valor.toString();
           respuesta.texto = texto;
@@ -96,6 +104,13 @@ const FormularioEdicion: React.FC<Props> = ({
           respuesta.correcta = checkboxValor === "on";
 
           if (respuesta.correcta) respuestasCorrectas++;
+
+          respuestas.map((r) => {
+            if (r.texto === respuesta.texto) {
+              currentErrors.respuestasIguales =
+                "No puede haber dos respuestas iguales en el ejercicio.";
+            }
+          });
 
           respuestas.push(respuesta);
         }
@@ -112,7 +127,7 @@ const FormularioEdicion: React.FC<Props> = ({
 
       const hasErrors = Object.values(currentErrors).some((msg) => msg);
       if (!hasErrors) {
-        //await updateEjercicio(bodyEjercicio, respuestas);
+        await updateEjercicio(bodyEjercicio, respuestas);
         window.location.reload();
       } else {
         setErrors(currentErrors);
@@ -165,18 +180,40 @@ const FormularioEdicion: React.FC<Props> = ({
         </h2>
       </header>
       <div className="flex flex-col gap-5 w-full" id="respuestas">
-        {Array.from({ length: respuestaCount }, (_, i) => (
+        {respuestasIniciales.map((respuesta, i) => (
           <RespuestaItem
             key={i}
             n_respuesta={i + 1}
-            defaultValue={respuestasIniciales[i]?.texto || ""}
-            defaultCorrecta={respuestasIniciales[i]?.correcta || false}
+            defaultValue={respuesta?.texto || ""}
+            defaultCorrecta={respuesta?.correcta || false}
+            isEditingEnabled={false}
+            id_ejercicio={ejercicio?.id}
+            respuesta={respuesta}
+            deletable={true}
           />
         ))}
+        {Array.from(
+          { length: respuestaCount - respuestasIniciales.length },
+          (_, i) => (
+            <RespuestaItem
+              key={i + respuestasIniciales.length}
+              n_respuesta={i + respuestasIniciales.length + 1}
+              defaultValue=""
+              defaultCorrecta={false}
+              isEditingEnabled={false}
+              id_ejercicio={ejercicio?.id}
+              deletable={false}
+            />
+          )
+        )}
       </div>
 
       {errors.respuestasImpares && (
         <p className="text-red-500">{errors.respuestasImpares}</p>
+      )}
+
+      {errors.respuestasIguales && (
+        <p className="text-red-500">{errors.respuestasIguales}</p>
       )}
 
       <button

@@ -17,8 +17,8 @@ const ExperienciaTipoItem: React.FC<Props> = ({
         name="tipo"
         defaultValue={defaultTipo}
       >
-        <option value="Parejas">Parejas</option>
-        <option value="Pescar">Pescar</option>
+        <option value="parejas">Parejas</option>
+        <option value="pescar">Pescar</option>
       </select>
 
       <input
