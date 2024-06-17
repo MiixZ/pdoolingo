@@ -30,7 +30,7 @@ const usuario = await getSesion(Astro.request);
     <div class="w-full xl:w-4/5 flex flex-col items-center justify-center rounded-xl bg-slate-800 gap-5 p-10 mt-10">
       <h2 class="text-center my-4 text-3xl font-bold">Insignias:</h2>
         {insignias?.map((insignia) => (
-          <InsigniaItem insignia={insignia}></InsigniaItem>
+          <InsigniaItem insignia={insignia} tipo_user={usuario.tipo}></InsigniaItem>
         ))}
     </div>
   ) : (
