@@ -35,7 +35,10 @@ const { insignia, tipo_user } = Astro.props;
 
     <div class="flex w:full 2xl:w-1/5 justify-between">
         {
-            tipo_user === 'admin' && <Edit id_insignia={insignia?.id} /> && <DeleteComponent id_insignia={insignia?.id} client:load />
+            tipo_user === 'admin' && <Edit id_insignia={insignia?.id} />
+        }
+        {
+            tipo_user === 'admin' && <DeleteComponent id_insignia={insignia?.id} client:load />
         }
     </div>
 </div>
