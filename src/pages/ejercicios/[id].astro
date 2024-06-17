@@ -9,6 +9,7 @@ import { getUsuarioID } from "@services/usuario";
 import { getRespuestasEjercicio } from "@services/ejercicios";
 
 import Cuerpo from "@components/ejercicios/in/cuerpo";
+import { getTema } from "@services/temas";
 
 const { id } = Astro.params;
 const ejercicio: Ejercicio | null = await getEjercicio(Number(id));
@@ -27,6 +28,12 @@ if (!id_usuario) {
 }
 
 const usuario = await getUsuarioID(id_usuario);
+
+const tema = await getTema(ejercicio.id_tema, usuario?.grupo);
+
+if (tema?.bloqueado) {
+  return Astro.redirect("/home");
+}
 ---
 
 <EjercicioLayout
