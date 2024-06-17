@@ -8,12 +8,13 @@ import FormularioInsignia from '@components/mainMenu/FormularioInsignia';
 import { getTemas } from "@services/temas";
 import { getSesion } from "@services/login";
 
-const temas = await getTemas();
 const usuario = await getSesion(Astro.request);
 
 if (!usuario) {
   return Astro.redirect("/home");
 }
+
+const temas = await getTemas();
 ---
 
 <Layout title="PDOOLingo - Insignias">
