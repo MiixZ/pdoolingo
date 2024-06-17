@@ -30,6 +30,14 @@ export const getUsuarioID = async (
   return (await result.json()).data as Usuario;
 };
 
+export const getUsuariosByGrupo = async (
+  id_grupo: number | null | undefined
+): Promise<Usuario[] | null> => {
+  const result = await fetch(url + `usuarios/grupo/${id_grupo}`);
+
+  return (await result.json()).data as Usuario[];
+};
+
 export const updateVidas = async (
   id_usuario: string | null | undefined,
   coste: number

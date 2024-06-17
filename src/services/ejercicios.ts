@@ -257,6 +257,14 @@ export const ejerciciosTotalesUsuario = async (
   return resultados.data.length as number;
 };
 
+export const ejerciciosTotalesUsuarioSinTema = async (id_usuario: string) => {
+  const result = await fetch(url + `usuario-ejercicios/${id_usuario}`);
+
+  const resultados = await result.json();
+
+  return resultados.data.length as number;
+};
+
 export const xpTotalPorTema = async (
   id_usuario: string,
   id_tema: number

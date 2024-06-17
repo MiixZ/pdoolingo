@@ -25,6 +25,14 @@ export const getGrupos = async (): Promise<Grupo[] | null> => {
   return data.data as Grupo[];
 };
 
+export const getGrupo = async (id: number): Promise<Grupo | null> => {
+  const result = await fetch(url + `grupos/${id}`);
+
+  const data = (await result.json()) as Data;
+
+  return data.data as Grupo;
+};
+
 export const getTemas = async (id_grupo?: number): Promise<Tema[] | null> => {
   const result = await fetch(url + "temas");
 
