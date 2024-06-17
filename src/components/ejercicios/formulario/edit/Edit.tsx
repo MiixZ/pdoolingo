@@ -87,8 +87,6 @@ const FormularioEdicion: React.FC<Props> = ({
       let respuestasCorrectas = 0;
       let respuestas: Respuesta[] = [];
 
-      console.log(formData);
-
       while (formData.has(`respuesta${respuestaContador}`)) {
         const valor = formData.get(`respuesta${respuestaContador}`);
         let respuesta: Respuesta = {
@@ -118,7 +116,7 @@ const FormularioEdicion: React.FC<Props> = ({
       }
 
       if (
-        (respuestasCorrectas % 2 !== 0 && tipo === "Parejas") ||
+        (respuestasCorrectas % 2 !== 0 && tipo === "parejas") ||
         respuestasCorrectas === 0
       ) {
         currentErrors.respuestasImpares =
