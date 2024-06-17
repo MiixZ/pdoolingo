@@ -2,13 +2,11 @@ import type { Usuario } from "@interfaces/Usuario";
 import { url } from "./comun";
 
 export const getUsuario = async (
-  nombreCompleto: string | undefined,
   email: string | undefined
 ) => {
   const pet = url + "usuarios/nombre";
 
   const body = {
-    nombreCompleto: nombreCompleto,
     email: email,
   };
 
