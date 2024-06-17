@@ -6,6 +6,7 @@ export interface Tema {
   titulo?: string;
   descripcion?: string;
   n_tema?: number;
+  bloqueado?: boolean;
   ejercicios?: Ejercicio[] | null;
   insignias?: Insignia[] | null;
 }

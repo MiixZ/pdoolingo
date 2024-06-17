@@ -112,14 +112,21 @@ export const insertInsignia = async (insignia: Insignia): Promise<boolean> => {
   return result.ok;
 };
 
-export const updateTema = async (tema: Tema): Promise<boolean> => {
+export const updateTema = async (tema?: Tema): Promise<boolean> => {
+  if (!tema) return false;
+
+  const { ejercicios, insignias, ...temaToSend } = tema;
+
+  console.log("ACTUALIZANDO TEMA: ", temaToSend);
   const result = await fetch(url + `temas/${tema.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(tema),
+    body: JSON.stringify(temaToSend),
   });
+
+  console.log("RESULTADO DE ACTUALIZAR TEMA: ", await result.json());
 
   return result.ok;
 };

@@ -5,6 +5,8 @@ import type { Usuario } from "@interfaces/Usuario";
 import DeleteComponent from "./DeleteTema";
 import Edit from "./Edit.astro";
 
+import CheckboxTema from "@components/utils/checkboxTema";
+
 interface Props {
     tema?: Tema;
     usuario?: Usuario | false;
@@ -24,6 +26,10 @@ const { tema, usuario } = Astro.props;
         {
             usuario && usuario.tipo === "admin" && 
             <DeleteComponent id_tema={tema?.id} client:load />
+        }
+        {
+            usuario && (usuario.tipo === "admin" || usuario.tipo === "profesor") && 
+            <CheckboxTema tema={tema} defaultChecked={!tema?.bloqueado} client:load />
         }
     </span>
 
