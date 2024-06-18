@@ -39,7 +39,7 @@ const xp = await xpTotalUsuario(usuario?.id) ?? 0;
             <Ranking/>
         </AsideMenuItem>
 
-        {usuario.tipo !== "estudiante" && (
+        {usuario && usuario.tipo !== "estudiante" && (
             <AsideMenuItem href="/grupo" text="GRUPO" selected={grupo}>
                 <Grupo/>
             </AsideMenuItem>

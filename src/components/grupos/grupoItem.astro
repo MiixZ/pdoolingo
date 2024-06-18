@@ -4,12 +4,16 @@ import { getUsuariosByGrupo } from "@services/usuario";
 
 import DeleteGrupo from "./DeleteGrupo";
 import DeleteUsuario from "./DeleteUsuario";
+import FormularioProfesor from "./FormularioProfesor";
+
+import type { Usuario } from "@interfaces/Usuario";
 
 interface Props {
     id_grupo?: number;
+    main_user?: Usuario
 }
 
-const { id_grupo } = Astro.props;
+const { id_grupo, main_user } = Astro.props;
 
 const grupo = await getGrupo(id_grupo ?? 0);
 const usuarios = await getUsuariosByGrupo(id_grupo);
@@ -22,14 +26,22 @@ const profesor = usuarios?.find(usuario => usuario.tipo === "profesor");
         <div class="flex flex-col p-10 w-full lg:w-3/5 mx-auto mt-10 rounded-xl bg-slate-900 gap-10">
             <span class="flex justify-between items-center">
                 <h1 class="text-4xl font-bold">Grupo - {grupo.codigo}</h1>
-                <DeleteGrupo id_grupo={grupo.id} client:load />
+                {main_user && main_user.tipo === "admin" && (
+                    <DeleteGrupo id_grupo={grupo.id} client:load />
+                )}
             </span>
 
             {
                 profesor ? (
-                    <h2 class="text-3xl"> Profesor: {profesor.nombre + " " + profesor.apellidos} </h2>
+                    <div class="flex gap-5 items-center">
+                        <h2 class="text-3xl"> Profesor: {profesor.nombre + " " + profesor.apellidos} </h2>
+                        {main_user && main_user.tipo === "admin" && (
+                            <DeleteUsuario id_usuario={profesor.id} client:load />
+                        )}
+                    </div>
                 ) : (
                     <h2 class="text-xl 2xl:text-3xl"> Aún no hay un profesor asignado a este grupo. </h2>
+                    <FormularioProfesor grupo={grupo.id ?? 0} client:load />
                 )
             }
 

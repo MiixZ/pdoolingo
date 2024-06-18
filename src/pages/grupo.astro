@@ -22,12 +22,15 @@ const grupos = await getGrupos();
     {
         tipo === "admin" ? (
             grupos?.map((grupo) => (
-                <GrupoItem id_grupo={grupo.id} />
+                <GrupoItem id_grupo={grupo.id} main_user={usuario} />
             ))
         ) : (
-            <GrupoItem id_grupo={grupo} />
+            <GrupoItem id_grupo={grupo} main_user={usuario} />
         )
     }
-
-    <FormularioGrupo client:load />
+    
+    {
+        usuario.tipo === "admin" && <FormularioGrupo client:load />
+    }
+    
 </Layout> 

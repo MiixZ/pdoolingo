@@ -1,5 +1,5 @@
 export interface Usuario {
-  id: string;
+  id?: string;
   nombre: string;
   apellidos: string;
   email: string;
@@ -8,5 +8,5 @@ export interface Usuario {
   tipo: string;
   racha: number;
   grupo: number;
-  image: string | null | undefined;
+  image?: string | null | undefined;
 }
