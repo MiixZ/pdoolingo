@@ -9,7 +9,7 @@ interface Props {
   grupo: number;
 }
 
-const FormularioProfesor: React.FC<Props> = ({ editing, grupo }) => {
+const FormularioEstudiante: React.FC<Props> = ({ editing, grupo }) => {
   const [mostrarFormulario, setMostrarFormulario] = useState(editing || false);
   const [errors, setErrors] = useState({
     nombre: "",
@@ -59,7 +59,7 @@ const FormularioProfesor: React.FC<Props> = ({ editing, grupo }) => {
       (error) => error !== ""
     );
 
-    const tipo = "profesor";
+    const tipo = "estudiante";
 
     if (!hasErrors) {
       if (!editing) {
@@ -84,7 +84,7 @@ const FormularioProfesor: React.FC<Props> = ({ editing, grupo }) => {
     <div>
       <AgregarItem
         handleClick={handleToggleFormulario}
-        text="Agregar profesor"
+        text="Agregar estudiante"
       />
       {mostrarFormulario && (
         <form
@@ -93,7 +93,7 @@ const FormularioProfesor: React.FC<Props> = ({ editing, grupo }) => {
         >
           <header>
             <h1 className="text-4xl font-bold text-wrap text-white truncate">
-              {editing ? "Editar profesor" : "Agrega un profesor"}
+              {editing ? "Editar estudiante" : "Agrega un estudiante"}
             </h1>
           </header>
 
@@ -101,7 +101,7 @@ const FormularioProfesor: React.FC<Props> = ({ editing, grupo }) => {
             className="inputs rounded-xl relative text-xl p-5 text-center resize-none h-auto w-full bg-gray-400 text-black hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white transition-all duration-500 ease-in-out"
             type="email"
             id="email"
-            placeholder="Agrega el email del profesor"
+            placeholder="Agrega el email del estudiante"
             name="email"
             required
           />
@@ -112,7 +112,7 @@ const FormularioProfesor: React.FC<Props> = ({ editing, grupo }) => {
             type="text"
             id="nombre"
             name="nombre"
-            placeholder="Agrega el nombre del profesor"
+            placeholder="Agrega el nombre del estudiante"
             required
           />
           <span>{errors.nombre}</span>
@@ -121,7 +121,7 @@ const FormularioProfesor: React.FC<Props> = ({ editing, grupo }) => {
             className="inputs rounded-xl relative text-xl p-5 text-center resize-none h-auto w-full bg-gray-400 text-black hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white transition-all duration-500 ease-in-out"
             type="text"
             id="apellidos"
-            placeholder="Agrega los apellidos del profesor"
+            placeholder="Agrega los apellidos del estudiante"
             name="apellidos"
           />
           <span>{errors.apellidos}</span>
@@ -130,7 +130,7 @@ const FormularioProfesor: React.FC<Props> = ({ editing, grupo }) => {
             className="inputs rounded-xl relative text-xl p-5 text-center resize-none h-auto w-full bg-gray-400 text-black hover:bg-zinc-800 hover:text-white focus:bg-zinc-900 focus:text-white transition-all duration-500 ease-in-out"
             type="text"
             id="DNI"
-            placeholder="Agrega el DNI del profesor"
+            placeholder="Agrega el DNI del estudiante"
             name="DNI"
           />
           <span>{errors.DNI}</span>
@@ -147,4 +147,4 @@ const FormularioProfesor: React.FC<Props> = ({ editing, grupo }) => {
   );
 };
 
-export default FormularioProfesor;
+export default FormularioEstudiante;
