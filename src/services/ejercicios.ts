@@ -106,10 +106,6 @@ export const updateEjercicio = async (
   const responseEjercicio = (await resultEjercicio.json()) as Data;
   const ejercicioActualizado = responseEjercicio.data as Ejercicio;
 
-  if (!responseEjercicio.success) {
-    throw new Error("Error al actualizar el ejercicio");
-  }
-
   let respuestasActualizadas: Respuesta[] = [];
 
   for (const respuesta of respuestas) {
@@ -237,7 +233,6 @@ export const deleteRespuesta = async (
   id_ejercicio: Number | undefined,
   id_respuesta: Number | undefined
 ): Promise<string> => {
-
   const result = await fetch(
     url + `ejercicios-respuestas/${id_ejercicio}/${id_respuesta}`,
     {
@@ -427,13 +422,17 @@ export const xpTotalPorTema = async (
 };
 
 export const usuariosOrdenadosPorXP = async (usuarios: Usuario[]) => {
-  const usuariosXP = await Promise.all(usuarios.map(async (usuario) => {
-    const xp = await xpTotalUsuario(usuario.id);
-    return { ...usuario, xp };
-  }));
+  const usuariosXP = await Promise.all(
+    usuarios.map(async (usuario) => {
+      const xp = await xpTotalUsuario(usuario.id ?? "");
+      return { ...usuario, xp };
+    })
+  );
 
-  return usuariosXP.sort((a, b) => b.xp - a.xp).map(usuario => {
-    const { xp, ...rest } = usuario;
-    return rest;
-  });
-}
+  return usuariosXP
+    .sort((a, b) => b.xp - a.xp)
+    .map((usuario) => {
+      const { xp, ...rest } = usuario;
+      return rest;
+    });
+};
