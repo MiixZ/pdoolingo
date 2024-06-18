@@ -8,6 +8,7 @@ import FormularioProfesor from "./FormularioProfesor";
 
 import type { Usuario } from "@interfaces/Usuario";
 import FormularioEstudiante from "./FormularioEstudiante";
+import FormularioExcel from "./FormularioExcel";
 
 interface Props {
     id_grupo?: number;
@@ -63,6 +64,7 @@ const profesor = usuarios?.find(usuario => usuario.tipo === "profesor");
                 )
             }
             <FormularioEstudiante grupo={grupo.id ?? 0} client:load />
+            <FormularioExcel grupo={grupo.id ?? 0} client:load />
         </div>
     )
 }
