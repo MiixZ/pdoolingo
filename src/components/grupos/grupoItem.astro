@@ -3,6 +3,7 @@ import { getGrupo } from "@services/temas";
 import { getUsuariosByGrupo } from "@services/usuario";
 
 import DeleteGrupo from "./DeleteGrupo";
+import DeleteUsuario from "./DeleteUsuario";
 
 interface Props {
     id_grupo?: number;
@@ -35,10 +36,13 @@ const profesor = usuarios?.find(usuario => usuario.tipo === "profesor");
             {
                 estudiantes && estudiantes.length > 0 ? (
                     estudiantes.map(estudiante => (
-                        <div class="grid grid-cols-1 2xl:grid-cols-3 gap-4 w-full items-center rounded-xl bg-slate-500 p-5 border-t-4 text-black font-bold">
-                            <p class="text-center"> {estudiante.nombre + " " + estudiante.apellidos} </p>
-                            <p class="text-center"> {estudiante.email} </p>
-                            <p class="text-center"> {estudiante.DNI} </p>
+                        <div class="flex justify-between items-center rounded-xl p-2 bg-slate-500 border-t-4">
+                            <div class="grid grid-cols-1 2xl:grid-cols-3 gap-4 w-full items-center p-5 text-black font-bold">
+                                <p class="text-center text-lg"> {estudiante.nombre + " " + estudiante.apellidos} </p>
+                                <p class="text-center"> {estudiante.email} </p>
+                                <p class="text-center"> {estudiante.DNI} </p>
+                            </div>
+                            <DeleteUsuario id_usuario={estudiante.id} client:load />
                         </div>
                     ))
                 ) : (

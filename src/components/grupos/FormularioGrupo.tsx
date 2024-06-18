@@ -48,7 +48,7 @@ const FormularioGrupo: React.FC<Props> = ({ grupo, editing }) => {
       if (!editing) {
         await insertGrupo({ codigo });
       }
-      //window.location.reload();
+      window.location.reload();
     } else {
       setErrors(currentErrors);
     }
