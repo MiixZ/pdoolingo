@@ -1,0 +1,50 @@
+---
+import { getGrupo } from "@services/temas";
+import { getUsuariosByGrupo } from "@services/usuario";
+
+import DeleteGrupo from "./DeleteGrupo";
+
+interface Props {
+    id_grupo?: number;
+}
+
+const { id_grupo } = Astro.props;
+
+const grupo = await getGrupo(id_grupo ?? 0);
+const usuarios = await getUsuariosByGrupo(id_grupo);
+
+const estudiantes = usuarios?.filter(usuario => usuario.tipo === "estudiante");
+const profesor = usuarios?.find(usuario => usuario.tipo === "profesor");
+---
+{
+    grupo && (
+        <div class="flex flex-col p-10 w-full lg:w-3/5 mx-auto mt-10 rounded-xl bg-slate-900 gap-10">
+            <span class="flex justify-between items-center">
+                <h1 class="text-4xl font-bold">Grupo - {grupo.codigo}</h1>
+                <DeleteGrupo id_grupo={grupo.id} client:load />
+            </span>
+
+            {
+                profesor ? (
+                    <h2 class="text-3xl"> Profesor: {profesor.nombre + " " + profesor.apellidos} </h2>
+                ) : (
+                    <h2 class="text-xl 2xl:text-3xl"> Aún no hay un profesor asignado a este grupo. </h2>
+                )
+            }
+
+            {
+                estudiantes && estudiantes.length > 0 ? (
+                    estudiantes.map(estudiante => (
+                        <div class="grid grid-cols-1 2xl:grid-cols-3 gap-4 w-full items-center rounded-xl bg-slate-500 p-5 border-t-4 text-black font-bold">
+                            <p class="text-center"> {estudiante.nombre + " " + estudiante.apellidos} </p>
+                            <p class="text-center"> {estudiante.email} </p>
+                            <p class="text-center"> {estudiante.DNI} </p>
+                        </div>
+                    ))
+                ) : (
+                    <h2 class="text-xl 2xl:text-3xl"> Aún no hay estudiantes en este grupo. </h2>
+                )
+            }
+        </div>
+    )
+}

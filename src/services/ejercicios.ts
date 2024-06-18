@@ -237,7 +237,6 @@ export const deleteRespuesta = async (
   id_ejercicio: Number | undefined,
   id_respuesta: Number | undefined
 ): Promise<string> => {
-  console.log(id_ejercicio, id_respuesta);
 
   const result = await fetch(
     url + `ejercicios-respuestas/${id_ejercicio}/${id_respuesta}`,

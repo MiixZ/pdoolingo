@@ -11,6 +11,7 @@ import Ejercicios from '@icons/aside/Ejercicios.astro'
 import Insignia from '@icons/aside/Insignia.astro'
 import Vidas from '@icons/aside/Vidas.astro'
 import Experience from '@icons/aside/Experience.astro'
+import Grupo from '@icons/aside/Grupo.astro'
 
 let pathname : String = Astro.url.pathname;
 pathname = pathname.split("/")[1];
@@ -18,6 +19,7 @@ pathname = pathname.split("/")[1];
 let ranking = pathname == "ranking" ? "true" : "false";
 let ejercicios = pathname == "ejercicios" ? "true" : "false";
 let insignias = pathname == "insignias" ? "true" : "false";
+let grupo = pathname == "grupo" ? "true" : "false";
 
 const usuario = await getSesion(Astro.request) as Usuario;
 const xp = await xpTotalUsuario(usuario?.id) ?? 0;
@@ -36,6 +38,12 @@ const xp = await xpTotalUsuario(usuario?.id) ?? 0;
         <AsideMenuItem href="/ranking" text="RANKING" selected={ranking}>   
             <Ranking/>
         </AsideMenuItem>
+
+        {usuario.tipo !== "estudiante" && (
+            <AsideMenuItem href="/grupo" text="GRUPO" selected={grupo}>
+                <Grupo/>
+            </AsideMenuItem>
+        )}
 
         <AsideMenuItem text={usuario?.vidas ?? 0} selected="false" notSelectable='true'>
             <Vidas/>

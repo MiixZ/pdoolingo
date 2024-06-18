@@ -87,3 +87,21 @@ export const updateRacha = async (
 
   return user.data.racha as number;
 };
+
+export const deleteUsuario = async (
+  id: string | null | undefined
+): Promise<boolean> => {
+  const resultUI = await fetch(url + `usuarios-insignias/${id}`, {
+    method: "DELETE",
+  });
+
+  const resultUE = await fetch(url + `usuarios-ejercicios/usuario/${id}`, {
+    method: "DELETE",
+  });
+
+  const result = await fetch(url + `usuarios/${id}`, {
+    method: "DELETE",
+  });
+
+  return (await result.json()).success as boolean;
+};

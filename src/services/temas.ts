@@ -6,6 +6,7 @@ import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Insignia } from "@interfaces/Insignia";
 
 import { deleteEjercicio } from "./ejercicios";
+import { deleteUsuario, getUsuariosByGrupo } from "./usuario";
 
 interface usuarios_insignias {
   id_usuario: string;
@@ -13,7 +14,7 @@ interface usuarios_insignias {
 }
 
 interface Grupo {
-  id: number;
+  id?: number;
   codigo: string;
 }
 
@@ -65,6 +66,14 @@ export const getTemas = async (id_grupo?: number): Promise<Tema[] | null> => {
       }
     })
   );
+
+  return data.data as Tema[];
+};
+
+export const getAllTemas = async (): Promise<Tema[] | null> => {
+  const result = await fetch(url + "temas");
+
+  const data = (await result.json()) as Data;
 
   return data.data as Tema[];
 };
@@ -172,6 +181,62 @@ export const insertTema = async (tema: Tema): Promise<boolean> => {
   return result.ok;
 };
 
+export const insertGrupo = async (grupo: Grupo): Promise<boolean> => {
+  const result = await fetch(url + "grupos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(grupo),
+  });
+
+  const grupoCreado = (await result.json()).data as Grupo;
+
+  const temas = await getAllTemas();
+
+  if (!temas) return false;
+
+  await Promise.all(
+    temas.map(async (tema) => {
+      await fetch(url + "temas-grupos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id_grupo: grupoCreado.id,
+          id_tema: tema.id,
+          bloqueado: false,
+        }),
+      });
+    })
+  );
+
+  return result.ok;
+};
+
+export const deleteGrupo = async (id: number | undefined): Promise<boolean> => {
+  await fetch(url + `temas-grupos/temas/${id}`, {
+    method: "DELETE",
+  });
+
+  const usuarios = await getUsuariosByGrupo(id);
+
+  if (usuarios) {
+    await Promise.all(
+      usuarios.map(async (usuario) => {
+        await deleteUsuario(usuario.id);
+      })
+    );
+  }
+
+  const result = await fetch(url + `grupos/${id}`, {
+    method: "DELETE",
+  });
+
+  return result.ok;
+};
+
 export const insertInsignia = async (insignia: Insignia): Promise<boolean> => {
   const result = await fetch(url + "insignias", {
     method: "POST",
@@ -180,8 +245,6 @@ export const insertInsignia = async (insignia: Insignia): Promise<boolean> => {
     },
     body: JSON.stringify(insignia),
   });
-
-  console.log("RESUTADO DE INSERTAR INSIGNIA: ", await result.json());
 
   return result.ok;
 };
@@ -209,7 +272,6 @@ export const updateTema = async (
   if (!id_grupo) {
     await Promise.all(
       grupos.map(async (grupo) => {
-        console.log("DATA A ENVIAR: ", tema.id, grupo.id, bloqueado);
         await fetch(url + `temas-grupos`, {
           method: "PUT",
           headers: {
@@ -224,7 +286,6 @@ export const updateTema = async (
       })
     );
   } else {
-    console.log("UPDATEANDO: ", id_grupo, tema.id, bloqueado);
     const resultadoo = await fetch(url + `temas-grupos`, {
       method: "PUT",
       headers: {
@@ -236,8 +297,6 @@ export const updateTema = async (
         bloqueado,
       }),
     });
-
-    console.log("RESULTADO DE UPDATE: ", await resultadoo.json());
   }
 
   return result.ok;
