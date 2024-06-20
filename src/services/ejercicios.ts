@@ -266,15 +266,17 @@ export const realizaEjercicio = async (
   const realiza = await getUsuarioEjercicios(id_usuario, id_ejercicio);
 
   let xp_ganada = xp_base;
+  let racha = usuario?.racha ?? 0;
+
+  if (realiza.success) {
+    return { xp_ganada: realiza.data.xp_ganada, racha };
+  }
 
   if (ejercicio?.tipo_coste_pista === "experiencia" && usa_pistas)
     xp_ganada -= ejercicio?.coste_pista ?? 0;
 
-  realiza.success
-    ? (xp_ganada = ponderarEjercicio(xp_ganada, contador ?? 60, false))
-    : (xp_ganada = ponderarEjercicio(xp_ganada, contador ?? 60, true));
+  xp_ganada = ponderarEjercicio(xp_ganada, contador ?? 60);
 
-  let racha = usuario?.racha ?? 0;
   if (!realiza.success) {
     racha = (await updateRacha(id_usuario)) ?? 0;
 
@@ -315,14 +317,10 @@ export const getUsuarioEjercicios = async (
   return await result.json();
 };
 
-const ponderarEjercicio = (
-  xp: number,
-  contador: number,
-  pondera: boolean
-): number => {
-  if (contador < 20 && pondera) {
+const ponderarEjercicio = (xp: number, contador: number): number => {
+  if (contador < 20) {
     return xp * 1.25;
-  } else if ((contador >= 20 && contador < 30) || (contador < 20 && !pondera)) {
+  } else if (contador >= 20 && contador < 30) {
     return xp;
   } else if (contador >= 30 && contador < 45) {
     return xp * 0.75;

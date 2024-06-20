@@ -341,7 +341,7 @@ export const deleteTema = async (id: number | undefined): Promise<boolean> => {
 
   if (!grupos) return false;
 
-  await fetch(url + `temas-grupos/temas/${id}`, {
+  await fetch(url + `temas-grupos/grupos/${id}`, {
     method: "DELETE",
   });
 
