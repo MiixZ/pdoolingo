@@ -120,5 +120,5 @@ export const deleteUsuario = async (
     method: "DELETE",
   });
 
-  return true;
+  return (await result.json()).success;
 };
