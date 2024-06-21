@@ -22,7 +22,7 @@ let insignias = pathname == "insignias" ? "true" : "false";
 let grupo = pathname == "grupo" ? "true" : "false";
 
 const usuario = await getSesion(Astro.request) as Usuario;
-const xp = await xpTotalUsuario(usuario?.id) ?? 0;
+const xp = await xpTotalUsuario(usuario?.id ?? '') ?? 0;
 ---
 
 <div class="bg-slate-900 rounded-lg p-2 flex-1" >

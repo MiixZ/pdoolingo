@@ -109,13 +109,16 @@ export const deleteUsuario = async (
     method: "DELETE",
   });
 
-  const resultUE = await fetch(url + `usuarios-ejercicios/usuario/${id}`, {
-    method: "DELETE",
-  });
+  const resultUE = await fetch(
+    url + `usuario-ejercicios/delete/usuario/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
 
   const result = await fetch(url + `usuarios/${id}`, {
     method: "DELETE",
   });
 
-  return (await result.json()).success as boolean;
+  return true;
 };
