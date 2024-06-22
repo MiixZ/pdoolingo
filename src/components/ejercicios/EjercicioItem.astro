@@ -4,8 +4,13 @@ import TipoPescar from "@icons/ejercicios/TipoPescar.astro";
 import TipoTexto from "@icons/ejercicios/TipoTexto.astro";
 import TipoRellenar from "@icons/ejercicios/TipoRellenar.astro";
 
+import Edit from "@components/ejercicios/formulario/edit/Edit.astro";
+import Delete from "@components/ejercicios/formulario/edit/Delete";
+
 import type { Ejercicio } from "@interfaces/Ejercicio";
 import type { Usuario } from "@interfaces/Usuario";
+
+import { getTema } from "@services/temas";
 
 interface Props {
   Ejercicio: Ejercicio;
@@ -14,12 +19,15 @@ interface Props {
 }
 
 const { Ejercicio, numero, Usuario } = Astro.props;
+const id_tema = Ejercicio.id_tema;
+
+const tema = await getTema(id_tema, Usuario.grupo);
 ---
 
-<tr class="flex flex-col lg:flex-row w-full mb-4 p-6 border-4 rounded-lg border-gray-600 bg-slate-900 hover:bg-slate-500 transition-colors duration-300">
+<tr class="flex flex-col xl:flex-row w-full mb-4 p-6 border-4 rounded-lg border-gray-600 bg-slate-900 hover:bg-slate-500 transition-colors duration-300">
   <td class="w-full">
     <slot />
-    <div class="flex flex-col lg:flex-row items-center justify-between w-full gap-4">
+    <div class="flex flex-col xl:flex-row items-center justify-between w-full gap-4">
       <p class="flex-none p-2">
         {(() => {
           switch (Ejercicio.tipo) {
@@ -36,21 +44,26 @@ const { Ejercicio, numero, Usuario } = Astro.props;
           }
         })()}
       </p>
-      
+
       <p class="py-2 font-bold text-2xl lg:text-4xl">
         {numero}
       </p>
-      
+
       <a
         href={`/ejercicios/${Ejercicio.id}?id_usuario=${Usuario.id}`}
-        class="flex justify-center items-center p-2 text-2xl border-r border-l hover:bg-zinc-800 rounded-xl transition-colors duration-500 w-full lg:w-1/4 lg:text-xl"
+        class=`flex justify-center items-center p-2 text-2xl border-r border-l hover:bg-zinc-800 rounded-xl transition-colors duration-500 w-full lg:w-1/4 lg:text-xl ${tema?.bloqueado ? "cursor-not-allowed pointer-events-none" : "cursor-pointer"}`
       >
-        START
+        {tema?.bloqueado ? "Bloqueado" : "START"}
       </a>
-      
+
       <span class="justify-center items-center text-center p-3 text-2xl text-yellow-700 font-bold bg-lime-600 rounded-xl w-full lg:w-1/4">
         {Ejercicio.xp_base}
       </span>
+
+      {Usuario.tipo === "admin" && (
+        <Edit id_ejercicio={Ejercicio.id} />
+        <Delete id_ejercicio={Ejercicio.id} client:load />
+      )}
     </div>
   </td>
 </tr>

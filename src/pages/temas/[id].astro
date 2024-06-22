@@ -1,0 +1,25 @@
+---
+import Layout from "@layouts/HomeLayout.astro"
+
+import FormularioTema from "@components/temas/FormularioTema";
+
+import { getTema } from "@services/temas";
+import { getSesion } from "@services/login";
+
+const { id } = Astro.params;
+
+const tema = await getTema(Number(id));
+const usuario = await getSesion(Astro.request);
+
+if (!usuario || !tema || usuario.tipo !== "admin") {
+    return Astro.redirect("/home");
+}
+---
+
+<Layout
+  title="PDOOLingo - Ejercicio"
+>
+    <div class="flex flex-col justify-center items-center p-10">
+        <FormularioTema tema={tema} editing={true} client:load/>
+    </div> 
+</Layout>

@@ -1,14 +1,34 @@
 ---
 import Layout from "@layouts/HomeLayout.astro";
+
 import EjercicioBase from "@components/ejercicios/EjercicioBase.astro";
+import TemaItem from "@components/temas/TemaItem.astro";
+import Formulario from "@components/ejercicios/formulario/crear/Formulario";
+import FormularioTema from "@components/temas/FormularioTema";
+
 import { getSesion } from "@services/login";
-import Formulario from "@components/ejercicios/formulario/Formulario.astro";
+import { getTemas } from "@services/temas";
 
 const usuario = await getSesion(Astro.request);
+
+if (!usuario) {
+  return Astro.redirect("/home");
+}
+
+const temas = await getTemas(usuario?.grupo);
 ---
+
 <Layout title="PDOOLingo">
-  <div class="flex flex-col justify-center items-center">
-    <EjercicioBase />
-    { usuario && usuario.tipo === "admin" && <Formulario usuario={usuario} /> }
+  <div class="flex flex-col gap-10 p-20 w-full lg:w-4/5 mx-auto">
+    {temas?.map((tema) => (
+      <TemaItem tema={tema} usuario={usuario}>
+        <EjercicioBase ejercicios={tema?.ejercicios} />
+        {usuario && usuario.tipo === "admin" && (
+          <Formulario usuario={usuario} id_tema={tema?.id} client:load />
+        )}
+      </TemaItem>
+    ))}
+
+    {usuario && usuario.tipo === "admin" && <FormularioTema client:load />}
   </div>
 </Layout>

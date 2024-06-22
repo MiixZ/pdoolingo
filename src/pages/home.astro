@@ -1,8 +1,36 @@
 ---
-import Layout from '@layouts/HomeLayout.astro';
-import EjercicioBase from '@components/ejercicios/EjercicioBase.astro';
+import Layout from "@layouts/HomeLayout.astro";
+
+import EjercicioBase from "@components/ejercicios/EjercicioBase.astro";
+import InsigniaBase from "@components/mainMenu/InsigniaBase.astro";
+import TemaItem from "@components/temas/TemaItem.astro";
+import NotLogged from "@components/NoLogged.astro";
+
+import { getSesion } from "@services/login";
+import { getTemas } from "@services/temas";
+
+const usuario = await getSesion(Astro.request);
+
+if (!usuario) {
+  return Astro.redirect("/perfil_page");
+}
+
+const temas = await getTemas(usuario.grupo);
 ---
 
 <Layout title="PDOOLingo">
-    <EjercicioBase />
+  {
+    usuario ? (
+      <div class="flex flex-col gap-10 p-20 w-full lg:w-4/5 mx-auto">
+        {temas && temas?.map((tema) => 
+          <TemaItem tema={tema} usuario={usuario}>
+            <EjercicioBase ejercicios={ tema?.ejercicios }/>
+            <InsigniaBase id_tema={tema?.id} id_usuario={usuario.id} />
+          </TemaItem>)
+        }
+      </div>
+    ) : (
+      <NotLogged />
+    )
+  }
 </Layout>

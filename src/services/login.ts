@@ -11,12 +11,11 @@ export const getSesion = async (
   }
 
   const sessionUser = session ? session.user : null;
-  const { email, name, image } = sessionUser || {};
+  const { email, image } = sessionUser || {};
 
-  const nombreCompleto = name ?? "";
   const emailUsuario = email ?? "";
 
-  const usuarios = await getUsuario(nombreCompleto, emailUsuario);
+  const usuarios = await getUsuario(emailUsuario);
 
   if (usuarios == null) {
     return null;

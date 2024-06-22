@@ -1,0 +1,30 @@
+---
+import Layout from "@layouts/HomeLayout.astro";
+
+import Edit from "@components/ejercicios/formulario/edit/Edit"
+
+import type { Ejercicio } from "@interfaces/Ejercicio";
+import type { Respuesta } from "@interfaces/Respuesta";
+
+import { getEjercicio } from "@services/ejercicios";
+import { getSesion } from "@services/login";
+import { getRespuestasEjercicio } from "@services/ejercicios";
+
+const { id } = Astro.params;
+const ejercicio: Ejercicio | null = await getEjercicio(Number(id));
+
+const usuario = await getSesion(Astro.request);
+const respuestas: Respuesta[] = await getRespuestasEjercicio(Number(id));
+
+if (!usuario || !ejercicio || usuario.tipo !== "admin") {
+  return Astro.redirect("/home");
+}
+---
+
+<Layout
+  title="PDOOLingo - Ejercicio"
+>
+    <div class="flex flex-col justify-center items-center p-10">
+        <Edit usuario={usuario} ejercicio={ejercicio} respuestasIniciales={respuestas} client:load/>
+    </div> 
+</Layout>

@@ -1,10 +1,12 @@
 export interface Usuario {
-  id: string;
+  id?: string;
   nombre: string;
   apellidos: string;
   email: string;
   DNI: string;
   vidas: number;
   tipo: string;
-  image: string | null | undefined;
+  racha: number;
+  grupo: number;
+  image?: string | null | undefined;
 }

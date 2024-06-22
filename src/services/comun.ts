@@ -1,1 +1,1 @@
-export const url = "https://vaelico.es/pdoolingoback/";
+export const url = "http://localhost:3000/";

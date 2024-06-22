@@ -6,40 +6,44 @@ import type { Usuario } from '@interfaces/Usuario'
 import { getSesion } from '@services/login'
 import { xpTotalUsuario } from '@services/ejercicios'
 
-import Temas from '@icons/aside/Temas.astro'
+import Ranking from '@icons/aside/Ranking.astro'
 import Ejercicios from '@icons/aside/Ejercicios.astro'
 import Insignia from '@icons/aside/Insignia.astro'
 import Vidas from '@icons/aside/Vidas.astro'
 import Experience from '@icons/aside/Experience.astro'
+import Grupo from '@icons/aside/Grupo.astro'
 
 let pathname : String = Astro.url.pathname;
 pathname = pathname.split("/")[1];
 
-let temas = pathname == "temas" ? "true" : "false";
+let ranking = pathname == "ranking" ? "true" : "false";
 let ejercicios = pathname == "ejercicios" ? "true" : "false";
 let insignias = pathname == "insignias" ? "true" : "false";
+let grupo = pathname == "grupo" ? "true" : "false";
 
 const usuario = await getSesion(Astro.request) as Usuario;
-const xp = await xpTotalUsuario(usuario?.id) ?? 0;
+const xp = await xpTotalUsuario(usuario?.id ?? '') ?? 0;
 ---
 
 <div class="bg-slate-900 rounded-lg p-2 flex-1" >
     <ul>
-        <!--
-        <AsideMenuItem href="/home" text="TEMAS" selected={temas}>   
-            <Temas/>
-        </AsideMenuItem>
-        -->
-
-        <AsideMenuItem href="/ejercicios/ejercicios" text="EJERCICIOS" selected={ejercicios}>   <!-- TODO: cambiar href -->
+        <AsideMenuItem href="/ejercicios/ejercicios" text="EJERCICIOS" selected={ejercicios}>
             <Ejercicios/>
         </AsideMenuItem>
 
-        <!--
         <AsideMenuItem href="/insignias/" text="INSIGNIAS" selected={insignias}>
             <Insignia/>
-        </AsideMenuItem> 
-        -->
+        </AsideMenuItem>
+
+        <AsideMenuItem href="/ranking" text="RANKING" selected={ranking}>   
+            <Ranking/>
+        </AsideMenuItem>
+
+        {usuario && usuario.tipo !== "estudiante" && (
+            <AsideMenuItem href="/grupo" text="GRUPO" selected={grupo}>
+                <Grupo/>
+            </AsideMenuItem>
+        )}
 
         <AsideMenuItem text={usuario?.vidas ?? 0} selected="false" notSelectable='true'>
             <Vidas/>
