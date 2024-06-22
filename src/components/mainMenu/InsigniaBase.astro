@@ -1,0 +1,39 @@
+---
+import InsigniaItem from "@components/mainMenu/InsigniaItem.astro";
+
+import { getSesion } from "@services/login";
+
+import { getInsigniasConseguidas, getInsigniasTema } from '@services/temas';
+
+interface Props {
+  id_tema?: number;
+  id_usuario?: string;
+}
+
+const { id_tema, id_usuario } = Astro.props;
+
+const insignias = await getInsigniasTema(id_tema);
+const insignias_conseguidas = await getInsigniasConseguidas(id_usuario);
+
+insignias_conseguidas?.forEach((insignia_conseguida) => {
+  insignias?.forEach((insignia) => {
+    if (insignia.id === insignia_conseguida.id_insignia) {
+      insignia.conseguida = true;
+    }
+  });
+});
+
+const usuario = await getSesion(Astro.request);
+---
+
+{ usuario ? (
+    <div class="w-full xl:w-4/5 flex flex-col items-center justify-center rounded-xl bg-slate-800 gap-5 p-10 mt-10">
+      <h2 class="text-center my-4 text-3xl font-bold">Insignias:</h2>
+        {insignias?.map((insignia) => (
+          <InsigniaItem insignia={insignia} tipo_user={usuario.tipo}></InsigniaItem>
+        ))}
+    </div>
+  ) : (
+    <p>Debes iniciar sesión para ver tus insignias.</p>
+  )
+}

@@ -10,7 +10,7 @@ const Contador = ({ isCompleted }) => {
 
     const interval = setInterval(() => {
       setCount((prevCount) => prevCount + 1);
-    }, 1000);
+    }, 60);
 
     return () => {
       clearInterval(interval);

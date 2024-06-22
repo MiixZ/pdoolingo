@@ -5,4 +5,5 @@ export interface Ejercicio {
   coste_pista: number;
   tipo_coste_pista: string;
   xp_base: number;
+  id_tema?: number;
 }

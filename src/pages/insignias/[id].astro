@@ -1,0 +1,25 @@
+---
+import Layout from "@layouts/HomeLayout.astro"
+
+import FormularioInsignia from "@components/mainMenu/FormularioInsignia";
+
+import { getInsignia } from "@services/temas";
+import { getSesion } from "@services/login";
+
+const { id } = Astro.params;
+
+const insignia = await getInsignia(Number(id));
+const usuario = await getSesion(Astro.request);
+
+if (!usuario || !insignia || usuario.tipo !== "admin") {
+    return Astro.redirect("/home");
+}
+---
+
+<Layout
+  title="PDOOLingo - Ejercicio"
+>
+    <div class="flex flex-col justify-center items-center p-10">
+        <FormularioInsignia insignia={insignia} id_tema={insignia.id_tema} editing={true} client:load/>
+    </div> 
+</Layout>

@@ -1,0 +1,17 @@
+---
+import Layout from "@layouts/HomeLayout.astro";
+
+import RankingItem from "@components/ranking/rankingItem.astro";
+
+import { getSesion } from "@services/login";
+
+const usuario = await getSesion(Astro.request);
+
+if (!usuario) {
+    return Astro.redirect("/home");
+}
+---
+
+<Layout title="PDOOLingo - Ranking">
+    <RankingItem idGrupo={usuario.grupo} mainUser={usuario} />
+</Layout>

@@ -7,7 +7,6 @@ import { realizaEjercicio } from "@services/ejercicios";
 import { updateVidas } from "@services/usuario";
 
 import GrupoRespuestas from "./GrupoRespuestas";
-import Contador from "./contador";
 import Pista from "./Pista";
 import type { Usuario } from "@interfaces/Usuario";
 
@@ -37,11 +36,25 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
   const [droppedItems, setDroppedItems] = useState<Respuesta[]>([]);
   const grupos = [grupo1, grupo2, grupo3];
   const [completed, setCompleted] = useState<boolean>(false);
+  const [xp_conseguida, setXpConseguida] = useState<number>(0);
+  const [racha, setRacha] = useState<number>(usuario?.racha ?? 0);
   const [initialized, setInitialized] = useState<boolean>(false);
   const [pistaUsed, setPistaUsed] = useState<boolean>(false);
   const [vidasIniciales, setVidasIniciales] = useState<number>(
     usuario?.vidas ?? 0
   );
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!completed && count < 60) {
+      const interval = setInterval(() => {
+        setCount((prevCount) => prevCount + 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [completed, count]);
 
   useEffect(() => {
     if (respuestas) {
@@ -97,7 +110,14 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
       setContainerBgColor("bg-green-500");
       const performEjercicio = async () => {
         if (ejercicio?.id && id_usuario) {
-          await realizaEjercicio(id_usuario, ejercicio.id, pistaUsed);
+          const ganado = await realizaEjercicio(
+            id_usuario,
+            ejercicio.id,
+            pistaUsed,
+            count
+          );
+          setXpConseguida(ganado.xp_ganada);
+          setRacha(ganado.racha);
         }
       };
 
@@ -159,7 +179,6 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
         : [...prev, respuesta];
 
       if (newSelected.length === 2) {
-        console.log(newSelected);
         setPair([newSelected[0], newSelected[1]]);
         setSelectedResponses([]);
       } else if (newSelected.length > 2) {
@@ -274,7 +293,13 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
               onClick={handlePista}
               id_usuario={id_usuario}
             />
-            <Contador isCompleted={completed} />
+            <h1
+              className={`gap-4 text-center text-4xl text-white w-full lg:${
+                completed ? "w-full" : "w-1/2"
+              }`}
+            >
+              {count}
+            </h1>
           </>
         ) : vidasIniciales <= 0 ? (
           <div className="flex items-center justify-center w-full">
@@ -293,6 +318,14 @@ const EjercicioComponent: React.FC<EjercicioComponentProps> = ({
           <>
             <div className="flex flex-col items-center justify-center text-white text-center mt-4 py-4 w-full lg:w-1/2 mx-auto">
               <span className="rounded-xl p-5 bg-green-950">¡COMPLETADO!</span>
+              <span className="mt-4">
+                ¡Has ganado {xp_conseguida} puntos de experiencia!
+              </span>
+              {racha > 0 && (
+                <span className="mt-4">
+                  ¡Estás en racha de {racha} ejercicios nuevos para ti, sigue así!
+                </span>
+              )}
               <button
                 onClick={() =>
                   (window.location.href = "/ejercicios/ejercicios")
