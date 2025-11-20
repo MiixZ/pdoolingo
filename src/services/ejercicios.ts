@@ -26,6 +26,10 @@ export const getEjercicio = async (
 ): Promise<Ejercicio | null> => {
   const result = await fetch(url + `ejercicios/${id}`);
 
+  if (!result.ok) {
+    return null;
+  }
+
   return (await result.json()).data as Ejercicio;
 };
 
@@ -56,38 +60,36 @@ export const insertEjercicio = async (
   const responseEjercicio = (await resultEjercicio.json()) as Data;
   const ejercicioCreado = responseEjercicio.data as Ejercicio;
 
-  let respuestasCreadas: Respuesta[] = [];
-
-  respuestas.map(async (respuesta) => {
-    const resultRespuesta = await fetch(url + "respuestas", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ texto: respuesta.texto }),
-    });
-
-    const response = (await resultRespuesta.json()) as Data;
-    const respuestaCreada = response.data as Respuesta;
-
-    if (response.success) {
-      respuestasCreadas.push(respuestaCreada);
-
-      const resultAsignadas = await fetch(url + "ejercicios-respuestas", {
+  await Promise.all(
+    respuestas.map(async (respuesta) => {
+      const resultRespuesta = await fetch(url + "respuestas", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          id_ejercicio: ejercicioCreado.id,
-          id_respuesta: respuestaCreada.id,
-          es_correcta: respuesta.correcta,
-        }),
+        body: JSON.stringify({ texto: respuesta.texto }),
       });
 
-      await resultAsignadas.json();
-    }
-  });
+      const response = (await resultRespuesta.json()) as Data;
+      const respuestaCreada = response.data as Respuesta;
+
+      if (response.success) {
+        const resultAsignadas = await fetch(url + "ejercicios-respuestas", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_ejercicio: ejercicioCreado.id,
+            id_respuesta: respuestaCreada.id,
+            es_correcta: respuesta.correcta,
+          }),
+        });
+
+        await resultAsignadas.json();
+      }
+    })
+  );
 };
 
 export const updateEjercicio = async (
@@ -366,9 +368,9 @@ export const xpTotalUsuario = async (id_usuario: string): Promise<number> => {
 
   if (!data) return 0;
 
-  data.map((object: usuario_ejercicios) => {
-    xpTotal += object.xp_ganada;
-  });
+  xpTotal = data.reduce((total, object: usuario_ejercicios) => {
+    return total + object.xp_ganada;
+  }, 0);
 
   return xpTotal;
 };
@@ -406,11 +408,9 @@ export const xpTotalPorTema = async (
 
   const data = resultados.data as usuario_ejercicios[];
 
-  let xpTotal: number = 0;
-
-  data.map((object) => {
-    xpTotal += object.xp_ganada;
-  });
+  const xpTotal: number = data.reduce((total, object) => {
+    return total + object.xp_ganada;
+  }, 0);
 
   return xpTotal;
 };
