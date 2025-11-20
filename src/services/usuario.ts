@@ -16,6 +16,10 @@ export const getUsuario = async (email: string | undefined) => {
     body: JSON.stringify(body),
   });
 
+  if (!response.ok) {
+    return null;
+  }
+
   const data = await response.json();
   const usuario = data.data as Usuario[];
 
@@ -27,6 +31,10 @@ export const getUsuarioID = async (
 ): Promise<Usuario | null> => {
   const result = await fetch(url + `usuarios/${id}`);
 
+  if (!result.ok) {
+    return null;
+  }
+
   return (await result.json()).data as Usuario;
 };
 
@@ -34,6 +42,10 @@ export const getUsuariosByGrupo = async (
   id_grupo: number | null | undefined
 ): Promise<Usuario[] | null> => {
   const result = await fetch(url + `usuarios/grupo/${id_grupo}`);
+
+  if (!result.ok) {
+    return null;
+  }
 
   return (await result.json()).data as Usuario[];
 };
@@ -105,11 +117,11 @@ export const updateRacha = async (
 export const deleteUsuario = async (
   id: string | null | undefined
 ): Promise<boolean> => {
-  const resultUI = await fetch(url + `usuarios-insignias/${id}`, {
+  await fetch(url + `usuarios-insignias/${id}`, {
     method: "DELETE",
   });
 
-  const resultUE = await fetch(
+  await fetch(
     url + `usuario-ejercicios/delete/usuario/${id}`,
     {
       method: "DELETE",

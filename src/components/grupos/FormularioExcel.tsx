@@ -35,7 +35,7 @@ const FormularioExcel: React.FC<Props> = ({ editing, grupo }) => {
 
     formData.append("grupo", grupo.toString());
 
-    const response = await fetch(url + "usuarios/loadcsv", {
+    await fetch(url + "usuarios/loadcsv", {
       method: "POST",
       body: formData,
     });

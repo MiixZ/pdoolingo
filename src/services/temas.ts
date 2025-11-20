@@ -286,7 +286,7 @@ export const updateTema = async (
       })
     );
   } else {
-    const resultadoo = await fetch(url + `temas-grupos`, {
+    await fetch(url + `temas-grupos`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
