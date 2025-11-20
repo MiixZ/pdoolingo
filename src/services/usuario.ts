@@ -105,11 +105,11 @@ export const updateRacha = async (
 export const deleteUsuario = async (
   id: string | null | undefined
 ): Promise<boolean> => {
-  const resultUI = await fetch(url + `usuarios-insignias/${id}`, {
+  await fetch(url + `usuarios-insignias/${id}`, {
     method: "DELETE",
   });
 
-  const resultUE = await fetch(
+  await fetch(
     url + `usuario-ejercicios/delete/usuario/${id}`,
     {
       method: "DELETE",

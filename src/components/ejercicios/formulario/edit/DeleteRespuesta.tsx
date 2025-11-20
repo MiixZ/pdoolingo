@@ -13,7 +13,7 @@ const DeleteRespuesta: React.FC<DeleteComponentProps> = ({
 }) => {
   const handleDelete = async () => {
     console.log(id_ejercicio, id_respuesta);
-    const result = await deleteRespuesta(id_ejercicio, id_respuesta);
+    await deleteRespuesta(id_ejercicio, id_respuesta);
 
     window.location.reload();
   };

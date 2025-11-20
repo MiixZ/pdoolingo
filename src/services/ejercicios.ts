@@ -85,8 +85,7 @@ export const insertEjercicio = async (
         }),
       });
 
-      const responseAsignadas = (await resultAsignadas.json()) as Data;
-      const asignadaCreada = responseAsignadas.data;
+      await resultAsignadas.json();
     }
   });
 };
@@ -156,8 +155,7 @@ export const updateEjercicio = async (
           }
         );
 
-        const responseAsignadas = (await resultAsignadas.json()) as Data;
-        const asignadaActualizada = responseAsignadas.data;
+        await resultAsignadas.json();
       }
     } else if (!respuestaExistente) {
       const resultNuevaRespuesta = await fetch(url + "respuestas", {
@@ -187,8 +185,7 @@ export const updateEjercicio = async (
           }),
         });
 
-        const responseAsignadas = (await resultAsignadas.json()) as Data;
-        const asignadaCreada = responseAsignadas.data;
+        await resultAsignadas.json();
       }
     } else {
       respuestasActualizadas.push(respuestaExistente);
@@ -205,8 +202,7 @@ export const updateEjercicio = async (
         }),
       });
 
-      const responseAsignadas = (await resultAsignadas.json()) as Data;
-      const asignadaCreada = responseAsignadas.data;
+      await resultAsignadas.json();
     }
   }
 };
@@ -214,11 +210,11 @@ export const updateEjercicio = async (
 export const deleteEjercicio = async (
   id_ejercicio: Number | undefined
 ): Promise<string> => {
-  const ER_Result = await fetch(url + `ejercicios-respuestas/${id_ejercicio}`, {
+  await fetch(url + `ejercicios-respuestas/${id_ejercicio}`, {
     method: "DELETE",
   });
 
-  const UE_Result = await fetch(url + `usuario-ejercicios/${id_ejercicio}`, {
+  await fetch(url + `usuario-ejercicios/${id_ejercicio}`, {
     method: "DELETE",
   });
 
@@ -347,7 +343,7 @@ export const comprobarInsignias = async (
         (insignia?.xp && xpTotal >= insignia.xp) ||
         (insignia?.n_ejercicios && n_ejercicios >= insignia.n_ejercicios)
       ) {
-        const result = await fetch(url + "usuarios-insignias", {
+        await fetch(url + "usuarios-insignias", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
